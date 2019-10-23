@@ -9,16 +9,16 @@
 // import HelloWorld from './views/Test.vue'
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     // HelloWorld
   },
-  data () {
+  data() {
     return {
       isRouterAlive: true
-    }
+    };
   }
-}
+};
 </script>
 
 <style>
