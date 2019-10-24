@@ -138,11 +138,11 @@ import { mapActions, mapMutations } from "vuex"
 export default {
   data () {
     return {
-      sysName: "业财一体化",
+      sysName: "西北地区供应保障服务平台",
       collapsed: false,
       sysUserName: "",
       sysUserAvatar: "",
-      logoSrc: require("@/assets/images/common/logo.png"),
+      logoSrc: require("../../assets/images/logo.png"),
       form: {
         name: "",
         region: "",
@@ -204,7 +204,7 @@ export default {
     if (user) {
       user = JSON.parse(user)
       this.sysUserName = user.userName || ""
-      this.sysUserAvatar = user.headImg || require("../assets/images/common/user.png")
+      this.sysUserAvatar = user.headImg || require("../../assets/images/user.png")
     }
     this.FETCH_USER_INFO()
     this.USER_INFO(user)
@@ -214,5 +214,139 @@ export default {
 
 </script>
 <style scoped lang="less">
+.el-menu-item,
+.el-submenu__title {
+  height: auto !important;
+}
+
+.container {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;
+  .header {
+    height: 60px;
+    line-height: 60px;
+    @background: color-primary;
+    color: #fff;
+    .userinfo {
+      text-align: right;
+      padding-right: 35px;
+      float: right;
+      .userinfo-inner {
+        cursor: pointer;
+        color: #fff;
+        img {
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+          margin: 12px 0px 10px 10px;
+          float: right;
+        }
+      }
+    }
+    .logo {
+      //width:230px;
+      height: 60px;
+      font-size: 22px;
+      padding-left: 20px;
+      padding-right: 20px;
+      // border-color: rgba(238, 241, 146, 0.3);
+      // border-right-width: 1px;
+      // border-right-style: solid;
+      img {
+        float: left;
+        margin: 5px 10px 10px 0px;
+        width: 92px;
+        height: auto;
+        // background: #fff;
+        padding: 10px;
+      }
+      .txt {
+        color: #fff;
+      }
+    }
+    .logo-width {
+      // width: 230px;
+    }
+    .logo-collapse-width {
+      width: 60px;
+    }
+    .tools {
+      padding: 0px 23px;
+      width: 14px;
+      height: 60px;
+      line-height: 60px;
+      cursor: pointer;
+    }
+  }
+  .main {
+    display: flex;
+    position: absolute;
+    top: 60px;
+    bottom: 0px;
+    overflow: hidden;
+    aside {
+      flex: 0 0 230px;
+      width: 230px;
+      .el-menu {
+        height: 100%;
+        overflow: auto;
+      }
+      .collapsed {
+        width: 60px;
+        .item {
+          position: relative;
+        }
+        .submenu {
+          position: absolute;
+          top: 0px;
+          left: 60px;
+          z-index: 99999;
+          height: auto;
+          display: none;
+        }
+      }
+    }
+    .menu-collapsed {
+      flex: 0 0 60px;
+      width: 60px;
+    }
+    .menu-expanded {
+      flex: 0 0 230px;
+      width: 230px;
+    }
+    .content-container {
+      flex: 1;
+      overflow-y: scroll;
+      padding: 20px;
+      .breadcrumb-container {
+        .title {
+          width: 200px;
+          float: left;
+          color: #475669;
+        }
+        .breadcrumb-inner {
+          /* float: right; */
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
+      }
+      .content-wrapper {
+        background-color: #fff;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+.el-dropdown-menu {
+  background: rgb(48, 65, 86);
+  li {
+    color: rgb(191, 203, 217);
+    &:hover {
+      background: #263445 !important;
+    }
+  }
+}
 
 </style>
