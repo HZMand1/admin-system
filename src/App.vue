@@ -1,17 +1,14 @@
 <template>
   <div id="app">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
 <script>
-// import HelloWorld from './views/Test.vue'
 
 export default {
   name: "app",
   components: {
-    // HelloWorld
   },
   data() {
     return {
