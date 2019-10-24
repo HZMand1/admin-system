@@ -134,6 +134,83 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from "vuex"
+export default {
+  data () {
+    return {
+      sysName: "业财一体化",
+      collapsed: false,
+      sysUserName: "",
+      sysUserAvatar: "",
+      logoSrc: require("@/assets/images/common/logo.png"),
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      "FETCH_USER_INFO",
+      "USER_INFO"
+    ]),
+    ...mapMutations([
+      "USER_INFO"
+    ]),
+    toPersonalCenter () {
+      this.$router.push({ path: "/main/personalCenter" })
+    },
+    onSubmit () {
+      console.log("submit!")
+    },
+    handleopen () {
+      // console.log('handleopen');
+    },
+    handleclose () {
+      // console.log('handleclose');
+    },
+    handleselect: function () {
+    },
+    // 退出登录
+    logout: function () {
+      let _this = this
+      this.$confirm("确认退出吗?", "提示", {
+        // type: 'warning'
+      }).then(() => {
+        sessionStorage.removeItem("user")
+        this.$Utils.setCookie("phSessionToken", "")
+        _this.$router.push("/login")
+      }).catch(() => {
+
+      })
+    },
+    // 折叠导航栏
+    collapse: function () {
+      this.collapsed = !this.collapsed
+    },
+    showMenu (i, status) {
+      this.$refs.menuCollapsed.getElementsByClassName("submenu-hook-" + i)[0].style.display = status ? "block" : "none"
+    }
+  },
+  mounted () {
+    let user = sessionStorage.getItem("user")
+    // let user = this.$sotre.state.userInfo
+    if (user) {
+      user = JSON.parse(user)
+      this.sysUserName = user.userName || ""
+      this.sysUserAvatar = user.headImg || require("../assets/images/common/user.png")
+    }
+    this.FETCH_USER_INFO()
+    this.USER_INFO(user)
+  }
+}
+
 
 </script>
 <style scoped lang="less">
