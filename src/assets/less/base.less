@@ -1,2 +1,84 @@
 
-@color-primary: #20a0ff;//#18c79c
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+      Microsoft YaHei, SimSun, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  #app {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+  }
+  
+  .el-submenu [class^="fa"] {
+    vertical-align: baseline;
+    margin-right: 10px;
+  }
+  
+  .el-menu-item [class^="fa"] {
+    vertical-align: baseline;
+    margin-right: 10px;
+  }
+  
+  .toolbar {
+    background: #f2f2f2;
+    padding: 10px;
+    //border:1px solid #dfe6ec;
+    margin: 10px 0px;
+    .el-form-item {
+      margin-bottom: 10px;
+    }
+  }
+  
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.2s ease;
+  }
+  
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+  }
+  .el-submenu {
+    background: rgb(48, 65, 86);
+    .el-submenu__title {
+      color: rgb(191, 203, 217);
+      font-size: 24px;
+      &:hover {
+        background: #263445 !important;
+      }
+    }
+  }
+  .el-menu-item {
+    background: #1f2d3d !important;
+    color: rgb(191, 203, 217) !important;
+    &:hover {
+      background: #001528 !important;
+    }
+  }
+  .container .header {
+    background: rgb(48, 65, 86) !important;
+  }
+  .container .main aside .el-menu {
+    background: rgb(48, 65, 86);
+  }
+  .el-submenu__title i {
+    color: rgb(191, 203, 217) !important;
+    font-size: 28px;
+  }
+  .el-submenu [class^="fa"] {
+    vertical-align: middle;
+  }
+  .el-menu-item.is-active {
+    color: #1890ff !important;
+  }
+  .custom.el-popper[x-placement^="bottom"] .popper__arrow::after {
+    border-bottom-color: rgb(48, 65, 86) !important;
+  }
+  

@@ -41,40 +41,44 @@
                  unique-opened
                  router
                  v-show="!collapsed">
-          <template v-for="(item,index) in $router.options.routes"
-                    v-show="!item.hidden">
-            <el-submenu :key="index" :index="index+''"
-                        v-if="!item.leaf">
-              <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-              <div v-for="(child,index) in item.children"
-                   :index="child.path"
-                   :key="child.path"
-                   v-show="!child.hidden">
-                <template v-if="child.children">
-                  <el-submenu :index="index+''">
-                    <template slot="title">{{child.name}}</template>
-                    <el-menu-item v-for="grandson in child.children"
-                                  :index="grandson.path"
-                                  :key="grandson.path"
-                                  v-show="!grandson.hidden"
-                                  router=true
-                                  :route="grandson.path">{{grandson.name}}</el-menu-item>
-                  </el-submenu>
-                </template>
-                <el-menu-item :index="child.path"
-                              :key="child.path"
-                              v-show="!child.children">{{child.name}}</el-menu-item>
-              </div>
-            </el-submenu>
-            <el-menu-item v-if="item.leaf&&item.children.length>0"
-                          :key="index" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+          <template v-for="(item,index) in $router.options.routes">
+            <template v-if="!item.hidden">
+              <el-submenu :key="index"
+                          :index="index+''"
+                          v-if="!item.leaf">
+                <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
+                <div v-for="(child,index) in item.children"
+                     :index="child.path"
+                     :key="child.path"
+                     v-show="!child.hidden">
+                  <template v-if="child.children">
+                    <el-submenu :index="index+''">
+                      <template slot="title">{{child.name}}</template>
+                      <el-menu-item v-for="grandson in child.children"
+                                    :index="grandson.path"
+                                    :key="grandson.path"
+                                    v-show="!grandson.hidden"
+                                    router=true
+                                    :route="grandson.path">{{grandson.name}}</el-menu-item>
+                    </el-submenu>
+                  </template>
+                  <el-menu-item :index="child.path"
+                                :key="child.path"
+                                v-show="!child.children">{{child.name}}</el-menu-item>
+                </div>
+              </el-submenu>
+              <el-menu-item v-if="item.leaf&&item.children.length>0"
+                            :key="index"
+                            :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+            </template>
           </template>
         </el-menu>
         <!--导航菜单-折叠后-->
         <ul class="el-menu el-menu-vertical-demo collapsed"
             v-show="collapsed"
             ref="menuCollapsed">
-          <li :key="index" v-for="(item,index) in $router.options.routes"
+          <li :key="index"
+              v-for="(item,index) in $router.options.routes"
               v-show="!item.hidden"
               class="el-submenu item">
             <template v-if="!item.leaf">
@@ -141,7 +145,7 @@ export default {
       sysName: "西北地区供应保障服务平台",
       collapsed: false,
       sysUserName: "",
-      sysUserAvatar: "",
+      sysUserAvatar: require("../../assets/images/user.png"),
       logoSrc: require("../../assets/images/logo.png"),
       form: {
         name: "",
@@ -199,15 +203,15 @@ export default {
     }
   },
   mounted () {
-    let user = sessionStorage.getItem("user")
-    // let user = this.$sotre.state.userInfo
-    if (user) {
-      user = JSON.parse(user)
-      this.sysUserName = user.userName || ""
-      this.sysUserAvatar = user.headImg || require("../../assets/images/user.png")
-    }
-    this.FETCH_USER_INFO()
-    this.USER_INFO(user)
+    // let user = sessionStorage.getItem("user")
+    // // let user = this.$sotre.state.userInfo
+    // if (user) {
+    //   user = JSON.parse(user)
+    //   this.sysUserName = user.userName || ""
+    //   this.sysUserAvatar = user.headImg || require("../../assets/images/user.png")
+    // }
+    // this.FETCH_USER_INFO()
+    // this.USER_INFO(user)
   }
 }
 
@@ -348,5 +352,4 @@ export default {
     }
   }
 }
-
 </style>

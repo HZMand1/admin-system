@@ -7,6 +7,7 @@ import Api from "./assets/api/api";
 Vue.config.productionTip = false
 import "element-ui/lib/theme-chalk/index.css";
 import "./assets/less/base.less";
+import "./assets/less/vars.less";
 Vue.prototype.$axios = Axios;
 Vue.prototype.$api = Api;
 Vue.use(ElementUI)
