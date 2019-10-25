@@ -14,9 +14,35 @@ const router = new Router({
 			meta: {
 				title: "首页",
 				requireAuth: false // 只要此字段为true，必须做鉴权处理
-
 			}
-		}
+		},
+		{
+			path: "/backstage/sysManage/MenuManage",
+			name: "MenuManage",
+			component: () => import("./views/backstage/sysManage/menuManage/MenuManage.vue"), // vue路由懒加载  异步加载
+			meta: {
+				title: "菜单管理",
+				requireAuth: false // 只要此字段为true，必须做鉴权处理
+			}
+		},
+		{
+			path: "/backstage/sysManage/MenuManage/AddMenu",
+			name: "AddMenu",
+			component: () => import("./views/backstage/sysManage/menuManage/components/AddMenu.vue"), // vue路由懒加载  异步加载
+			meta: {
+				title: "菜单管理-新增",
+				requireAuth: false // 只要此字段为true，必须做鉴权处理
+			}
+		},
+		{
+			path: "/backstage/sysManage/MenuManage/EditMenu",
+			name: "EditMenu",
+			component: () => import("./views/backstage/sysManage/menuManage/components/EditMenu.vue"), // vue路由懒加载  异步加载
+			meta: {
+				title: "菜单管理-修改",
+				requireAuth: false // 只要此字段为true，必须做鉴权处理
+			}
+		},
 	]
 })
 
