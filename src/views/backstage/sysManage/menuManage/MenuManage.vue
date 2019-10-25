@@ -1,25 +1,25 @@
 <template>
   <!-- 系统管理-菜单配置 -->
-  <section class="pad-l-20 pad-t-20 MenuManage pad-r-20">
+  <section class="pad-l-20 pad-t-20 menu-manage pad-r-20">
     <el-row>
       <el-col>
         <span>
-          <el-button type="primary" icon="el-icon-s-promotion">刷新</el-button>
+          <el-button icon="el-icon-s-promotion">刷新</el-button>
         </span>
         <span class="pad-l-10">
           <el-button type="primary" @click="addMenu" icon="el-icon-plus">新增</el-button>
         </span>
         <span class="pad-l-10">
-          <el-button type="primary" @click="editMenu" icon="el-icon-edit">修改</el-button>
+          <el-button type="warning" @click="editMenu" icon="el-icon-edit">修改</el-button>
         </span>
         <span class="pad-l-10">
-          <el-button type="primary" @click="deleteMenu" icon="el-icon-delete">删除</el-button>
+          <el-button type="danger" @click="deleteMenu" icon="el-icon-delete">删除</el-button>
         </span>
       </el-col>
     </el-row>
     <el-row class="pad-t-20">
       <el-col>
-        <el-table :data="tableData" style="width: 100%;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table :data="tableData" :max-height="800" style="width: 100%;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
           <el-table-column label="操作" width="50" type="selection">
             <template slot-scope="scope">
               <el-radio v-model="checked" :label="scope.row.id" @change.native="getRadio(scope.$index,scope.row)">{{&nbsp;}}</el-radio>
@@ -234,7 +234,7 @@ export default {
 };
 </script>
 <style lang="less">
-.MenuManage {
+.menu-manage {
   .el-table__header-wrapper {
     .el-checkbox {
       display: none;

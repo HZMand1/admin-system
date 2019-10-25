@@ -52,7 +52,7 @@ const router = new Router({
     name: "AddMenu",
     component: () => import("./views/backstage/sysManage/menuManage/components/AddMenu.vue"), // vue路由懒加载  异步加载
     meta: {
-      title: "菜单管理-新增",
+      title: "菜单管理",
       requireAuth: false // 只要此字段为true，必须做鉴权处理
     }
   },
@@ -61,13 +61,29 @@ const router = new Router({
     name: "EditMenu",
     component: () => import("./views/backstage/sysManage/menuManage/components/EditMenu.vue"), // vue路由懒加载  异步加载
     meta: {
-      title: "菜单管理-修改",
+      title: "菜单管理",
+      requireAuth: false // 只要此字段为true，必须做鉴权处理
+    }
+  },
+  {
+    path: "/backstage/sysManage/SysParameters",
+    name: "SysParameters",
+    component: () => import("./views/backstage/sysManage/sysParameters/SysParameters.vue"), // vue路由懒加载  异步加载
+    meta: {
+      title: "系统参数",
+      requireAuth: false // 只要此字段为true，必须做鉴权处理
+    }
+  },
+  {
+    path: "/backstage/sysManage/SysParameters/AddSys",
+    name: "AddSys",
+    component: () => import("./views/backstage/sysManage/sysParameters/components/AddSys.vue"), // vue路由懒加载  异步加载
+    meta: {
+      title: "系统参数",
       requireAuth: false // 只要此字段为true，必须做鉴权处理
     }
   },
   ]
-
-
 })
 
 Vue.use(Router)
