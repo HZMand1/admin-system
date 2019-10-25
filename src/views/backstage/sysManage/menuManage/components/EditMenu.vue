@@ -18,7 +18,9 @@
             <el-input v-model="ruleForm.menuName"></el-input>
           </el-form-item>
           <el-form-item label="上级菜单" :prop="ruleForm.type==='button'?'supeName':''">
-            <el-input v-model="ruleForm.supeName"></el-input>
+            <el-input v-model="ruleForm.supeName" :readonly="true">
+              <i class="el-icon-edit el-input__icon" slot="suffix" @click="showTree"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="菜单URL" prop="menuUrl" v-if="ruleForm.type==='menu'">
             <el-input v-model="ruleForm.menuUrl"></el-input>
@@ -46,14 +48,19 @@
         </el-form>
       </el-col>
     </el-row>
+    <tree-dialog @cancelEmit="cancelEmit" @confirmEmit="confirmEmit" :isDialog="isDialog"></tree-dialog>
   </section>
 </template>
 <script>
+import TreeDialog from "./TreeDialog";
 export default {
   name: "EditMenu",
+  components: {
+    TreeDialog
+  },
   data() {
     return {
-      dialogVisible: true,
+      isDialog: false,
       ruleForm: {
         type: "menu",
         menuName: "",
@@ -93,13 +100,27 @@ export default {
         }
       });
     },
+    // 显示组织架构树
+    showTree() {
+      this.isDialog = true;
+    },
     // 返回
     goback() {
       this.$router.push({ path: "/backstage/sysManage/MenuManage" });
     },
     // 重置
     resetForm(formName) {
+      this.ruleForm.type = "menu";
       this.$refs[formName].resetFields();
+    },
+    // 取消弹框
+    cancelEmit(b) {
+      this.isDialog = b;
+    },
+    // 确认弹框
+    confirmEmit(b, o) {
+      this.isDialog = b;
+      this.ruleForm.supeName = o;
     }
   }
 };
