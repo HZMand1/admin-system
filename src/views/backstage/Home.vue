@@ -64,21 +64,16 @@
 </aside>
 <section class="content-container">
   <div class="grid-content bg-purple-light">
-    <el-col :span="24"
-            class="breadcrumb-container">
+    <el-col :span="24" class="breadcrumb-container">
       <!-- <strong class="title">{{$route.name}}</strong> -->
-      <el-breadcrumb separator="/"
-                     class="breadcrumb-inner">
-        <el-breadcrumb-item v-for="item in $route.matched"
-                            :key="item.path">
+      <el-breadcrumb separator="/" class="breadcrumb-inner">
+        <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
           {{ item.name }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </el-col>
-    <el-col :span="24"
-            class="content-wrapper">
-      <transition name="fade"
-                  mode="out-in">
+    <el-col :span="24" class="content-wrapper">
+      <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
     </el-col>
@@ -126,7 +121,11 @@ export default {
     handleclose() {
       // console.log('handleclose');
     },
-    handleselect: function() {},
+    //  菜单回调
+    handleselect: function(index, indexPath) {
+      console.log(index);
+      console.log(indexPath);
+    },
     // 退出登录
     logout: function() {
       let _this = this;

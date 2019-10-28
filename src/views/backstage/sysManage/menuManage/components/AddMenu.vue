@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="上级菜单" :prop="ruleForm.type==='button'?'supeName':''">
             <el-input v-model="ruleForm.supeName" :readonly="true">
-              <i class="el-icon-edit el-input__icon" slot="suffix" @click="showTree"></i>
+              <i class="iconyanjing iconfont" slot="suffix" @click="showTree" style="cursor: pointer;"></i>
             </el-input>
           </el-form-item>
           <el-form-item label="菜单URL" prop="menuUrl" v-if="ruleForm.type==='menu'">
@@ -32,7 +32,9 @@
             <el-input-number v-model="ruleForm.num" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
           <el-form-item label="图标" v-if="ruleForm.type!=='button'">
-            <el-input v-model="ruleForm.icon" placeholder="图标"></el-input>
+            <el-input v-model="ruleForm.icon" placeholder="图标,点击右边按钮选取图标">
+              <i class="iconyanjing iconfont" slot="suffix" @click="showIcon" style="cursor: pointer;"></i>
+            </el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-radio-group v-model="ruleForm.status">
@@ -42,25 +44,29 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-            <el-button type="primary" @click="goback">返回</el-button>
+            <el-button type="warning" @click="goback">返回</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
       </el-col>
     </el-row>
-    <tree-dialog @cancelEmit="cancelEmit" @confirmEmit="confirmEmit" :isDialog="isDialog"></tree-dialog>
+    <tree-dialog @cancelEmit="cancelEmit" @confirmEmit="confirmEmit" :isDialog="isDialogTree"></tree-dialog>
+    <icon-dialog :isDialog="isDialogIcon" @cancelIconEmit="cancelIconEmit"></icon-dialog>
   </section>
 </template>
 <script>
 import TreeDialog from "./TreeDialog";
+import IconDialog from "./IconDialog";
 export default {
   name: "AddMenu",
   components: {
-    TreeDialog
+    TreeDialog,
+    IconDialog
   },
   data() {
     return {
-      isDialog: false,
+      isDialogTree: false,
+      isDialogIcon: false,
       ruleForm: {
         type: "menu",
         menuName: "",
@@ -110,15 +116,23 @@ export default {
     },
     // 显示组织架构树
     showTree() {
-      this.isDialog = true;
+      this.isDialogTree = true;
     },
-    // 取消弹框
+    // 显示icon弹框
+    showIcon() {
+      this.isDialogIcon = true;
+    },
+    // 取消tree弹框
     cancelEmit(b) {
-      this.isDialog = b;
+      this.isDialogTree = b;
     },
-    // 确认弹框
+    // 关闭icon弹框
+    cancelIconEmit(b) {
+      this.isDialogIcon = b;
+    },
+    // 确认tree弹框
     confirmEmit(b, o) {
-      this.isDialog = b;
+      this.isDialogTree = b;
       this.ruleForm.supeName = o;
     }
   }
