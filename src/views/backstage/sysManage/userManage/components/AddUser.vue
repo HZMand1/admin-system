@@ -37,7 +37,7 @@
       <el-form-item>
         <el-button type="primary"
                    @click="submit">提交</el-button>
-        <el-button>返回</el-button>
+        <el-button @click="back">返回</el-button>
         <el-button>重置</el-button>
       </el-form-item>
     </el-form>
@@ -72,6 +72,9 @@ export default {
     //表单提交
     submit () {
       this.$confirm("确认提交？")
+    },
+    back () {
+      this.$fun.goBack();
     }
   }
 }
