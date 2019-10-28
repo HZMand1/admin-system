@@ -1,6 +1,6 @@
 <template>
   <!-- 系统管理-菜单配置 -->
-  <section class="pad-l-20 pad-t-20 menu-manage pad-r-20">
+  <section class="menu-manage">
     <el-row>
       <el-col>
         <span>

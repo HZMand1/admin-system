@@ -1,6 +1,6 @@
 <template>
   <!-- 新增菜单结构 -->
-  <section class="bor-1 mar-l-20 mar-r-20 mar-t-20">
+  <section class="bor-1 ">
     <el-row class="bor-b-1">
       <el-col class="pad-l-20 font-weight-b" style="line-height: 50px;">修改</el-col>
     </el-row>
@@ -106,7 +106,7 @@ export default {
     },
     // 返回
     goback() {
-      this.$router.push({ path: "/backstage/sysManage/MenuManage" });
+      this.$fun.goBack();
     },
     // 重置
     resetForm(formName) {

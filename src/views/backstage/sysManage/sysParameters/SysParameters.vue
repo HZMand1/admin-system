@@ -1,6 +1,6 @@
 <template>
   <!-- 系统管理-系统参数 -->
-  <section class="pad-l-20 pad-t-20 sys-parameters pad-r-20">
+  <section class="sys-parameters">
     <el-row>
       <el-col :span="4">
         <el-input v-model="searchValue" placeholder="参数名"></el-input>
