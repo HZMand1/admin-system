@@ -80,6 +80,15 @@ const router = new Router({
 						requireAuth: false // 只要此字段为true，必须做鉴权处理
 					}
 				},
+				{
+					path: "/backstage/sysManage/SysParameters/EditSys",
+					name: "修改参数",
+					hidden: true,
+					component: () => import("./views/backstage/sysManage/sysParameters/components/EditSys.vue"), // vue路由懒加载  异步加载
+					meta: {
+						requireAuth: false // 只要此字段为true，必须做鉴权处理
+					}
+				},
 			]
 		},
 

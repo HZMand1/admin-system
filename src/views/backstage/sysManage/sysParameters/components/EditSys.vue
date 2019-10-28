@@ -1,8 +1,8 @@
 <template>
-  <!-- 新增系统参数 -->
+  <!-- 修改系统参数 -->
   <section class="bor-1">
     <el-row class="bor-b-1">
-      <el-col class="pad-l-20 font-weight-b" style="line-height: 50px;">新增</el-col>
+      <el-col class="pad-l-20 font-weight-b" style="line-height: 50px;">修改</el-col>
     </el-row>
     <el-row class="pad-t-30">
       <el-col>
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  name: "AddSys",
+  name: "EditSys",
   data() {
     return {
       ruleForm: {

@@ -56,52 +56,62 @@ export default {
         {
           argName: "appCode",
           argValue: "王小虎",
-          remark: "上海市普陀区金沙江路 1518 弄"
+          remark: "上海市普陀区金沙江路 1518 弄",
+          id: 10
         },
         {
           argName: "code",
           argValue: "李四",
-          remark: "45455555"
+          remark: "45455555",
+          id: 20
         },
         {
           argName: "appCode",
           argValue: "王小虎",
-          remark: "上海市普陀区金沙江路 1518 弄"
+          remark: "上海市普陀区金沙江路 1518 弄",
+          id: 30
         },
         {
           argName: "code",
           argValue: "李四",
-          remark: "45455555"
+          remark: "45455555",
+          id: 40
         },
         {
           argName: "appCode",
           argValue: "王小虎",
-          remark: "上海市普陀区金沙江路 1518 弄"
+          remark: "上海市普陀区金沙江路 1518 弄",
+          id: 50
         },
         {
           argName: "code",
           argValue: "李四",
-          remark: "45455555"
+          remark: "45455555",
+          id: 60
         },
         {
           argName: "appCode",
           argValue: "王小虎",
-          remark: "上海市普陀区金沙江路 1518 弄"
+          remark: "上海市普陀区金沙江路 1518 弄",
+          id: 70
         },
         {
           argName: "code",
           argValue: "李四",
-          remark: "45455555"
+          remark: "45455555",
+          id: 80
         },
         {
           argName: "appCode",
           argValue: "王小虎",
-          remark: "上海市普陀区金沙江路 1518 弄"
+          remark: "上海市普陀区金沙江路 1518 弄",
+          id: 90
         },
         {
           argName: "code",
           argValue: "李四",
-          remark: "45455555"
+          remark: "45455555",
+          id: 100
         }
       ],
       multipleSelection: []
@@ -131,14 +141,36 @@ export default {
         this.$message.error("请选择一条记录");
         return;
       }
+      let id = this.multipleSelection[0].id;
+      this.$router.push({
+        path: "/backstage/sysManage/SysParameters/EditSys",
+        query: { id: id }
+      });
     },
     // 删除
     deleteSys() {
       let len = this.multipleSelection.length;
-      if (len !== 1) {
+      if (len < 1) {
         this.$message.error("请选择一条记录");
         return;
       }
+      this.$confirm("确定要删除选中的记录？", "信息", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };

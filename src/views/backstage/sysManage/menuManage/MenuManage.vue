@@ -33,19 +33,24 @@
           </el-table-column>
           <el-table-column prop="menu" label="上级菜单" min-width="5%">
           </el-table-column>
-          <el-table-column prop="icon" label="图标" min-width="5%">
+          <el-table-column prop="icon" label="图标" min-width="8%">
           </el-table-column>
-          <el-table-column prop="type" label="类型" min-width="5%">
+          <el-table-column label="类型" min-width="4%">
+            <template slot-scope="scope">
+              <div v-if="scope.row.type==='directory'" class="directory">目录</div>
+              <div v-if="scope.row.type==='button'" class="button">按钮</div>
+              <div v-if="scope.row.type==='menu'" class="menu">菜单</div>
+            </template>
           </el-table-column>
           <el-table-column prop="sort" label="排序" min-width="5%">
           </el-table-column>
           <el-table-column prop="URL" label="菜单URL" min-width="10%">
           </el-table-column>
-          <el-table-column prop="auth" label="授权标识" min-width="40%">
+          <el-table-column prop="auth" label="授权标识" min-width="50%">
           </el-table-column>
-          <el-table-column prop="status" label="状态" min-width="5%">
+          <el-table-column prop="status" label="状态" min-width="4%">
             <template slot-scope="scope">
-              <div>
+              <div class="button" :class="scope.row.status?'blue':'red'">
                 {{scope.row.status?"有效":"无效"}}
               </div>
             </template>
@@ -68,7 +73,7 @@ export default {
           name: "会员管理",
           menu: "",
           icon: "",
-          type: "目录",
+          type: "directory",
           sort: "1",
           URL: "/home",
           auth: "",
@@ -80,7 +85,7 @@ export default {
               name: "会员等级",
               menu: "",
               icon: "",
-              type: "目录",
+              type: "directory",
               sort: "2",
               URL: "",
               auth: "",
@@ -94,7 +99,7 @@ export default {
           name: "商城配置",
           menu: "",
           icon: "",
-          type: "目录",
+          type: "directory",
           sort: "2",
           URL: "",
           auth: "",
@@ -106,7 +111,7 @@ export default {
               name: "商品规格",
               menu: "",
               icon: "",
-              type: "目录",
+              type: "directory",
               sort: "2",
               URL: "",
               auth: "",
@@ -118,7 +123,7 @@ export default {
                   name: "查看",
                   menu: "",
                   icon: "",
-                  type: "按钮",
+                  type: "button",
                   sort: "2",
                   URL: "",
                   auth: "",
@@ -130,7 +135,7 @@ export default {
                   name: "新增",
                   menu: "",
                   icon: "",
-                  type: "按钮",
+                  type: "button",
                   sort: "2",
                   URL: "",
                   auth: "",
@@ -146,7 +151,7 @@ export default {
           name: "编辑商品",
           menu: "",
           icon: "",
-          type: "目录",
+          type: "directory",
           sort: "2",
           URL: "",
           auth: "",
@@ -158,7 +163,7 @@ export default {
               name: "商城配置",
               menu: "",
               icon: "",
-              type: "目录",
+              type: "directory",
               sort: "2",
               URL: "",
               auth: "",
@@ -170,7 +175,7 @@ export default {
               name: "商城配置",
               menu: "",
               icon: "",
-              type: "目录",
+              type: "menu",
               sort: "2",
               URL: "",
               auth: "",
@@ -239,6 +244,27 @@ export default {
     .el-checkbox {
       display: none;
     }
+  }
+  .directory,
+  .button,
+  .menu {
+    padding: 0;
+    background-color: #1ab394;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+  }
+  .button {
+    background-color: #f8ac59;
+  }
+  .menu {
+    background-color: #1c84c6;
+  }
+  .blue {
+    background-color: #1c84c6;
+  }
+  .red {
+    background-color: #ed5565;
   }
 }
 </style>
