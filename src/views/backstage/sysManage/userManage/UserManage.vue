@@ -12,24 +12,26 @@
                    type="primary"
                    @click="addUser">新增</el-button>
         <el-button class="mar-l-10 mar-b-20"
-                   type="primary">修改</el-button>
+                   type="primary"
+                   @click="editUser">修改</el-button>
         <el-button class="mar-l-10 mar-b-20"
-                   type="danger">删除</el-button>
+                   type="danger"
+                   @click="deleteUser">删除</el-button>
       </el-col>
     </el-row>
 
     <!-- 表格 -->
     <template>
       <el-table border
-                :data="tableData"
+                :data="tableDatas"
                 style="width:100%"
                 @selection-change="handleSelectionChange">
         <el-table-column type="index"
                          label=" "></el-table-column>
         <el-table-column type="selection"></el-table-column>
-        <el-table-column prop="userName"
+        <el-table-column prop="name"
                          label="用户名"></el-table-column>
-        <el-table-column prop="department"
+        <el-table-column prop="appCode"
                          label="所属部门"></el-table-column>
         <el-table-column prop="email"
                          label="邮箱"></el-table-column>
@@ -37,53 +39,103 @@
                          label="手机号"></el-table-column>
         <el-table-column prop="status"
                          label="状态"></el-table-column>
-        <el-table-column prop="createTime"
+        <el-table-column prop="addTime"
                          label="创建时间"></el-table-column>
       </el-table>
     </template>
+
+    <!-- 分页 -->
+    <el-row class="pad-t-20 pad-b-20 bor-1">
+      <div class="text-center">
+        <el-pagination background
+                       @size-change="setAuctionSizeChange"
+                       @current-change="setAuctionCurrentChange"
+                       :current-page="currentPage"
+                       :total="total"
+                       :page-size="totalPage"
+                       :page-sizes="[10, 20, 30, 40]"
+                       layout="total,sizes,prev,pager,next,jumper"></el-pagination>
+      </div>
+    </el-row>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
+      currentPage: 1, // 分页 当前页数
+      totalPage: 10, // 分页 每页显示多少条
+      total: 100, // 总条数
       input: "",
-      tableData: [{
-        userName: "小明",
-        department: "市场部",
-        email: "123@qq.con",
-        phone: "123",
-        status: "正常",
-        createTime: Date.parse(new Date())
-      }, {
-        userName: "小萌",
-        department: "计划部",
-        email: "456@qq.com",
-        phone: "456",
-        status: "正常",
-        createTime: Date.parse(new Date())
-      }, {
-        userName: "小曌",
-        department: "业务部",
-        email: "789@qq.com",
-        phone: "789",
-        status: "正常",
-        createTime: Date.parse(new Date())
-      }]
-
+      tableDatas: [],//接口返回的列表数据源
+      multipleSelection: [] //勾选的列
     }
+  },
+  mounted () {
+    let data = this.$api.api.findSeedUserAllPage({})
+      .then(result => {
+        let dataRow = result.data;
+        if (dataRow.retcode === 1) {
+          //数据源
+          this.tableDatas = dataRow.data.list
+          //当前页数
+          this.currentPage = dataRow.data.pageNum
+          //每页条数
+          this.totalPage = dataRow.data.pageSize
+          //总条数
+          this.total = dataRow.data.total
+        } else {
+          this.$message.error(dataRow.retmsg)
+        }
+      }).catch(() => {
+        this.$message.error("请求失败！")
+      })
   },
   methods: {
     handleSelectionChange (val) {
       this.multipleSelection = val;
     },
-
+    // 设置显示每页多少条数据
+    setAuctionSizeChange (currentPage) {
+      this.totalPage = currentPage;
+    },
+    // 设置当前页码
+    setAuctionCurrentChange (val) {
+      this.currentPage = val;
+    },
     //跳转到新增页面
     addUser () {
       this.$router.push({ path: "/backstage/sysManage/userManage/components/AddUser" })
+    },
+    //跳转到编辑页面
+    editUser () {
+      let num = this.multipleSelection.length;
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
+      let id = this.multipleSelection[0].id;
+      this.$router.push({
+        path: "/backstage/sysManage/roleManage/components/EditUser",
+        query: { id: id }
+      })
+    },
+    //删除数据
+    deleteUser () {
+      let num = this.multipleSelection.length();
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
     }
   }
 
 
 }
 </script>
+<style lang="less" scoped>
+.bor-1 {
+  border: 1px solid #ebeef5;
+  border-top: none;
+}
+</style>

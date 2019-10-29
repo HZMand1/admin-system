@@ -2,28 +2,33 @@
   <div id="adduser">
     <el-form :model="reluForm"
              :rules="rules"
-             ref="ruleForm"
+             ref="reluForm"
              label-width="100px">
+      <el-form-item label="账号"
+                    prop="userAccount"
+                    required>
+        <el-input v-model="ruleForm.userAccount"
+                  placeholder="请输入账号"></el-input>
+      </el-form-item>
+      <el-form-item label="密码"
+                    prop="userPassword"
+                    required>
+        <el-input v-model="ruleForm.userPassword"
+                  placeholder="请输入密码"></el-input>
+      </el-form-item>
       <el-form-item label="用户名"
                     prop="userName"
                     required>
         <el-input v-model="ruleForm.userName"
                   placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="所属部门"
-                    prop="department">
-        <el-input v-model="ruleForm.department"
-                  placeholder="请输入部门"></el-input>
-      </el-form-item>
       <el-form-item label="邮箱"
-                    prop="email"
-                    required>
+                    prop="email">
         <el-input v-model="ruleForm.email"
                   placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <el-form-item label="手机号"
-                    prop="phone"
-                    required>
+                    prop="phone">
         <el-input v-model="ruleForm.phone"
                   placeholder="请输入手机号"></el-input>
       </el-form-item>
@@ -47,9 +52,10 @@
 export default {
   data () {
     return {
-      ruleForm: {
+      reluForm: {
+        userAccount: "",
+        userPassword: "",
         userName: "",
-        department: "",
         email: "",
         phone: ""
       },
@@ -71,7 +77,24 @@ export default {
   methods: {
     //表单提交
     submit () {
-      this.$confirm("确认提交？")
+      this.$confirm("确认提交？", "提交", {        confirmButtonText: "确定", cancelButtonText: "取消", type: "warning"
+      })
+        .then(() => {
+          //调用新增接口
+          let dataRow = this.$api.api.insertSeedUser({
+            //参数
+          }).then(result => {
+            //返回结果处理
+            let dataRow = result.data;
+            if (dataRow.retcode === 1) {
+
+            } else {
+              this.$message.error(dataRow.retmsg)
+            }
+          }).catch(() => {
+            this.$message.error("请求失败！")
+          })
+        })
     },
     back () {
       this.$fun.goBack();

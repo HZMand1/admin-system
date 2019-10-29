@@ -10,11 +10,13 @@
         <el-button class="mar-l-10 mar-b-20">查询</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
-                   @click="addUser">新增</el-button>
+                   @click="addRole">新增</el-button>
         <el-button class="mar-l-10 mar-b-20"
-                   type="primary">修改</el-button>
+                   type="primary"
+                   @click="editRole">修改</el-button>
         <el-button class="mar-l-10 mar-b-20"
-                   type="danger">删除</el-button>
+                   type="danger"
+                   @click="deleteRole">删除</el-button>
       </el-col>
     </el-row>
 
@@ -77,7 +79,8 @@ export default {
         department: "业务部",
         remark: "备注3",
         createTime: Date.parse(new Date())
-      }]
+      }],
+      multipleSelection: []
 
     }
   },
@@ -95,8 +98,29 @@ export default {
       this.currentPage = val;
     },
     //跳转到新增页面
-    addUser () {
+    addRole () {
       this.$router.push({ path: "/backstage/sysManage/roleManage/components/AddRole" })
+    },
+    //跳转到编辑页面
+    editRole () {
+      let num = this.multipleSelection.length;
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
+      let id = this.multipleSelection[0].id;
+      this.$router.push({
+        path: "/backstage/sysManage/roleManage/components/EditRole",
+        query: { id: id }
+      })
+    },
+    //删除数据
+    deleteRole () {
+      let num = this.multipleSelection.length;
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
     }
   }
 
