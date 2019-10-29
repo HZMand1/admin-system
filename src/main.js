@@ -2,8 +2,10 @@ import Vue from "vue"
 import App from "./App.vue"
 import ElementUI from "element-ui"
 import router from "./router"
+import store from "./store";
 import Axios from "./assets/request/http";
 import Api from "./assets/api/api";
+import Config from "./assets/utils/config";
 Vue.config.productionTip = false
 import "element-ui/lib/theme-chalk/index.css";
 import "./assets/less/base.less";
@@ -12,6 +14,7 @@ import Fun from "./assets/utils/public";
 Vue.prototype.$axios = Axios;
 Vue.prototype.$api = Api;
 Vue.prototype.$fun = Fun;
+Vue.prototype.$config = Config;
 Vue.use(ElementUI)
 router.beforeEach((to, from, next) => {
 	// 路由发生变化修改页面title
@@ -22,5 +25,6 @@ router.beforeEach((to, from, next) => {
 });
 new Vue({
 	router,
+	store,
 	render: h => h(App),
 }).$mount("#app")
