@@ -19,22 +19,18 @@
     </el-row>
     <el-row class="pad-t-20">
       <el-col>
-        <el-table :data="tableData" :max-height="800" style="width: 100%;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table :data="tableData" style="width: 100%;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
           <el-table-column label="操作" width="50" type="selection">
             <template slot-scope="scope">
               <el-radio v-model="checked" :label="scope.row.id" @change.native="getRadio(scope.$index,scope.row)">{{&nbsp;}}</el-radio>
             </template>
           </el-table-column>
           <!-- <el-table-column type="selection" width="55">
-          </el-table-column> -->
-          <el-table-column prop="name" label="名称" width="180">
-          </el-table-column>
-          <el-table-column prop="code" label="编号" min-width="3%">
-          </el-table-column>
-          <el-table-column prop="menu" label="上级菜单" min-width="5%">
-          </el-table-column>
-          <el-table-column prop="icon" label="图标" min-width="8%">
-          </el-table-column>
+          </el-table-column>-->
+          <el-table-column prop="name" label="名称" width="180"></el-table-column>
+          <el-table-column prop="code" label="编号" min-width="3%"></el-table-column>
+          <el-table-column prop="menu" label="上级菜单" min-width="5%"></el-table-column>
+          <el-table-column prop="icon" label="图标" min-width="8%"></el-table-column>
           <el-table-column label="类型" min-width="4%">
             <template slot-scope="scope">
               <div v-if="scope.row.type==='directory'" class="directory">目录</div>
@@ -42,17 +38,12 @@
               <div v-if="scope.row.type==='menu'" class="menu">菜单</div>
             </template>
           </el-table-column>
-          <el-table-column prop="sort" label="排序" min-width="5%">
-          </el-table-column>
-          <el-table-column prop="URL" label="菜单URL" min-width="10%">
-          </el-table-column>
-          <el-table-column prop="auth" label="授权标识" min-width="50%">
-          </el-table-column>
+          <el-table-column prop="sort" label="排序" min-width="5%"></el-table-column>
+          <el-table-column prop="URL" label="菜单URL" min-width="10%"></el-table-column>
+          <el-table-column prop="auth" label="授权标识" min-width="50%"></el-table-column>
           <el-table-column prop="status" label="状态" min-width="4%">
             <template slot-scope="scope">
-              <div class="button" :class="scope.row.status?'blue':'red'">
-                {{scope.row.status?"有效":"无效"}}
-              </div>
+              <div class="button" :class="scope.row.status?'blue':'red'">{{scope.row.status?"有效":"无效"}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -186,6 +177,9 @@ export default {
       ],
       configItem: {}
     };
+  },
+  mounted() {
+    console.log(this.$config.RET_CODE.SUCCESS_CODE);
   },
   methods: {
     getRadio(index, row) {

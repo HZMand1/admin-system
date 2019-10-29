@@ -15,7 +15,6 @@ const router = new Router({
 			component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
 			meta: {
 				requireAuth: false // 只要此字段为true，必须做鉴权处理
-
 			},
 			children: [{
 					path: "/backstage/sysManage/userManage",
@@ -90,8 +89,7 @@ const router = new Router({
 					}
 				},
 			]
-		},
-
+		}
 	]
 })
 
