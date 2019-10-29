@@ -1,25 +1,25 @@
 <template>
   <div id="adduser">
-    <el-form :model="reluForm"
+    <el-form :model="ruleForm"
              :rules="rules"
-             ref="reluForm"
+             ref="ruleForm"
              label-width="100px">
       <el-form-item label="账号"
-                    prop="userAccount"
+                    prop="account"
                     required>
-        <el-input v-model="ruleForm.userAccount"
+        <el-input v-model="ruleForm.account"
                   placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-form-item label="密码"
-                    prop="userPassword"
+                    prop="password"
                     required>
-        <el-input v-model="ruleForm.userPassword"
+        <el-input v-model="ruleForm.password"
                   placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="用户名"
-                    prop="userName"
+                    prop="name"
                     required>
-        <el-input v-model="ruleForm.userName"
+        <el-input v-model="ruleForm.name"
                   placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="邮箱"
@@ -52,15 +52,15 @@
 export default {
   data () {
     return {
-      reluForm: {
-        userAccount: "",
-        userPassword: "",
-        userName: "",
+      ruleForm: {
+        account: "",
+        password: "",
+        name: "",
         email: "",
         phone: ""
       },
       rules: {
-        userName: [
+        name: [
           { required: true, message: "请输入用户名", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
@@ -87,7 +87,10 @@ export default {
             //返回结果处理
             let dataRow = result.data;
             if (dataRow.retcode === 1) {
-
+              this.$message({
+                message: dataRow.retmsg,
+                type: success
+              })
             } else {
               this.$message.error(dataRow.retmsg)
             }
