@@ -15,6 +15,7 @@ const router = new Router({
 			component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
 			meta: {
 				requireAuth: false // 只要此字段为true，必须做鉴权处理
+
 			},
 			children: [{
 					path: "/backstage/sysManage/userManage",
@@ -30,6 +31,51 @@ const router = new Router({
 					name: "新增用户",
 					hidden: true,
 					component: () => import("./views/backstage/sysManage/userManage/components/AddUser.vue"),
+					meta: {
+						requireAuth: true
+					}
+				},
+				{
+					path: "/backstage/sysManage/roleManage/components/AddRole",
+					name: "新增角色",
+					hidden: true,
+					component: () => import("./views/backstage/sysManage/roleManage/components/AddRole.vue"),
+					meta: {
+						requireAuth: true
+					}
+				},
+				{
+					path: "/backstage/sysManage/roleManage/components/EditRole",
+					name: "编辑角色",
+					hidden: true,
+					component: () => import("./views/backstage/sysManage/roleManage/components/EditRole.vue"),
+					meta: {
+						requireAuth: true
+					}
+				},
+				{
+					path: "/backstage/sysManage/roleManage",
+					name: "角色管理",
+					hidden: false,
+					component: () => import("./views/backstage/sysManage/roleManage/RoleManage.vue"),
+					meta: {
+						requireAuth: true
+					}
+				},
+				{
+					path: "/backstage/sysManage/roleManage/components/AddRole",
+					name: "新增角色",
+					hidden: true,
+					component: () => import("./views/backstage/sysManage/roleManage/components/AddRole.vue"),
+					meta: {
+						requireAuth: true
+					}
+				},
+				{
+					path: "/backstage/sysManage/roleManage/components/EditRole",
+					name: "编辑角色",
+					hidden: true,
+					component: () => import("./views/backstage/sysManage/roleManage/components/EditRole.vue"),
 					meta: {
 						requireAuth: true
 					}
