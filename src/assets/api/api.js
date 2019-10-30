@@ -7,19 +7,44 @@ axios.defaults.baseURL = "/api";
 let url = process.env.VUE_APP_BASEURL;
 
 const api = {
-  login (params) {
-    return axios.post("login", params);
-  },
-  //后台用户管理---分页列表
-  findSeedUserAllPage (params) {
-    return axios.post("/rest/seed/user/findSeedUserAllPage", params);
-  },
-  //后台用户管理---新增用户
-  insertSeedUser (params) {
-    return axios.post("/rest/seed/user/insertSeedUser", params);
-  }
+	// 登录
+	login(params) {
+		return axios.post("login", params);
+	},
+	//后台用户管理---分页列表
+	findSeedUserAllPage(params) {
+		return axios.post("/rest/seed/user/findSeedUserAllPage", params);
+	},
+	//后台用户管理---新增用户
+	insertSeedUser(params) {
+		return axios.post("/rest/seed/user/insertSeedUser", params);
+	},
+	// 后台菜单管理-获取菜单树结构
+	findMenuZtree(params = {}) {
+		return axios.post("/rest/seed/menu/findMenuZtree", params);
+	},
+	// 后台管理 - 菜单管理 - 新增菜单按钮
+	insertMenu(params = {}) {
+		return axios.post("/rest/seed/menu/insertMenu", params);
+	},
+	// 后台管理 — 系统参数 — 列表查询
+	findSysList(params = {}) {
+		return axios.post("/systemParam/findList", params);
+	},
+	// 后台管理 — 系统参数 — 添加
+	addSysList(params = {}) {
+		return axios.post("/systemParam/add", params);
+	},
+	// 后台管理 — 系统参数 — 删除
+	delSysList(params = {}) {
+		return axios.post("/systemParam/del", params);
+	},
+	// 后台管理 — 系统参数 — 修改
+	updateSysList(params = {}) {
+		return axios.post("/systemParam/update", params);
+	},
 }
 
 export default {
-  api
+	api
 }
