@@ -29,50 +29,31 @@ export default {
   },
   data() {
     return {
-      treeData: [
-        {
-          id: 1,
-          label: "一级菜单",
-          children: [
-            {
-              id: 2,
-              label: "会员管理",
-              children: [
-                {
-                  id: 3,
-                  label: "会员收藏"
-                },
-                {
-                  id: 4,
-                  label: "会员优惠卷"
-                }
-              ]
-            },
-            {
-              id: 21,
-              label: "商城配置",
-              children: [
-                {
-                  id: 31,
-                  label: "商城属性种类"
-                },
-                {
-                  id: 41,
-                  label: "商品规格"
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      treeData: [],
       defaultProps: {
         children: "children",
         label: "label"
       },
       selectOrg: {
         orgsid: []
-      }
+      },
+      code: this.$config.RET_CODE.SUCCESS_CODE
     };
+  },
+  mounted() {
+    this.$api.api
+      .findMenuZtree()
+      .then(result => {
+        let datas = result.data.data;
+        if (result.data.retcode === this.code) {
+          this.treeData = datas;
+        } else {
+          this.$message.error(result.data.retmsg);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     // 自定义tree节点
@@ -80,7 +61,7 @@ export default {
       return (
         <span class="custom-tree-node">
           <i class={data.className}></i>
-          <span>{node.label}</span>
+          <span>{node.name}</span>
         </span>
       );
     },

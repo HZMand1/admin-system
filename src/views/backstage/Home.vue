@@ -99,7 +99,7 @@
 import { mapActions, mapMutations } from "vuex";
 import Taps from "../../components/Taps";
 export default {
-  components: {  },
+  components: {},
   data() {
     return {
       sysName: "西北地区供应保障服务平台",

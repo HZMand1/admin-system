@@ -20,7 +20,7 @@ function isPc() {
 let sysType = isPc();
 // 创建axios实例
 let instance = axios.create({
-	timeout: 1000 * 6 // 超时
+	timeout: 1000 * 10 // 超时
 });
 // 设置post请求头
 instance.defaults.headers.post["Content-Type"] =

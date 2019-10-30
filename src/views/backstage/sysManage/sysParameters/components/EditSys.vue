@@ -4,7 +4,7 @@
     <el-row class="bor-b-1">
       <el-col class="pad-l-20 font-weight-b" style="line-height: 50px;">修改</el-col>
     </el-row>
-    <el-row class="pad-t-30">
+    <el-row class="pad-t-30" v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
       <el-col>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm pad-r-30">
           <el-form-item label="参数名" prop="sysName">
@@ -12,6 +12,9 @@
           </el-form-item>
           <el-form-item label="参数值" prop="sysValue">
             <el-input v-model="ruleForm.sysValue" placeholder="参数值"></el-input>
+          </el-form-item>
+          <el-form-item label="类型" prop="sysType">
+            <el-input v-model="ruleForm.sysType" placeholder="类型"></el-input>
           </el-form-item>
           <el-form-item label="备注">
             <el-input type="textarea" :rows="3" placeholder="备注" v-model="ruleForm.sysTextarea">
@@ -35,6 +38,7 @@ export default {
       ruleForm: {
         sysName: "",
         sysValue: "",
+        sysType: "",
         sysTextarea: ""
       },
       rules: {
@@ -44,22 +48,80 @@ export default {
         sysValue: [
           { required: true, message: "参数值不能为空", trigger: "blur" }
         ],
+        sysType: [{ required: true, message: "类型不能为空", trigger: "blur" }],
         menuUrl: [
           { required: true, message: "菜单 url 不能为空", trigger: "blur" }
         ]
-      }
+      },
+      code: this.$config.RET_CODE.SUCCESS_CODE,
+      SSXT: this.$config.SSXT,
+      loading: false,
+      sysId: null
     };
   },
+  mounted() {
+    const { type, id } = this.$route.query;
+    this.sysId = id;
+    let params = {
+      appCode: this.SSXT,
+      type: type
+    };
+    this.findSysList(params);
+  },
   methods: {
+    // 获取列表
+    findSysList(params) {
+      this.loading = true;
+      this.$api.api
+        .findSysList(params)
+        .then(result => {
+          let datas = result.data.data.list[0];
+          if (result.data.retcode === this.code) {
+            this.ruleForm.sysName = datas.code;
+            this.ruleForm.sysValue = datas.val;
+            this.ruleForm.sysType = datas.type;
+            this.ruleForm.sysTextarea = datas.remark;
+          } else {
+            this.$message.error(result.data.retmsg);
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+          this.$message.error("服务器出错!");
+        });
+    },
     // 提交
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // 提交成功
-          this.$message({
-            message: "恭喜你，这是一条成功消息",
-            type: "success"
-          });
+          this.loading = true;
+          let params = {
+            id: this.sysId,
+            code: this.ruleForm.sysName,
+            val: this.ruleForm.sysValue,
+            remark: this.ruleForm.sysTextarea,
+            type: this.ruleForm.sysType,
+            appCode: this.SSXT
+          };
+          this.$api.api
+            .updateSysList(params)
+            .then(result => {
+              if (result.data.retcode === this.code) {
+                this.$message({
+                  message: result.data.retmsg,
+                  type: "success"
+                });
+                this.goback();
+              } else {
+                this.$message.error(result.data.retmsg);
+              }
+              this.loading = false;
+            })
+            .catch(err => {
+              this.loading = false;
+              this.$message.error("服务器出错!");
+            });
         } else {
           console.log("error submit!!");
           return false;

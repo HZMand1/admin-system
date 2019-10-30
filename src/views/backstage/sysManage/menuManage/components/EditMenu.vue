@@ -31,9 +31,9 @@
           <el-form-item label="排序号" v-if="ruleForm.type!=='button'">
             <el-input-number v-model="ruleForm.num" controls-position="right" :min="0"></el-input-number>
           </el-form-item>
-          <el-form-item label="图标" v-if="ruleForm.type!=='button'">
+          <!-- <el-form-item label="图标" v-if="ruleForm.type!=='button'">
             <el-input v-model="ruleForm.icon" placeholder="图标"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="状态">
             <el-radio-group v-model="ruleForm.status">
               <el-radio :label="1">有效</el-radio>
