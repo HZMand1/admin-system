@@ -1,23 +1,27 @@
 <template>
-  <div id="adduser">
-    <el-form :model="reluForm"
+  <div id="addRole">
+    <el-form :model="ruleForm"
              :rules="rules"
              ref="ruleForm"
              label-width="100px">
       <el-form-item label="角色名称"
-                    prop="roleName"
-                    required>
-        <el-input v-model="ruleForm.userName"
+                    prop="roleName">
+        <el-input v-model="ruleForm.roleName"
                   placeholder="请输入角色名称"></el-input>
       </el-form-item>
-      <el-form-item label="所属部门"
-                    prop="department">
-        <el-input v-model="ruleForm.department"
-                  placeholder="请输入所属部门"></el-input>
+      <el-form-item label="角色编号"
+                    prop="roleCode">
+        <el-input v-model="ruleForm.roleCode"
+                  placeholder="请输入角色编号"></el-input>
+      </el-form-item>
+      <el-form-item label="所属系统"
+                    prop="appCode">
+        <el-input v-model="ruleForm.appCode"
+                  placeholder="请输入所属系统"></el-input>
       </el-form-item>
       <el-form-item label="备注"
-                    prop="remake">
-        <el-input v-model="ruleForm.remake"
+                    prop="remark">
+        <el-input v-model="ruleForm.remark"
                   placeholder="请输入备注"></el-input>
       </el-form-item>
       <el-form-item label="功能权限">
@@ -29,21 +33,11 @@
                  :default-checked-keys="false"
                  :props="defaultProps"></el-tree>
       </el-form-item>
-      <el-form-item label="数据权限">
-        <el-tree class="mar-t-auto"
-                 :data="dataTree"
-                 show-checkbox="true"
-                 node-key="id"
-                 :default-expanded-keys="[2, 3]"
-                 :default-checked-keys="[5]"
-                 :props="defaultProps"></el-tree>
-      </el-form-item>
 
       <el-form-item>
         <el-button type="primary"
                    @click="submit">提交</el-button>
         <el-button @click="back">返回</el-button>
-        <el-button>重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -54,19 +48,14 @@ export default {
     return {
       ruleForm: {
         roleName: "",
-        department: "",
-        remake: ""
+        roleCode: "",
+        appCode: "",
+        remark: ""
       },
       rules: {
-        userName: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
-        ],
-        email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" }
-        ],
-        phone: [
-          { required: true, message: "请输入手机号", trigger: "blur" }
+        roleName: [
+          { required: true, message: "请输入角色", trigger: "blur" },
+          { min: 3, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" }
         ]
       },
       radio: "1",
@@ -108,13 +97,44 @@ export default {
       defaultProps: {
         children: "children",
         label: "label"
-      }
+      },
+      loading: false
     }
   },
   methods: {
     //表单提交
     submit () {
-      this.$confirm("确认提交？")
+      this.$confirm("确认提交？", "提交", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //打开loading
+          this.loading = true
+          //调用新增接口
+          this.$api.api.insertRole(this.ruleForm)
+            .then(result => {
+              //返回结果处理
+              let dataRow = result.data;
+              if (dataRow.retcode === 1) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                })
+                //新增成功后，返回到上一页
+                this.$fun.goBack();
+              } else {
+                this.$message.error(dataRow.retmsg)
+              }
+              //关闭loading
+              this.loading = false
+            }).cathc(() => {
+              //关闭loading
+              this.loading = false
+              this.$message.error("请求失败！")
+            })
+        })
     },
     back () {
       this.$fun.goBack();

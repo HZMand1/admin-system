@@ -19,9 +19,29 @@ const api = {
   insertSeedUser (params = {}) {
     return axios.post("/rest/seed/user/insertSeedUser", params);
   },
+  //后台用户管理---用户详情
+  findSeedUserById (params = {}) {
+    return axios.post("/rest/seed/user/findSeedUserById", params);
+  },
   //后台用户管理---修改用户
   updateSeedUser (params = {}) {
     return axios.post("/rest/seed/user/updateSeedUser", params);
+  },
+  //后台管理-角色管理-所有角色列表分页
+  findRoleAllPage (params = {}) {
+    return axios.post("/rest/seed/role/findRoleAllPage", params);
+  },
+  //后台管理--角色管理--给用户分配角色
+  alterUserToRole (params = {}) {
+    return axios.post("/rest/seed/roleuser/alterUserToRole", params);
+  },
+  //后台管理-用户角色-根据用户获取角色
+  findRoleByUser (params = {}) {
+    return axios.post("/rest/seed/roleuser/findRoleByUser", params);
+  },
+  //后台管理--角色管理--新增角色
+  insertRole (params = {}) {
+    return axios.post("/rest/seed/role/insertRole", params);
   },
   // 后台菜单管理-获取菜单树结构
   findMenuZtree (params = {}) {
