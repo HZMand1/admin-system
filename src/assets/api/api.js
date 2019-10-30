@@ -3,6 +3,7 @@ import axios from "../../assets/request/http"; // 导入http中创建的axios实
 // axios.defaults.baseURL = process.env.VUE_APP_BASEURL;
 
 axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = process.env.VUE_APP_BASEURL;
 // 本地对接接口
 let url = process.env.VUE_APP_BASEURL;
 
@@ -26,6 +27,18 @@ const api = {
 	// 后台管理 - 菜单管理 - 新增菜单按钮
 	insertMenu(params = {}) {
 		return axios.post("/rest/seed/menu/insertMenu", params);
+	},
+	// 后台管理 - 菜单管理 - 根据 id 获取菜单信息
+	findMenuById(params) {
+		return axios.post("/rest/seed/menu/findMenuById", params);
+	},
+	// 后台管理 - 菜单管理 - 修改菜单信息
+	updateMenu(params) {
+		return axios.post("/rest/seed/menu/updateMenu", params);
+	},
+	// 后台管理 - 菜单管理 - 修改菜单状态(删除)
+	updateMenuEnable(params) {
+		return axios.post("/rest/seed/menu/updateMenuEnable", params);
 	},
 	// 后台管理 — 系统参数 — 列表查询
 	findSysList(params = {}) {
