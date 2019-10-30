@@ -11,12 +11,16 @@ const api = {
     return axios.post("login", params);
   },
   //后台用户管理---分页列表
-  findSeedUserAllPage (params) {
+  findSeedUserAllPage (params = {}) {
     return axios.post("/rest/seed/user/findSeedUserAllPage", params);
   },
   //后台用户管理---新增用户
-  insertSeedUser (params) {
+  insertSeedUser (params = {}) {
     return axios.post("/rest/seed/user/insertSeedUser", params);
+  },
+  //后台用户管理---修改用户
+  updateSeedUser (params = {}) {
+    return axios.post("/rest/seed/user/updateSeedUser", params);
   }
 }
 

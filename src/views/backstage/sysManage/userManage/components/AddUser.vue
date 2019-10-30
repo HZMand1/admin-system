@@ -3,22 +3,23 @@
     <el-form :model="ruleForm"
              :rules="rules"
              ref="ruleForm"
-             label-width="100px">
+             label-width="100px"
+             v-loading="loading"
+             element-loading-text="拼命加载中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.8)">
       <el-form-item label="账号"
-                    prop="account"
-                    required>
+                    prop="account">
         <el-input v-model="ruleForm.account"
                   placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-form-item label="密码"
-                    prop="password"
-                    required>
+                    prop="password">
         <el-input v-model="ruleForm.password"
                   placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="用户名"
-                    prop="name"
-                    required>
+                    prop="name">
         <el-input v-model="ruleForm.name"
                   placeholder="请输入用户名"></el-input>
       </el-form-item>
@@ -60,43 +61,52 @@ export default {
         phone: ""
       },
       rules: {
-        name: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+        account: [
+          { required: true, message: "请输入账号", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
-        email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" }
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" }
         ],
-        phone: [
-          { required: true, message: "请输入手机号", trigger: "blur" }
+        name: [
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
-      radio: "1"
+      radio: "1",
+      loading: false
     }
   },
   methods: {
     //表单提交
     submit () {
-      this.$confirm("确认提交？", "提交", {        confirmButtonText: "确定", cancelButtonText: "取消", type: "warning"
+      this.$confirm("确认提交？", "提交", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(() => {
+          //打开loading
+          this.loading = true
           //调用新增接口
-          let dataRow = this.$api.api.insertSeedUser({
-            //参数
-          }).then(result => {
-            //返回结果处理
-            let dataRow = result.data;
-            if (dataRow.retcode === 1) {
-              this.$message({
-                message: dataRow.retmsg,
-                type: success
-              })
-            } else {
-              this.$message.error(dataRow.retmsg)
-            }
-          }).catch(() => {
-            this.$message.error("请求失败！")
-          })
+          this.$api.api.insertSeedUser(this.ruleForm)
+            .then(result => {
+              //返回结果处理
+              let dataRow = result.data;
+              if (dataRow.retcode === 1) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                })
+                //关闭loading
+                this.loading = false
+                //新增成功后，返回到上一页
+                this.$fun.goBack();
+              } else {
+                this.$message.error(dataRow.retmsg)
+              }
+            }).catch(() => {
+              this.$message.error("请求失败！")
+            })
         })
     },
     back () {
