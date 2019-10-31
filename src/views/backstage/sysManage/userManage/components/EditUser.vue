@@ -128,7 +128,7 @@ export default {
     /**
      * 获取用户详情
      */
-    getData (id) {
+    getData () {
       this.loading = true
       let params = {
         id: this.id
@@ -138,11 +138,7 @@ export default {
           //返回结果处理
           let dataRow = result.data;
           if (dataRow.retcode === 1) {
-            this.account = dataRow.data.account
-            this.password = dataRow.data.password
-            this.name = dataRow.data.name
-            this.email = dataRow.data.email
-            this.phone = dataRow.data.phone
+            this.ruleForm = dataRow.data
           } else {
             this.$message.error(dataRow.retmsg)
           }

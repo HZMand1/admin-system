@@ -27,6 +27,10 @@ const api = {
   updateSeedUser (params = {}) {
     return axios.post("/rest/seed/user/updateSeedUser", params);
   },
+  //后台管理-后台用户管理-用户启用、禁用
+  enableSeedUser (params = {}) {
+    return axios.post("/rest/seed/user/enableSeedUser", params);
+  },
   //后台管理-角色管理-所有角色列表分页
   findRoleAllPage (params = {}) {
     return axios.post("/rest/seed/role/findRoleAllPage", params);
@@ -42,6 +46,26 @@ const api = {
   //后台管理--角色管理--新增角色
   insertRole (params = {}) {
     return axios.post("/rest/seed/role/insertRole", params);
+  },
+  //后台管理-角色管理-根据id获取角色
+  findRoleById (params = {}) {
+    return axios.post("/rest/seed/role/findRoleById", params);
+  },
+  //后台管理-角色管理-修改角色
+  updateRole (params = {}) {
+    return axios.post("/rest/seed/role/updateRole", params);
+  },
+  //后台管理-角色管理-修改角色状态
+  updateRoleEnable (params = {}) {
+    return axios.post("/rest/seed/role/updateRoleEnable", params);
+  },
+  //后台管理-用户角色权限-获取角色所有权限
+  findAuthByRole (params = {}) {
+    return axios.post("/rest/seed/roleauth/findAuthByRole", params);
+  },
+  //后台管理-用户角色权限-给角色分配权限
+  saveAuthToRole (params = {}) {
+    return axios.post("/rest/seed/roleauth/saveAuthToRole", params);
   },
   // 后台菜单管理-获取菜单树结构
   findMenuZtree (params = {}) {
