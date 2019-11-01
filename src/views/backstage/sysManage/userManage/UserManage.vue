@@ -42,10 +42,25 @@
                          label="手机号"></el-table-column>
         <el-table-column prop="tel"
                          label="固话"></el-table-column>
-        <el-table-column prop="status"
-                         label="状态"></el-table-column>
+        <el-table-column prop="enable"
+                         label="状态"
+                         :formatter="stateFormat">
+        </el-table-column>
+
         <el-table-column prop="addTime"
                          label="创建时间"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"
+                       type="primary"
+                       :loading="btnloading"
+                       @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
+            <el-button size="mini"
+                       type="danger"
+                       :loading="btnloading"
+                       @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </template>
 
@@ -66,6 +81,7 @@
     <!-- 弹框 -->
     <el-dialog title="角色分配"
                :visible.sync="allotRole"
+               @close="closeDialog"
                center>
       <el-table :data="gridData"
                 ref="dialogTable"
@@ -100,6 +116,8 @@
                    @click="dialogSubmit">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 弹框结束 -->
+
   </div>
 </template>
 <script>
@@ -119,6 +137,7 @@ export default {
       dialogMultipleSelectionName: [], //勾选列的名称--弹框分配
       deleteIDs: [], //删除的id集合
       loading: false,
+      btnloading: false, //按钮内部加载
       nameTxt: "", //条件框的值：用户名
       allotRole: false, //角色弹框
       show: false, //隐藏弹框的id列
@@ -128,6 +147,11 @@ export default {
   mounted () {
     this.getData()
     this.getRole()
+  },
+  watch: {
+    // "this.tableDatas": function () {
+    //   console.log(111)
+    // }
   },
   methods: {
     handleSelectionChange (val) {
@@ -152,6 +176,56 @@ export default {
       }
       this.getData(params)
     },
+    //启用 0
+    handleEnabled (index, row) {
+      this.btnloading = true
+      this.setAbled("确认启用", row.id, 0)
+    },
+    //禁用 1
+    handleDisabled (index, row) {
+      this.btnloading = true
+      this.setAbled("确认禁用", row.id, 1)
+    },
+
+    setAbled (strInfo, id, abled) {
+      this.$confirm(strInfo, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let params = {
+            id: id,
+            enable: abled
+          }
+          this.$api.api.enableSeedUser(params)
+            .then(result => {
+              let dataRow = result.data
+              if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                })
+                this.getData()
+              } else {
+                this.$message.error(dataRow.retmsg)
+              }
+              this.btnloading = false
+            }).catch(() => {
+              this.btnloading = false
+              this.$message.error("请求失败！")
+            })
+        }).catch(() => {
+          this.btnloading = false
+        })
+    },
+    stateFormat (row, column) {
+      if (row.enable === 0) {
+        return "启用"
+      } else {
+        return "禁用"
+      }
+    },
 
     //弹框相关方法---开始
     //点击按钮，显示弹框
@@ -163,6 +237,17 @@ export default {
       }
       this.getRoleByUser()
       this.allotRole = true
+    },
+    closeDialog () {
+      //成功后，清空弹框的选中项
+      let index = 0
+      for (let item of this.gridData) {
+        this.$refs.dialogTable.toggleRowSelection(this.gridData[index], false)
+        index++;
+      }
+
+      //清空数组
+      this.checkItemIds = []
     },
     //选中列的id
     dialogHandleSelectionChange (val) {
@@ -206,7 +291,7 @@ export default {
         .then(result => {
           //返回结果处理
           let dataRow = result.data;
-          if (dataRow.retcode === 1) {
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             this.$message({
               message: dataRow.retmsg,
               type: "success"
@@ -220,6 +305,9 @@ export default {
               this.$refs.dialogTable.toggleRowSelection(this.gridData[index], false)
               index++;
             }
+
+            //清空数组
+            this.checkItemIds = []
           } else {
             this.$message.error(dataRow.retmsg)
           }
@@ -268,7 +356,7 @@ export default {
       let data = this.$api.api.findRoleAllPage(params)
         .then(result => {
           let dataRow = result.data;
-          if (dataRow.retcode === 1) {
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             //数据源
             this.gridData = dataRow.data.list
             //当前页
@@ -302,16 +390,12 @@ export default {
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             //将已分配的角色id存入数组
             dataRow.data.map(item => {
-              this.checkItemIds.push(item.id)
+              this.checkItemIds.push(item.roleId)
             })
 
             let index = 0
-            for (let item of this.tableDatas) {
+            for (let item of this.gridData) {
               for (let chk of this.checkItemIds) {
-                console.log(item.id);
-
-                console.log(chk);
-
                 if (item.id === chk) {
                   this.$refs.dialogTable.toggleRowSelection(this.gridData[index], true)
                 }
@@ -337,7 +421,7 @@ export default {
       let data = this.$api.api.findSeedUserAllPage(params)
         .then(result => {
           let dataRow = result.data;
-          if (dataRow.retcode === 1) {
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             //数据源
             this.tableDatas = dataRow.data.list
             //当前页

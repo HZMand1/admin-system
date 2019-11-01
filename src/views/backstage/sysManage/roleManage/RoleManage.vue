@@ -16,8 +16,8 @@
                    type="primary"
                    @click="editRole">修改</el-button>
         <el-button class="mar-l-10 mar-b-20"
-                   type="danger"
-                   @click="deleteRole">删除</el-button>
+                   type="warning"
+                   @click="showPowerDialog">分配权限</el-button>
       </el-col>
     </el-row>
 
@@ -40,6 +40,23 @@
                          label="操作人"></el-table-column>
         <el-table-column prop="addTime"
                          label="创建时间"></el-table-column>
+        <el-table-column prop="enable"
+                         label="状态"
+                         :formatter="stateFormat">
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"
+                       type="primary"
+                       :loading="btnloading"
+                       @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
+            <el-button size="mini"
+                       type="danger"
+                       :loading="btnloading"
+                       @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+          </template>
+        </el-table-column>
+
       </el-table>
     </el-row>
 
@@ -56,6 +73,27 @@
                        layout="total,sizes,prev,pager,next,jumper"></el-pagination>
       </div>
     </el-row>
+
+    <!-- 弹框 -->
+    <el-dialog title="权限分配"
+               :visible.sync="allotPower"
+               @close="closeDialog"
+               center>
+      <el-tree ref="tree"
+               :data="dataTree"
+               :show-checkbox="true"
+               node-key="id"
+               :default-checked-keys="treeIds"
+               :default-expand-all="true"
+               :props="defaultProps"></el-tree>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button type="primary"
+                   @click="dialogSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 弹框结束 -->
+
   </div>
 </template>
 
@@ -69,12 +107,24 @@ export default {
       tableDatas: [], //数据源
       multipleSelection: [],
       loading: false, //加载框
+      btnloading: false, //按钮内部加载
       deleteIDs: [], //删除的id集合
-      nameTxt: null //条件框的值：用户名
+      nameTxt: null, //条件框的值：用户名
+      allotPower: false, //弹框
+      dataTree: [], //菜单树的集合
+      treeIds: [], //接口返回当前角色已有权限的id集合
+      defaultProps: {
+        children: "children",
+        label: "name"
+      }
+
     }
   },
   mounted () {
+    //获取列表数据
     this.getData()
+    //获取树菜单
+    this.getTree()
   },
   methods: {
     // 多选
@@ -105,7 +155,142 @@ export default {
       }
       this.getData(params)
     },
-    //查询方法
+    //启用 0
+    handleEnabled (index, row) {
+      this.btnloading = true
+      this.setAbled("确认启用", row.id, 0)
+    },
+    //禁用 1
+    handleDisabled (index, row) {
+      this.btnloading = true
+      this.setAbled("确认禁用", row.id, 1)
+    },
+
+    setAbled (strInfo, id, abled) {
+      this.$confirm(strInfo, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let params = {
+            id: id,
+            enable: abled
+          }
+          this.$api.api.updateRoleEnable(params)
+            .then(result => {
+              let dataRow = result.data
+              if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                })
+                this.getData()
+              } else {
+                this.$message.error(dataRow.retmsg)
+              }
+              this.btnloading = false
+            }).catch(() => {
+              this.btnloading = false
+              this.$message.error("请求失败！")
+            })
+        }).catch(() => {
+
+          this.btnloading = false
+        })
+    },
+    stateFormat (row, column) {
+      if (row.enable === 0) {
+        return "启用"
+      } else {
+        return "禁用"
+      }
+    },
+
+    //弹框---开始
+    /**
+     * 显示弹框
+     */
+    showPowerDialog () {
+      let num = this.multipleSelection.length;
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
+      let id = this.multipleSelection[0].id;
+      this.getPowerByRole(id)
+
+    },
+    //关闭弹框
+    closeDialog () {
+      //清空选中项
+      this.$refs.tree.setCheckedKeys([])
+
+    },
+    //弹框的提交按钮
+    dialogSubmit () {
+      let id = this.multipleSelection[0].id
+      let menuId = this.$refs.tree.getCheckedKeys()
+      let params = {
+        roleId: id,
+        menuIds: menuId
+      }
+      this.$api.api.saveAuthToRole(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.$message({
+              message: dataRow.retmsg,
+              type: "success"
+            })
+            this.allotPower = false
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败!")
+        })
+    },
+    //权限树是否被选中
+    getPowerByRole (id) {
+      let params = {
+        roleId: id
+      }
+      this.$api.api.findAuthByRole(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.treeIds = []
+            dataRow.data.map((item) => {
+              this.treeIds.push(item.menuId)
+            })
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+
+          this.allotPower = true
+        }).catch(() => {
+          this.allotPower = true
+          this.$message.error("请求失败！")
+        })
+    },
+    //获取树菜单
+    getTree () {
+      this.$api.api.findMenuZtree()
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.dataTree = dataRow.data
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
+    },
+    //弹框---结束
+
+    //列表的查询方法
     queryUser () {
       let params = {
         roleName: this.nameTxt === "" ? null : this.nameTxt,
@@ -131,14 +316,6 @@ export default {
         query: { id: id }
       })
     },
-    //删除数据
-    deleteRole () {
-      let num = this.multipleSelection.length;
-      if (num !== 1) {
-        this.$message.error("请选择一条记录");
-        return;
-      }
-    },
 
     /**
      * 查询方法
@@ -148,7 +325,7 @@ export default {
       let data = this.$api.api.findRoleAllPage(params)
         .then(result => {
           let dataRow = result.data;
-          if (dataRow.retcode === 1) {
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             //数据源
             this.tableDatas = dataRow.data.list
             //当前页
