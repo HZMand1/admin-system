@@ -25,6 +25,17 @@
                             style="width: 250px">
             </el-date-picker>
           </el-form-item>
+          <el-form-item label="广告状态"
+                        class="pad-r-30">
+            <el-select v-model="searchForm.status"
+                       style="width: 150px"
+                       placeholder="请选择广告状态">
+              <el-option label="开启"
+                         value="0"></el-option>
+              <el-option label="禁用"
+                         value="1"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button @click="searchBtn()"
                        type="primary">查询</el-button>
