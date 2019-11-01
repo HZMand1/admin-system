@@ -143,6 +143,15 @@ const router = new Router({
                 requireAuth: false
             }
         }]
+    },
+    {
+      path: "/northwest/NorthwestIndex",
+      name: "门户首页",
+      hidden: false,
+      component: () => import("./views/northwest/NorthwestIndex.vue"), 
+      meta: {
+        requireAuth: false
+      }
     }
     ]
 })
