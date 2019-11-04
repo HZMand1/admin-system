@@ -29,8 +29,8 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       "/api": {
-        target: "http://192.168.100.46:8081", //对应跨域的接口,吕观林  
-        // target: "http://192.168.100.222:8081", //对应跨域的接口，测试
+        // target: "http://192.168.100.46:8081", //对应跨域的接口,吕观林  
+        target: "http://192.168.100.222:8081", //对应跨域的接口，测试
 
         changeOrigin: true,
         ws: false,

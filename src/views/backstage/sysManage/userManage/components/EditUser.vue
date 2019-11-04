@@ -39,12 +39,6 @@
         <el-input v-model="ruleForm.tel"
                   placeholder="请输入固话"></el-input>
       </el-form-item>
-      <el-form-item label="状态">
-        <el-radio v-model="radio"
-                  label="1">禁用</el-radio>
-        <el-radio v-model="radio"
-                  label="2">正常</el-radio>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary"
                    @click="submit">提交</el-button>
@@ -78,7 +72,6 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
-      radio: "1",
       loading: false,
       id: "" //上个页面传过来的值
     }
