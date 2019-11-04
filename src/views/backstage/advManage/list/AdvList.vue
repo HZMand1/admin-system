@@ -17,13 +17,13 @@
                   @selectionChangeHandle="selectionChangeHandle">
         </ph-table>
         <el-row class="mar-t-10">
-          <el-col :span='4'>
+          <!-- <el-col :span='4'>
             <el-button @click="batchDeleteHandle()"
                        :disabled="isBatchDeleteDisabled"
                        size="small">批量删除
             </el-button>
-          </el-col>
-          <el-col :span='20'>
+          </el-col> -->
+          <el-col :span='24'>
             <ph-pagination @sendPaginations="sendPaginationsHandle"
                            :paginations="paginationParams"
                            class="mar-r-20 text-right">
@@ -80,7 +80,8 @@ export default {
       searchForm: {
         title: "",
         typeCode: "",
-        time: ""
+        time: "",
+        status: ""
       }
     }
   },
@@ -135,26 +136,34 @@ export default {
     },
     //搜索查询
     searchBtn (searchData) {
-      //请求参数
+      console.log(searchData)
+      let addTime = searchData && searchData.time[0] ? new Date(searchData.time[0]).getTime() : null
+      let finishTime = searchData && searchData.time[1] ? new Date(searchData.time[1]).getTime() : null
       let params = {
-        type: 0,
         pageNo: this.paginationParams.pageNo,//页码
         pageSize: this.paginationParams.pageSize,//每页条数
-        name: searchData && searchData.name ? searchData.name : null,
-        code: searchData && searchData.code ? searchData.code : null
+        type: 0,
+        title: searchData && searchData.title ? searchData.title : null,
+        typeCode: searchData && searchData.typeCode ? searchData.typeCode : null,
+        enable: searchData && searchData.status ? Number(searchData.status) : null,
+        addTime: addTime,
+        finishTime: finishTime
       }
       //用封装好的函数请求
       this.successList(params)
     },
     //接收分页参数
     sendPaginationsHandle () {
-      if (this.searchForm.name !== "" || this.searchForm.code !== "") {
+      if (this.searchForm.title !== "" || this.searchForm.typeCode !== "" || this.searchForm.status !== "" || this.searchForm.time !== "") {
         let params = {
-          aliveFlag: "Y",//状态--必填
           pageNo: this.paginationParams.pageNo,//页码
           pageSize: this.paginationParams.pageSize,//每页条数
-          name: this.searchForm && this.searchForm.name !== "" ? this.searchForm.name : null,
-          code: this.searchForm && this.searchForm.code !== "" ? this.searchForm.code : null,
+          type: 0,
+          title: this.searchForm && this.searchForm.title ? this.searchForm.title : null,
+          typeCode: this.searchForm && this.searchForm.typeCode ? this.searchForm.typeCode : null,
+          enable: this.searchForm && this.searchForm.status ? Number(this.searchForm.status) : null,
+          addTime: this.searchForm && this.searchForm.time[0] ? new Date(this.searchForm.time[0]).getTime() : null,
+          finishTime: this.searchForm && this.searchForm.time[1] ? new Date(this.searchForm.time[1]).getTime() : null
         }
         //发送请求
         this.successList(params)
@@ -164,7 +173,12 @@ export default {
     },
     //重置搜索查询
     resetSearchBtn () {
-      this.searchForm = {}
+      this.searchForm = {
+        title: "",
+        typeCode: "",
+        time: "",
+        status: ""
+      }
       this.paginationParams.pageNo = 1
       this.getList()
     },

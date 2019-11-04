@@ -19,8 +19,8 @@
     <el-table-column prop="enable"
                      label="广告状态">
       <template slot-scope="scope">
-        <span v-if="scope.row.enable === '0'">开启</span>
-        <span v-if="scope.row.enable === '1'">禁用</span>
+        <span v-if="scope.row.enable === 0">开启</span>
+        <span v-if="scope.row.enable === 1">禁用</span>
       </template>
     </el-table-column>
     <el-table-column label="操作">
