@@ -118,6 +118,14 @@ const api = {
   /**
    * 商家管理 - end
    */
+  // 西北门户-获取比价采购，现货晒场数据
+  findProductService (params = {}) {
+    return axios.post("rest/seed/http/findProductService", params);
+  },
+  // 西北门户-广告新闻资讯管理-列表查询
+  findAdNewsAllList (params = {}) {
+    return axios.post("rest/seed/adNews/findAdNewsAllList", params);
+  }
 }
 
 export default {
