@@ -160,7 +160,17 @@ const router = new Router({
       meta: {
         requireAuth: true
       }
-    }]
+    },
+    {
+      path: "/backstage/merchantManage/ShopDetail",
+      name: "店铺详情",
+      hidden: true,
+      component: () => import("./views/backstage/merchantManage/components/ShopDetail.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }
+    ]
   },
   {
     path: "/backstage/home",

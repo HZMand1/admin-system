@@ -1,19 +1,27 @@
 <template>
-  <div id="supplierUser">
+  <div id="newsList">
     <el-row>
       <el-col :span="6">
         <el-input class="mar-r-10 mar-b-20"
                   v-model="nameTxt"
-                  placeholder="店铺名"></el-input>
+                  placeholder="资讯名称"></el-input>
       </el-col>
       <el-col :span="12">
         <el-button class="mar-l-10 mar-b-20"
-                   @click="queryShop"
+                   @click="queryNews"
                    icon="el-icon-select">查询</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
-                   @click="editShop"
+                   @click="updateNews"
+                   icon="el-icon-edit">新增</el-button>
+        <el-button class="mar-l-10 mar-b-20"
+                   type="primary"
+                   @click="editNews"
                    icon="el-icon-edit">修改</el-button>
+        <el-button class="mar-l-10 mar-b-20"
+                   type="danger"
+                   @click="deleteNews"
+                   icon="el-icon-edit">删除</el-button>
       </el-col>
     </el-row>
 
@@ -30,45 +38,45 @@
         <el-table-column type="index"
                          label=" "></el-table-column>
         <el-table-column type="selection"></el-table-column>
-        <el-table-column prop="name"
-                         label="店铺名称"></el-table-column>
-        <el-table-column prop="account"
-                         label="商户账号"></el-table-column>
-        <el-table-column prop="userName"
-                         label="商户名称"></el-table-column>
-        <el-table-column prop="enable"
-                         label="审核状态"
-                         :formatter="auditFormat"></el-table-column>
-        <el-table-column prop="state"
-                         label="店铺状态"
-                         :formatter="stateFormat"></el-table-column>
-        <el-table-column label="入驻时间">
+        <el-table-column prop="title"
+                         label="资讯标题"></el-table-column>
+        <el-table-column prop=""
+                         label="资讯来源"></el-table-column>
+        <el-table-column prop=""
+                         label="是否原创"
+                         :formatter="reviewFormat"></el-table-column>
+        <el-table-column prop=""
+                         label="资讯分类"
+                         :formatter="enableFormat"></el-table-column>
+        <el-table-column prop=""
+                         label="资讯摘要"
+                         :formatter="enableFormat"></el-table-column>
+        <el-table-column prop=""
+                         label="是否置顶"
+                         :formatter="enableFormat"></el-table-column>
+        <el-table-column label="创建时间">
           <template slot-scope="scope">{{ scope.row.addTime | dateFormat('YYYY-MM-DD HH:mm:ss') }}</template>
         </el-table-column>
+        <el-table-column prop=""
+                         label="发布状态"
+                         :formatter="enableFormat"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-
-            <el-button v-if="scope.row.state == 1"
+            <el-button v-if="scope.row.enable == 1"
                        size="mini"
                        type="primary"
                        @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
-
             <el-button v-else
                        size="mini"
                        type="danger"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-
-            <el-button v-if="scope.row.enable != 0"
+            <el-button v-if="scope.row.review != 0"
                        size="mini"
                        type="primary"
-                       @click="shopAudit(scope.$index, scope.row)">审核</el-button>
+                       @click="memberAudit(scope.$index, scope.row)">审核</el-button>
             <el-button size="mini"
-                       @click="shopInfo(scope.$index, scope.row)">详情</el-button>
-            <!-- <el-button size="mini"
-                       type="primary"
-                       :loading="btnloading"
-                       @click="shopStaff(scope.$index, scope.row)">店员</el-button> -->
+                       @click="memberInfo(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,7 +97,7 @@
     </el-row>
 
     <!-- 弹框 -->
-    <el-dialog title="店铺审核"
+    <el-dialog title="用户审核"
                :visible.sync="showAudit"
                @close="closeDialog"
                center>
@@ -167,7 +175,7 @@ export default {
     handleDisabled (index, row) {
       this.setAbled("确认禁用", row.id, 1)
     },
-    setAbled (strInfo, id, state) {
+    setAbled (strInfo, id, enable) {
       this.$confirm(strInfo, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -177,9 +185,9 @@ export default {
           this.loading = true
           let params = {
             id: id,
-            state: state
+            enable: enable
           }
-          this.$api.api.updateSupplierState(params)
+          this.$api.api.enableOutletUser(params)
             .then(result => {
               let dataRow = result.data
               if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
@@ -201,8 +209,8 @@ export default {
         })
     },
 
-    //显示店铺审核弹框
-    shopAudit (index, row) {
+    //显示审核弹框
+    memberAudit (index, row) {
       this.showAudit = true
       this.auditId = row.id
     },
@@ -218,7 +226,7 @@ export default {
         enable: this.radio,
         review: this.auditCause
       }
-      this.$api.api.updateSupplierEnable(params)
+      this.$api.api.updateOutletUser(params)
         .then(result => {
           let dataRow = result.data
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
@@ -237,8 +245,8 @@ export default {
           this.$message.error("请求失败！")
         })
     },
-    //店铺详情
-    shopInfo (index, row) {
+    //用户详情
+    memberInfo (index, row) {
       this.$router.push({
         path: "/backstage/merchantManage/shopManage/components/ShopDetail",
         query: { id: row.id }
@@ -249,17 +257,17 @@ export default {
     //   //TODO
     // },
 
-    stateFormat (row, column) {
-      if (row.state === 0) {
+    enableFormat (row, column) {
+      if (row.enable === 0) {
         return "启用"
       } else {
         return "禁用"
       }
     },
-    auditFormat (row, column) {
-      if (row.enable === 0) {
+    reviewFormat (row, column) {
+      if (row.review === 0) {
         return "审核通过"
-      } else if (row.enable === 1) {
+      } else if (row.review === 1) {
         return "审核不通过"
       } else {
         return "未审核"
@@ -267,7 +275,7 @@ export default {
     },
 
     //查询方法
-    queryShop () {
+    queryMember () {
       let params = {
         name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
@@ -276,7 +284,7 @@ export default {
       this.getData(params)
     },
     //跳转到编辑页面
-    editShop () {
+    editMember () {
       let num = this.multipleSelection.length;
       if (num !== 1) {
         this.$message.error("请选择一条记录");
@@ -294,7 +302,7 @@ export default {
      */
     getData (params) {
       this.loading = true
-      this.$api.api.findSupplierInfoPage(params)
+      this.$api.api.findOutletUserListPage(params)
         .then(result => {
           let dataRow = result.data;
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
