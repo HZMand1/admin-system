@@ -91,6 +91,7 @@
 }
 .wrap_bg {
   background: #ebeff8;
+  padding-bottom: 45px;
 }
 .icon_group {
   ul {
@@ -151,6 +152,24 @@
   .pull_t {
     background: #3B4655;
     color: #748090;
+    .layout {
+      text-align: center;
+      .contact-row {
+        p {
+          text-align: center;
+        }
+      }
+      ul {
+        li {
+          display: inline-block;
+        }
+      }
+      .filing-info {
+        div {
+          display: inline-block;
+        }
+      }
+    }
   }
   .pull_b {
     background: #485463;
@@ -221,32 +240,59 @@
     color: #fff;
   }
 }
-.info_group {
-  margin-top: 5px;
-  ul {
-    li {
-      width: 152px;
-      height: 74px;
-      line-height: 74px;
-      text-align: center;
-      color: #666;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    &:first-child{
-      li {
-        background: url(../../../src/assets/images/home/icon_fire.png) 30px center #fff no-repeat;
+.zyzx {
+  .info_group {
+    margin-top: 5px;
+    color: #666;
+    .tab {
+      span {
+        display: block;
+        width: 152px;
+        height: 74px;
+        line-height: 74px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 8px;
+        &:first-child{
+          background: url(../../../src/assets/images/home/icon_fire.png) 30px center #fff no-repeat;
+        }
+        &:nth-of-type(2) {
+          background: url(../../../src/assets/images/home/icon_line.png) 30px center #fff no-repeat;
+        }
+        &:nth-of-type(3) {
+          background: url(../../../src/assets/images/home/icon_eye.png) 30px center #fff no-repeat;
+        }
       }
     }
-    &:nth-of-type(2) {
-      li {
-        background: url(../../../src/assets/images/home/icon_line.png) 30px center #fff no-repeat;
+    .info_con {
+      width: 84%;
+      background: #fff;
+      .pull_left {
+        width: 60%;
+        border-right: 1px solid #ccc;
       }
-    }
-    &:nth-of-type(3) {
-      li {
-        background: url(../../../src/assets/images/home/icon_eye.png) 30px center #fff no-repeat;
+      .pull_right {
+        width: 40%;
+        .fl img {
+          width: 32px;
+          height: 32px;
+        }
       }
     }
   }
+}
+.sc06 {
+  width: 100%;
+  height: 154px;
+  background: #fff;
+  .c_title {
+    padding: 20px 60px;
+    background: url(../../../src/assets/images/home/icon_jewel.png) 25px center no-repeat;
+  }
+  .friendLine {
+    div {
+      display: inline-block;
+      padding: 15px 22px;
+    }
+  } 
 }
