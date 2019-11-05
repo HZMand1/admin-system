@@ -23,14 +23,20 @@
         <span v-if="scope.row.enable === 1">禁用</span>
       </template>
     </el-table-column>
-    <el-table-column label="操作">
+    <el-table-column label="操作"
+                     width="220px">
       <template slot-scope="scope">
-        <el-button type="text"
-                   size="small"
-                   class="mar-r-20"
+        <el-button type="primary"
+                   size="mini"
+                   plain
+                   @click="showHandle(scope.$index, scope.row)">查看</el-button>
+        <el-button type="primary"
+                   size="mini"
+                   plain
                    @click="editHandle(scope.$index, scope.row)">编辑</el-button>
-        <el-button type="text"
-                   size="small"
+        <el-button type="primary"
+                   size="mini"
+                   plain
                    @click="singleDeleteHandle(scope.$index, scope.row)">删除</el-button>
       </template>
     </el-table-column>
