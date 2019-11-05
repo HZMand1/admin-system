@@ -118,6 +118,64 @@ const api = {
   /**
    * 商家管理 - end
    */
+
+  /**
+  * 会员管理 - start
+  */
+  //后台管理-会员管理-分页获取会员信息
+  findOutletUserListPage (params = {}) {
+    return axios.post("/rest/seed/outlet/user/findOutletUserListPage", params);
+  },
+  //后台管理-会员管理-启用、禁用会员信息
+  enableOutletUser (params = {}) {
+    return axios.post("/rest/seed/outlet/user/enableOutletUser", params);
+  },
+  // //后台管理-会员管理-审核会员信息
+  // updateOutletUser (params = {}) {
+  //   return axios.post("/rest/seed/outlet/user/updateOutletUser", params);
+  // },
+  //后台管理-会员管理-修改会员信息
+  updateOutletUser (params = {}) {
+    return axios.post("/rest/seed/outlet/user/updateOutletUser", params);
+  },
+  //后台管理-会员管理-根据ID查询会员信息
+  findOutletUserById (params = {}) {
+    return axios.post("/rest/seed/outlet/user/findOutletUserById", params);
+  },
+  /**
+  * 会员管理 - end
+  */
+
+  /**
+  * 资讯管理 - start
+  */
+  //后台管理-广告新闻资讯管理-分页查询
+  findAdNewsListPage (params = {}) {
+    return axios.post("/rest/seed/adNews/findAdNewsListPage", params);
+  },
+  //后台管理-广告新闻资讯管理-通过ID获取详情
+  findAdNewsById (params = {}) {
+    return axios.post("/rest/seed/adNews/findAdNewsById", params);
+  },
+  //后台管理-广告新闻资讯管理-启用 禁用
+  enableAdNews (params = {}) {
+    return axios.post("/rest/seed/adNews/enableAdNews", params);
+  },
+  //后台管理-广告新闻资讯管理-删除
+  deleteAdNews (params = {}) {
+    return axios.post("/rest/seed/adNews/deleteAdNews", params);
+  },
+  //后台管理-广告新闻资讯管理-修改
+  updateAdNews (params = {}) {
+    return axios.post("/rest/seed/adNews/updateAdNews", params);
+  },
+  //后台管理-广告新闻资讯管理-新增
+  insertAdNews (params = {}) {
+    return axios.post("/rest/seed/adNews/insertAdNews", params);
+  },
+  /**
+  * 资讯管理 - end
+  */
 }
 
 export default {
