@@ -208,13 +208,12 @@
             <el-table :data="tableDataPrice" class="h_table fr">
               <el-table-column
                 prop="custName"
-                label="企业名称"
-                width="180">
+                label="企业名称">
               </el-table-column>
               <el-table-column
                 prop="tradeName"
                 label="品种"
-                width="180">
+                width="140">
               </el-table-column>
               <el-table-column
                 prop="number"
@@ -222,7 +221,8 @@
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="交货地">
+                label="交货地"
+                width="290">
               </el-table-column>
               <el-table-column
                 prop="addTime"
@@ -242,26 +242,35 @@
             <div class="pull_r">更多></div>
           </div>
           <div class="info_group clearfloat">
-            <div class="tab fl">
-              <span class="active">今日资讯</span>
-              <span>市场动态</span>
-              <span>中药前沿</span>
-            </div>
+            <ul class="tab fl">
+              <li class="active">今日资讯</li>
+              <li>市场动态</li>
+              <li>中药前沿</li>
+            </ul>
             <div class="info_con fr">
-              <div class="pull_left fl">
+              <div class="pull_left fl" 
+                   v-for="(item, index) in firstNews" 
+                   :key="index">
                 <div class="fl">
+                  <!-- <img :src="item.imgPath" /> -->
                   <img src="../../../src/assets/images/home/photo.png" />
                 </div>
-                <div class="fr" style="width: 66%;">
-                  <div>中国汉广中药材集团领导一行到访跑合网</div>
-                  <span>2019-06-05</span>
-                  <p>2019年6月5日，中国汉广中药材集团执行董事长刘守杰、副总经理黄维等领导一行到访跑合网，中国汉广中药材集团成立于2011年，旗下拥有38家产地初加工子公司，致力于在中药材行业领域打造全产业链运营模式和业务体系。跑合网总经理武文韬对汉广集团刘董事长一行的来访表示热烈的欢迎，并介绍了跑合网成立两年多所取得的一些成果，详细介绍了平台所提供上一个台阶了和你...</p>
+                <div class="fr">
+                  <div>{{item.title}}</div>
+                  <span>{{item.addTime}}</span>
+                  <p>{{item.content}}</p>
                 </div>
               </div>
               <div class="pull_right fr">
-                <div class="fl"><img src="../../../src/assets/images/home/photo.png" /></div>
-                <div class="fl">不甘心！日本拿着中国的药材...</div>
-                <div class="fl">2019-10-31</div>
+                <div class="news-row fl" 
+                     v-for="(item, index) in newsData" 
+                     :key="index">
+                  <!-- <div class="pic fl"><img :src="item.imgPath" /></div> -->
+                  <div class="pic fl"><img src="../../../src/assets/images/home/photo.png" /></div>
+                  <div class="desc fl">{{item.subTitle}}</div>
+                  <!-- <div class="timer fr">{{item.addTime}}</div> -->
+                  <div class="timer fr">2019-10-31</div>
+                </div>
               </div>
             </div>
           </div>
@@ -270,30 +279,31 @@
           <div class="c_title clearfloat">
             <div class="pull_l">友情链接</div>
           </div>
-          <div class="friendLine">
-            <div>
+          <ul class="friendLine">
+            <li>
               <img src="../../../src/assets/images/home/icon_company1.png" />
-            </div>
-            <div>
+            </li>
+            <li>
               <img src="../../../src/assets/images/home/icon_company2.png" />
-            </div>
-            <div>
+            </li>
+            <li>
               <img src="../../../src/assets/images/home/icon_company3.png" />
-            </div>
-            <div>
+            </li>
+            <li>
               <img src="../../../src/assets/images/home/icon_company4.png" />
-            </div>
-            <div>
+            </li>
+            <li>
               <img src="../../../src/assets/images/home/icon_company5.png" />
-            </div>
-          </div>
+            </li>
+          </ul>
         </section>
       </div>
     </section>
-    <footer class="footer">
+    <common-footer></common-footer>
+    <!-- <footer class="footer">
       <div class="pull_t">
         <div class="layout">
-          <p class="p-text">对我们有任何疑问，请联系我们<span>（工作时间周一至周五8:30~17:30）</span></p>
+          <p class="contact-us">对我们有任何疑问，请联系我们<span>（工作时间周一至周五8:30~17:30）</span></p>
           <div class="contact-row">
             <p>010-88462303</p>
             <p>fadf232@suyuan.com</p>
@@ -306,18 +316,18 @@
             <li>知识产权</li>
           </ul>
           <div class="filing-info">
-            <div>
-              <p class="p-text">互联网药品信息服务资格证： (粤)-经营性-2017-0043 | 信息系统安全等级保护备案证明： 4401181334900001 | B2B-A证软件评估报告</p>
-              <p class="p-text">增值电信业务经营许可证： 粤B2-20170438 | 食品经营许可证：JY14401030195308| 拍卖经营批准证书：4407001100002019</p>
-              <p class="p-text">粤公网安备 44010302000320号</p>
-              <p class="p-text">地址：广东省广州市荔湾区东沙大道16号 粤ICP备17022914号</p>
-              <p class="p-text">Copyright©2008-2018 中药材供应平台</p>
-              <img src="../../../src/assets/images/home/footPic.png" />
+            <div class="p-text">
+              <p>互联网药品信息服务资格证： (粤)-经营性-2017-0043 | 信息系统安全等级保护备案证明： 4401181334900001 | B2B-A证软件评估报告</p>
+              <p>增值电信业务经营许可证： 粤B2-20170438 | 食品经营许可证：JY14401030195308| 拍卖经营批准证书：4407001100002019</p>
+              <p>粤公网安备 44010302000320号</p>
+              <p>地址：广东省广州市荔湾区东沙大道16号 粤ICP备17022914号</p>
+              <p>Copyright©2008-2018 中药材供应平台</p>
             </div>
             <div class="qCorde">
               <img src="../../../src/assets/images/home/qrcode.png" />
               <p>扫码关注</p>
             </div>
+            <img class="filing-pic" src="../../../src/assets/images/home/footPic.png" />
           </div>
         </div>
       </div>
@@ -326,11 +336,12 @@
           技术支持：广东跑合中药材电子商务有限公司
         </div>
       </div>
-    </footer>
+    </footer> -->
   </div>
 </template>
 
 <script>
+import CommonFooter from "./components/Footer"
 export default {
   name: "NorthwestIndex",
   data () {
@@ -344,22 +355,25 @@ export default {
     }
     return {
       tableData: Array(8).fill(item),
-      tableDataPrice: [],
-      tableDataYard: [],
+      tableDataPrice: [], // 比价采购
+      tableDataYard: [], // 现货晒场
+      newsData: [], // 新闻
+      firstNews: [] // 第一条新闻
     }
   },
   components: {
-    
+    CommonFooter
   },
   mounted () {
     this.getTableList()
+    this.getNewsList()
   },
   methods: {
     getTableList (params) {
       this.$api.api.findProductService(params)
         .then(res => {
           if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.tableDataPrice = res.data.data.price
+            this.tableDataPrice = res.data.data.price.slice(0, 6)
             this.tableDataYard = res.data.data.yard
           } else {
             this.$message.error(res.data.retmsg)
@@ -367,7 +381,27 @@ export default {
         }).catch(() => {
           this.$message.error("请求失败！")
         })
+    },
+    getNewsList (params) {
+      params = {
+        type: 1
+      }
+      this.$api.api.findAdNewsAllList(params)
+        .then(res => {
+          if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.newsData = res.data.data
+
+            this.firstNews = res.data.data.slice(0,1)
+            // this.firstNews = res.data.data[0]
+            console.log(this.firstNews)
+          } else {
+            this.$message.error(res.data.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
     }
+    
 
     
     
