@@ -93,7 +93,7 @@ export default {
       }
       this.$router.push({
         path: "/backstage/sysManage/MenuManage/EditMenu",
-        query: { code: this.configItem.code }
+        query: { id: this.configItem.id }
       });
     },
     // 刷新
@@ -135,10 +135,26 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          let params = {
+            id: this.configItem.id,
+            enable: 1
+          };
+          this.$api.api
+            .updateMenuEnable(params)
+            .then(result => {
+              if (result.data.retcode === this.code) {
+                this.$message({
+                  type: "success",
+                  message: result.data.retmsg
+                });
+                this.refresh();
+              } else {
+                this.$message.error(result.data.retmsg);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
         })
         .catch(() => {
           this.$message({

@@ -67,14 +67,21 @@ export default {
       isBatchDeleteDisabled: false,//是否可以批量删除
       //table数据
       tableData: [{
-        name: "www",
-        code: "code"
+        title: "www",
+        typeCode: "code",
+        addTime: "",
+        finishTime: ""
       }],
       //弹窗
       addedEditorDialog: false,
       dialogForm: {
-        name: "",
-        code: ""
+        title: "www",
+        url: "code",
+        subTitle: "www",
+        typeCode: "",
+        status: "",
+        orders: "",
+        imgPath: ""
       },
       //搜索
       searchForm: {
@@ -187,10 +194,7 @@ export default {
       this.handleType = "add"//判断为新增
       this.addedEditorDialog = true//显示弹窗
       //设置传给后台的数据
-      this.dialogForm = {
-        name: "",
-        code: ""
-      }
+      this.dialogForm = {}
     },
     //表格全选
     selectionChangeHandle (checkedData) {
@@ -207,7 +211,7 @@ export default {
       let params = row.id
       this.$api.qualityControl.goodsManage.getDataById(params)
         .then(res => {
-          if (res.data.retcode === this.SUCCESS_CODE) {
+          if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             let data = res.data.data
             //设置传给后台的数据
             this.dialogForm = {
@@ -237,13 +241,13 @@ export default {
         //请求删除账号接口
         this.$api.qualityControl.goodsManage.batchEdit(params)
           .then(res => {
-            if (res.data.retcode === this.SUCCESS_CODE) {
+            if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
               this.$message({
                 type: "success",
                 message: res.data.retmsg
               })
               this.getList()
-            } else if (res.data.retcode === this.ERROR_CODE) {
+            } else if (res.data.retcode === this.$config.RET_CODE.ERROR_CODE) {
               this.$message({
                 type: "error",
                 message: res.data.retmsg
@@ -288,13 +292,24 @@ export default {
     },
     //新增、修改弹窗提交
     submitAddedEditorForm () {
+      console.log(this.dialogForm)
       this.submitLoading = true
-      let params = this.dialogForm
+      let params = {
+        type: 0,
+        title: this.dialogForm.title,
+        url: this.dialogForm.url,
+        subTitle: this.dialogForm.subTitle,
+        typeCode: this.dialogForm.typeCode,
+        status: this.dialogForm.status,
+        orders: this.dialogForm.orders,
+        imgPath: this.dialogForm.imgPath
+      }
+
       if (this.handleType === "add") {
         //添加
-        this.$api.qualityControl.goodsManage.add(params)
+        this.$api.api.insertAdNews(params)
           .then(res => {
-            if (res.data.retcode === this.SUCCESS_CODE) {
+            if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
               this.submitLoading = false
               this.$message({
                 message: res.data.retmsg,
@@ -319,7 +334,7 @@ export default {
         //编辑
         this.$api.qualityControl.goodsManage.edit(params)
           .then(res => {
-            if (res.data.retcode === this.SUCCESS_CODE) {
+            if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
               this.submitLoading = false
               this.$message({
                 type: "success",

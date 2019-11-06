@@ -96,10 +96,10 @@
 .icon_group {
   ul {
     li {
-      // float: left;
       display: inline-block;
       text-align: center;
-      padding: 20px 69px;
+      width: 8%;
+      margin: 4% 6%;
       .circleIcon {
         width: 94px;
         height: 94px;
@@ -152,21 +152,67 @@
   .pull_t {
     background: #3B4655;
     color: #748090;
+    font-size: 12px;
     .layout {
       text-align: center;
+      .contact-us {
+        padding: 20px 0 10px 0;
+        color: #fff;
+        span {
+          color: #748090;
+        }
+      }
       .contact-row {
         p {
-          text-align: center;
+          padding: 16px 65px;
+          font-size: 20px;
+          display: inline-block;
+          color: #fff;
+          &:first-child {
+            background: url(../../../src/assets/images/home/icon_tel.jpg) left center no-repeat;
+          }
+          &:last-child {
+            background: url(../../../src/assets/images/home/icon_email.jpg) left center no-repeat;
+          }
         }
       }
       ul {
+        padding: 10px 0;
         li {
           display: inline-block;
+          color: #fff;
+          span {
+            color: #748090;
+            padding: 0 5px;
+          }
         }
       }
       .filing-info {
-        div {
+        .p-text {
           display: inline-block;
+          margin-right: 10px;
+          p {
+            line-height: 25px;
+            &:nth-of-type(3) {
+              background: url(../../../src/assets/images/home/icon_police.png) 240px center no-repeat;
+            }
+          }
+          img {
+            margin-bottom: 20px;
+          }
+        }
+        .qCorde {
+          display: inline-block;
+          img {
+            width: 96px;
+            height: 96px;
+          }
+          p {
+            color: #fff;
+          }
+        }
+        .filing-pic {
+          margin: 10px 0 20px 0;
         }
       }
     }
@@ -178,6 +224,8 @@
     padding: 8px 0;
   }
 }
+  
+
 
 
 
@@ -240,24 +288,30 @@
     color: #fff;
   }
 }
-.zyzx {
+.sc05 {
+  margin-top: 20px;
   .info_group {
-    margin-top: 5px;
+    margin-top: 8px;
+    height: 246px;
     color: #666;
+    // background: pink;
     .tab {
-      span {
+      width: 13%;
+      margin-right: 1%;
+      li {
         display: block;
-        width: 152px;
+        // width: 152px;
         height: 74px;
         line-height: 74px;
         text-align: center;
         font-weight: bold;
-        margin-bottom: 8px;
         &:first-child{
           background: url(../../../src/assets/images/home/icon_fire.png) 30px center #fff no-repeat;
+          margin-bottom: 12px;
         }
         &:nth-of-type(2) {
           background: url(../../../src/assets/images/home/icon_line.png) 30px center #fff no-repeat;
+          margin-bottom: 12px;
         }
         &:nth-of-type(3) {
           background: url(../../../src/assets/images/home/icon_eye.png) 30px center #fff no-repeat;
@@ -265,17 +319,54 @@
       }
     }
     .info_con {
-      width: 84%;
+      padding: 22px;
+      width: 86%;
       background: #fff;
+      font-size: 12px;
       .pull_left {
-        width: 60%;
+        width: 65%;
         border-right: 1px solid #ccc;
+        .fl {
+          width: 34%;
+        }
+        .fr {
+          width: 66%;
+          padding: 0 10px;
+          div {
+            font-weight: bold;
+            margin: 10px 0;
+          }
+          span {
+            color: #999;
+            margin-bottom: 5px;
+            display: block;
+          }
+          p {
+            text-indent: 2em;
+            line-height: 22px;
+          }
+        }
       }
       .pull_right {
-        width: 40%;
-        .fl img {
-          width: 32px;
-          height: 32px;
+        width: 35%;
+        line-height: 32px;
+        padding: 10px;
+        .news-row {
+          margin-bottom: 10px;
+          .pic {
+            width: 10%;
+            // width: 32px;
+            height: 32px;
+            // margin-right: 5px;
+          }
+          .desc {
+            width: 70%;
+            padding-left: 10px;
+          }
+          .timer {
+            width: 20%;
+            color: #999;
+          }
         }
       }
     }
@@ -285,14 +376,24 @@
   width: 100%;
   height: 154px;
   background: #fff;
+  margin-top: 20px;
   .c_title {
     padding: 20px 60px;
     background: url(../../../src/assets/images/home/icon_jewel.png) 25px center no-repeat;
   }
-  .friendLine {
-    div {
-      display: inline-block;
-      padding: 15px 22px;
+  ul {
+    li {
+      float: left;
+      width: 16%;
+      margin: 1% 2%;
     }
-  } 
+  }
+}
+/deep/ .sc03 {
+  .el-table td, .el-table th {
+    padding: 9px 0;
+  }
+}
+ul {
+  padding: 0;
 }
