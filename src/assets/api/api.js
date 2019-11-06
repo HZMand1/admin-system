@@ -20,6 +20,10 @@ const api = {
 	insertSeedUser(params) {
 		return axios.post("/rest/seed/user/insertSeedUser", params);
 	},
+	//后台用户管理---修改用户
+	updateSeedUser(params = {}) {
+		return axios.post("/rest/seed/user/updateSeedUser", params);
+	},
 	// 后台菜单管理-获取菜单树结构
 	findMenuZtree(params = {}) {
 		return axios.post("/rest/seed/menu/findMenuZtree", params);

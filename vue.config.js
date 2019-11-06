@@ -14,6 +14,7 @@ module.exports = {
 	//设置打包之后是否打包.map文件
 	productionSourceMap: env !== "development" ? false : true,
 
+<<<<<<< HEAD
 	// 输出文件目录
 	outputDir: "dist",
 	// 让样式找到源
@@ -38,6 +39,32 @@ module.exports = {
 			}
 		}
 	},
+=======
+  // 输出文件目录
+  outputDir: "dist",
+  // 让样式找到源
+  css: {
+    sourceMap: true
+  },
+  // 配置代理
+  devServer: {
+    port: 8088,
+    host: "0.0.0.0",
+    hot: true,
+    open: false,
+    disableHostCheck: true,
+    proxy: {
+      "/api": {
+        target: "http://192.168.100.52:8081", //对应跨域的接口
+        changeOrigin: true,
+        ws: false,
+        pathRewrite: {
+          "^/api": ""
+        }
+      }
+    }
+  },
+>>>>>>> 0dcf2e0f4a12df05e8b7a8bc127fe79feba3e2b1
 
 	chainWebpack: config => {
 		config.resolve.alias.set("@", path.resolve(__dirname, "./src"));

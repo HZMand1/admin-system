@@ -3,11 +3,12 @@
     <el-row>
       <el-col :span="6">
         <el-input class="mar-r-10 mar-b-20"
-                  v-model="input"
+                  v-model="nameTxt"
                   placeholder="用户名"></el-input>
       </el-col>
       <el-col :span="12">
-        <el-button class="mar-l-10 mar-b-20">查询</el-button>
+        <el-button class="mar-l-10 mar-b-20"
+                   @click="queryUser">查询</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
                    @click="addUser">新增</el-button>
@@ -22,7 +23,11 @@
 
     <!-- 表格 -->
     <template>
-      <el-table border
+      <el-table v-loading="loading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+                border
                 :data="tableDatas"
                 style="width:100%"
                 @selection-change="handleSelectionChange">
@@ -31,8 +36,6 @@
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="name"
                          label="用户名"></el-table-column>
-        <el-table-column prop="appCode"
-                         label="所属部门"></el-table-column>
         <el-table-column prop="email"
                          label="邮箱"></el-table-column>
         <el-table-column prop="phone"
@@ -53,7 +56,7 @@
                        :current-page="currentPage"
                        :total="total"
                        :page-size="totalPage"
-                       :page-sizes="[10, 20, 30, 40]"
+                       :page-sizes="[5,10, 20, 30, 40]"
                        layout="total,sizes,prev,pager,next,jumper"></el-pagination>
       </div>
     </el-row>
@@ -66,42 +69,54 @@ export default {
       currentPage: 1, // 分页 当前页数
       totalPage: 10, // 分页 每页显示多少条
       total: 100, // 总条数
-      input: "",
       tableDatas: [],//接口返回的列表数据源
-      multipleSelection: [] //勾选的列
+      multipleSelection: [], //勾选的列--修改
+      deleteIDs: [], //删除的id集合
+      loading: false,
+      nameTxt: "" //条件框的值：用户名
     }
   },
   mounted () {
-    let data = this.$api.api.findSeedUserAllPage({})
-      .then(result => {
-        let dataRow = result.data;
-        if (dataRow.retcode === 1) {
-          //数据源
-          this.tableDatas = dataRow.data.list
-          //当前页数
-          this.currentPage = dataRow.data.pageNum
-          //每页条数
-          this.totalPage = dataRow.data.pageSize
-          //总条数
-          this.total = dataRow.data.total
-        } else {
-          this.$message.error(dataRow.retmsg)
-        }
-      }).catch(() => {
-        this.$message.error("请求失败！")
-      })
+    this.getData()
   },
   methods: {
     handleSelectionChange (val) {
-      this.multipleSelection = val;
+      //给修改功能用的
+      this.multipleSelection = val
+      //给删除功能用的
+      this.deleteIDs = []
+      val.map((item) => {
+        this.deleteIDs.push(item.id)
+      })
+      console.log(this.deleteIDs);
+
     },
     // 设置显示每页多少条数据
     setAuctionSizeChange (currentPage) {
-      this.totalPage = currentPage;
+      this.totalPage = currentPage
+      let params = {
+        start: this.currentPage,
+        pageSize: this.totalPage
+      }
+      this.getData(params)
     },
     // 设置当前页码
     setAuctionCurrentChange (val) {
-      this.currentPage = val;
+      this.currentPage = val
+      let params = {
+        start: this.currentPage,
+        pageSize: this.totalPage
+      }
+      this.getData(params)
+    },
+    //查询方法
+    queryUser () {
+      let params = {
+        name: this.nameTxt,
+        start: this.currentPage,
+        pageSize: this.totalPage
+      }
+      this.getData(params)
     },
     //跳转到新增页面
     addUser () {
@@ -127,6 +142,29 @@ export default {
         this.$message.error("请选择一条记录");
         return;
       }
+    },
+    getData (params) {
+      this.loading = true
+      let data = this.$api.api.findSeedUserAllPage(params)
+        .then(result => {
+          let dataRow = result.data;
+          if (dataRow.retcode === 1) {
+            //数据源
+            this.tableDatas = dataRow.data.list
+            //当前页
+            this.currentPage = dataRow.data.pageNum
+            //每页条数
+            this.totalPage = dataRow.data.pageSize
+            //总条数
+            this.total = dataRow.data.total
+            //关闭loading
+            this.loading = false
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
     }
   }
 
