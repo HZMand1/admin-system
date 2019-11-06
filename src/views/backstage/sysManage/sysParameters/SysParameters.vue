@@ -55,7 +55,7 @@ export default {
       searchValue: "",
       currentPage: 1, // 分页 当前页数
       totalPage: 10, // 分页 每页显示多少条
-      total: 100, // 总条数
+      total: 0, // 总条数
       tableData: [],
       multipleSelection: [],
       multipleSelectionId: [],
