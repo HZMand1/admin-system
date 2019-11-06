@@ -23,7 +23,7 @@ instance.interceptors.request.use(
 		//用户信息
 		let userInfo = "";
 		if (localStorage.getItem("userInfo")) {
-			userInfo = encodeURI(JSON.stringify(localStorage.userInfo))
+			userInfo = encodeURI(localStorage.userInfo)
 		} else {
 			userInfo = "";
 		}
