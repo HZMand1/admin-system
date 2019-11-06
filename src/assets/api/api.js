@@ -8,9 +8,9 @@ axios.defaults.baseURL = process.env.VUE_APP_BASEURL;
 let url = process.env.VUE_APP_BASEURL;
 
 const api = {
-  // 登录
+  // 后台管理 — 权限管理 — 登录
   login (params) {
-    return axios.post("login", params);
+    return axios.post("/authority/login", params);
   },
   //后台用户管理---分页列表
   findSeedUserAllPage (params = {}) {

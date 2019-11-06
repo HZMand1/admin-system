@@ -4,20 +4,6 @@
  */
 import axios from "axios";
 import router from "../../router";
-//判断是电脑还是手机
-function isPc() {
-	let userAgentInfo = navigator.userAgent;
-	let Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
-	let flag = "pc";
-	for (let v = 0; v < Agents.length; v++) {
-		if (userAgentInfo.indexOf(Agents[v]) > 0) {
-			flag = "mobile";
-			break;
-		}
-	}
-	return "pc";
-}
-let sysType = isPc();
 // 创建axios实例
 let instance = axios.create({
 	timeout: 1000 * 10 // 超时
@@ -37,27 +23,25 @@ instance.interceptors.request.use(
 		//用户信息
 		let userInfo = "";
 		if (localStorage.getItem("userInfo")) {
-			userInfo = localStorage.userInfo
+			userInfo = encodeURI(localStorage.userInfo)
 		} else {
 			userInfo = "";
 		}
 		//token
 		let phSessionToken = "";
 		if (localStorage.getItem("token")) {
-			phSessionToken = localStorage.token
+			phSessionToken = JSON.parse(localStorage.token)
 		} else {
 			phSessionToken = "";
 		}
 		config.headers = {
-			"sys-type": sysType, //访问来源
-			"phSessionToken": phSessionToken
+			"token": phSessionToken,
+			"user-info": userInfo
 		}
 		return config;
-
 	},
 	error => Promise.error(error)
 );
-
 // 响应拦截器
 instance.interceptors.response.use(
 	// 请求成功
@@ -76,18 +60,16 @@ instance.interceptors.response.use(
 		} = error;
 		if (response) {
 			// token过期 || 没有token || 服务端错误
-			if (response.data.errorcode === "500" || response.data.errorcode === "401") {
+			if (response.data.errorcode === "0") {
 				localStorage.removeItem("token");
 				Message({
 					message: "登录过期，即将前往登录页",
 					type: "error"
 				})
 				router.push({
-					path: "/login"
+					path: "/backstage/login"
 				})
-
 			}
-
 			return Promise.reject(response);
 		} else {
 			// 处理断网的情况
