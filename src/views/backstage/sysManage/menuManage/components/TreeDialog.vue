@@ -61,7 +61,7 @@ export default {
       return (
         <span class="custom-tree-node">
           <i class={data.className}></i>
-          <span>{node.name}</span>
+          <span>{data.name}</span>
         </span>
       );
     },
@@ -79,7 +79,7 @@ export default {
     confirm() {
       let nodes = this.$refs.tree.getCheckedNodes();
       let obj = nodes.length <= 0 ? {} : nodes[0];
-      this.$emit("confirmEmit", false, obj.label);
+      this.$emit("confirmEmit", false, obj);
     }
   }
 };

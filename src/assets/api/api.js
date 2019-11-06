@@ -2,14 +2,19 @@ import axios from "../../assets/request/http"; // 导入http中创建的axios实
 
 // axios.defaults.baseURL = process.env.VUE_APP_BASEURL;
 
-axios.defaults.baseURL = "/api";
+// axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = process.env.VUE_APP_BASEURL;
 // 本地对接接口
 let url = process.env.VUE_APP_BASEURL;
 
 const api = {
-    // 登录
+    // 后台管理 — 权限管理 — 登录
     login (params) {
-        return axios.post("login", params);
+        return axios.post("/authority/login", params);
+    },
+    // 文件管理-上传附件到fasdfs
+    fileUpload (params) {
+        return axios.post("/rest/seed/http/fileUpload", params);
     },
     //后台用户管理---分页列表
     findSeedUserAllPage (params = {}) {
@@ -75,6 +80,18 @@ const api = {
     insertMenu (params = {}) {
         return axios.post("/rest/seed/menu/insertMenu", params);
     },
+    // 后台管理 - 菜单管理 - 修改菜单信息
+    updateMenu (params) {
+        return axios.post("/rest/seed/menu/updateMenu", params);
+    },
+    // 后台管理 - 菜单管理 - 修改菜单状态(删除)
+    updateMenuEnable (params) {
+        return axios.post("/rest/seed/menu/updateMenuEnable", params);
+    },
+    // 后台管理 - 菜单管理 - 根据 id 获取菜单信息
+    findMenuById (params) {
+        return axios.post("/rest/seed/menu/findMenuById", params);
+    },
     // 后台管理 — 系统参数 — 列表查询
     findSysList (params = {}) {
         return axios.post("/systemParam/findList", params);
@@ -96,9 +113,9 @@ const api = {
         return axios.post("rest/seed/adNews/findAdNewsListPage", params);
     },
 
-    /**
-     * 商家管理 - start
-     */
+	/**
+	 * 商家管理 - start
+	 */
     //后台管理-商家店铺-店铺分页
     findSupplierInfoPage (params = {}) {
         return axios.post("/rest/seed/supplier/info/findSupplierInfoPage", params);
@@ -115,13 +132,13 @@ const api = {
     findSupplierInfoById (params = {}) {
         return axios.post("/rest/seed/supplier/info/findSupplierInfoById", params);
     },
-    /**
-     * 商家管理 - end
-     */
+	/**
+	 * 商家管理 - end
+	 */
 
-    /**
-    * 会员管理 - start
-    */
+	/**
+	 * 会员管理 - start
+	 */
     //后台管理-会员管理-分页获取会员信息
     findOutletUserListPage (params = {}) {
         return axios.post("/rest/seed/outlet/user/findOutletUserListPage", params);
@@ -142,13 +159,13 @@ const api = {
     findOutletUserById (params = {}) {
         return axios.post("/rest/seed/outlet/user/findOutletUserById", params);
     },
-    /**
-    * 会员管理 - end
-    */
+	/**
+	 * 会员管理 - end
+	 */
 
-    /**
-    * 资讯管理 - start
-    */
+	/**
+	 * 资讯管理 - start
+	 */
     //后台管理-广告新闻资讯管理-分页查询
     findAdNewsListPage (params = {}) {
         return axios.post("/rest/seed/adNews/findAdNewsListPage", params);
@@ -173,14 +190,9 @@ const api = {
     insertAdNews (params = {}) {
         return axios.post("/rest/seed/adNews/insertAdNews", params);
     },
-    //文件管理-上传附件到fasdfs
-    fileUpload (params = {}) {
-        return axios.post("/rest/seed/http/fileUpload", params);
-    },
-
-    /**
-    * 资讯管理 - end
-    */
+	/**
+	 * 资讯管理 - end
+	 */
 
     // 西北门户-获取比价采购，现货晒场数据
     findProductService (params = {}) {
@@ -191,7 +203,6 @@ const api = {
         return axios.post("rest/seed/adNews/findAdNewsAllList", params);
     }
 }
-
 export default {
     api
 }

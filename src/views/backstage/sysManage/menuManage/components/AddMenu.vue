@@ -4,7 +4,7 @@
     <el-row class="bor-b-1">
       <el-col class="pad-l-20 font-weight-b" style="line-height: 50px;">新增</el-col>
     </el-row>
-    <el-row>
+    <el-row v-loading="loading" element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
       <el-col>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm pad-r-30">
           <el-form-item label="类型" class="pad-t-20">
@@ -17,11 +17,11 @@
             <el-input v-model="ruleForm.menuName"></el-input>
           </el-form-item>
           <el-form-item label="上级菜单" :prop="ruleForm.type==='button'?'supeName':''">
-            <el-input v-model="ruleForm.supeName" :readonly="true">
+            <el-input v-model="ruleForm.supeName" :readonly="true" placeholder="点击右边按钮选取菜单">
               <i class="iconyanjing iconfont" slot="suffix" @click="showTree" style="cursor: pointer;"></i>
             </el-input>
           </el-form-item>
-          <el-form-item label="菜单URL" prop="menuUrl" v-if="ruleForm.type==='menu'">
+          <el-form-item label="菜单URL" prop="menuUrl" v-if="ruleForm.type===0">
             <el-input v-model="ruleForm.menuUrl"></el-input>
           </el-form-item>
           <el-form-item label="授权标识" v-if="ruleForm.type!=='directory'">
@@ -68,12 +68,13 @@ export default {
       isDialogIcon: false,
       ruleForm: {
         type: 0,
-        menuName: "",
-        supeName: "",
-        menuUrl: "",
-        auth: "",
+        menuName: null,
+        supeName: "一级菜单",
+        supeId: null,
+        menuUrl: null,
+        auth: null,
         num: 0,
-        icon: "",
+        icon: null,
         status: 0
       },
       rules: {
@@ -87,7 +88,8 @@ export default {
           { required: true, message: "菜单 url 不能为空", trigger: "blur" }
         ]
       },
-      code: this.$config.RET_CODE.SUCCESS_CODE
+      code: this.$config.RET_CODE.SUCCESS_CODE,
+      loading: false
     };
   },
   methods: {
@@ -97,12 +99,14 @@ export default {
         if (valid) {
           // 提交成功
           let params = {
-            appCode: this.SSXT,
             type: this.ruleForm.type,
+            parentId: this.ruleForm.supeId,
+            path: this.ruleForm.menuUrl,
             name: this.ruleForm.menuName,
             auth: this.ruleForm.auth,
             enable: this.ruleForm.status
           };
+          this.loading = true;
           this.$api.api
             .insertMenu(params)
             .then(result => {
@@ -111,12 +115,14 @@ export default {
                   message: result.data.retmsg,
                   type: "success"
                 });
-                console.log(result);
+                this.goback();
               } else {
                 this.$message.error(result.data.retmsg);
               }
+              this.loading = false;
             })
             .catch(err => {
+              this.loading = false;
               console.log(err);
             });
         } else {
@@ -152,7 +158,8 @@ export default {
     // 确认tree弹框
     confirmEmit(b, o) {
       this.isDialogTree = b;
-      this.ruleForm.supeName = o;
+      this.ruleForm.supeName = o.name;
+      this.ruleForm.supeId = o.id;
     }
   }
 };
