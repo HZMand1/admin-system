@@ -173,6 +173,11 @@ const api = {
     insertAdNews (params = {}) {
         return axios.post("/rest/seed/adNews/insertAdNews", params);
     },
+    //文件管理-上传附件到fasdfs
+    fileUpload (params = {}) {
+        return axios.post("/rest/seed/http/fileUpload", params);
+    },
+
     /**
     * 资讯管理 - end
     */

@@ -81,7 +81,8 @@ export default {
         typeCode: "",
         status: "",
         orders: "",
-        imgPath: ""
+        imgPath: "",
+        time: ""
       },
       //搜索
       searchForm: {
@@ -239,7 +240,7 @@ export default {
         center: true
       }).then(() => {
         //请求删除账号接口
-        this.$api.qualityControl.goodsManage.batchEdit(params)
+        this.$api.api.deleteAdNews(params)
           .then(res => {
             if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
               this.$message({
@@ -265,26 +266,11 @@ export default {
     },
     //单个删除
     singleDeleteHandle (index, row) {
-      let arr = []
-      arr.push(row.id)
       let params = {
-        ids: [row.id]//数组
+        id: row.id
       }
-      this.deleteHandle("确定删除当前拍品信息?", params, "取消删除")
-    },
-    //批量删除
-    batchDeleteHandle () {
-      if (this.checkedIds.length > 0) {
-        let params = {
-          ids: this.checkedIds//数组
-        }
-        this.deleteHandle("确定批量删除当前拍品信息?", params, "取消删除")
-      } else {
-        this.$message({
-          type: "error",
-          message: "请选择拍品"
-        })
-      }
+      console.log(row)
+      this.deleteHandle("确定删除当前广告信息?", params, "取消删除")
     },
     //点击弹框下的取消
     handleCancel () {
@@ -302,7 +288,9 @@ export default {
         typeCode: this.dialogForm.typeCode,
         status: this.dialogForm.status,
         orders: this.dialogForm.orders,
-        imgPath: this.dialogForm.imgPath
+        imgPath: this.dialogForm.imgPath,
+        addTime: new Date(this.dialogForm.time[0]).getTime(),
+        finishTime: new Date(this.dialogForm.time[1]).getTime()
       }
 
       if (this.handleType === "add") {

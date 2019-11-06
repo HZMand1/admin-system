@@ -64,6 +64,7 @@ export default {
     },
     //删除
     singleDeleteHandle (index, row) {
+      console.log(row)
       this.$emit("singleDeleteHandle", index, row)
     }
   }

@@ -82,7 +82,12 @@
   .custom.el-popper[x-placement^="bottom"] .popper__arrow::after {
   	border-bottom-color: rgb(48, 65, 86) !important;
   }
-
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  margin: 0;
+  }
+  input[type="number"]{-moz-appearance:textfield;}
   html,
   body,
   a,

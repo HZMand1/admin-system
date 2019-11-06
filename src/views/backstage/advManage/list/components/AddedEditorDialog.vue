@@ -3,7 +3,7 @@
   <el-dialog title=""
              :visible.sync="dialogVisible"
              :before-close="handleCancel"
-             width="900px">
+             width="1100px">
     <el-form :model="dialogForm"
              ref="dialogForm"
              label-width="130px"
@@ -15,14 +15,6 @@
             <el-input v-model.trim="dialogForm.title"
                       maxlength="30"
                       placeholder="请输入广告标题"
-                      style="width: 90%;"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item prop="url"
-                        label="广告URL地址">
-            <el-input v-model.trim="dialogForm.url"
-                      placeholder="广告URL地址"
                       style="width: 90%;"></el-input>
           </el-form-item>
         </el-col>
@@ -61,8 +53,28 @@
             <el-input v-model.trim="dialogForm.orders"
                       type="number"
                       @mousewheel.native.prevent
-                      placeholder="显示顺序"
+                      placeholder="数字越大越在前展示"
                       style="width: 90%;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="time"
+                        label="有效时间">
+            <el-date-picker v-model="dialogForm.time"
+                            type="daterange"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
+                            :default-time="['00:00:00', '23:59:59']"
+                            style="width: 360px">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item prop="url"
+                        label="广告URL地址">
+            <el-input v-model.trim="dialogForm.url"
+                      placeholder="广告URL地址"
+                      style="width: 95.5%;"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -168,14 +180,23 @@ export default {
     }
   },
   data () {
-    let validateText = (rule, value, callback) => {
-      let reg = /^[0-9a-zA-Z]+$/
+    let validateTypeCode = (rule, value, callback) => {
+      let reg = /\w+|\d+/
       if (reg.test(value) || value === "") {
-        callback(new Error("请输入英文和数字"))
+        callback(new Error("只能输入英文和数字"))
       } else {
         callback()
       }
     }
+    let validateUrl = (rule, value, callback) => {
+      let reg = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/
+      if (reg.test(value) || value === "") {
+        callback(new Error("请输入正确的url地址"))
+      } else {
+        callback()
+      }
+    }
+
     return {
       //剪切图片上传
       uploadingLoading: false,
@@ -204,11 +225,12 @@ export default {
       formRules: {
         // title: [{ required: true, trigger: "blur", validator: validateText }],
         title: [{ required: true, message: "请输入广告标题", trigger: "blur" }],
-        url: [{ required: true, message: "请输入url", trigger: "blur" }],
+        url: [{ required: true, validator: validateUrl, trigger: "blur" }],
         subTitle: [{ required: true, message: "请输入广告位置", trigger: "blur" }],
-        typeCode: [{ required: true, validator: validateText, trigger: "blur" }],
+        typeCode: [{ required: true, validator: validateTypeCode, trigger: "blur" }],
         status: [{ required: true, message: "请选择广告状态", trigger: "blur" }],
-        orders: [{ required: true, message: "请输入显示顺序", trigger: "blur" }]
+        orders: [{ required: true, message: "请输入显示顺序", trigger: "blur" }],
+        time: [{ required: true, message: "请选择开始和结束时间", trigger: "blur" }]
       }
     }
   },
