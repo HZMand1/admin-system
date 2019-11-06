@@ -1,64 +1,78 @@
 <template>
-  <div id="roleMaeage">
+  <div id="supplierUser">
     <el-row>
       <el-col :span="6">
         <el-input class="mar-r-10 mar-b-20"
                   v-model="nameTxt"
-                  placeholder="角色名称"></el-input>
+                  placeholder="店铺名"></el-input>
       </el-col>
       <el-col :span="12">
         <el-button class="mar-l-10 mar-b-20"
-                   @click="queryUser">查询</el-button>
+                   @click="queryShop"
+                   icon="el-icon-select">查询</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
-                   @click="addRole">新增</el-button>
-        <el-button class="mar-l-10 mar-b-20"
-                   type="primary"
-                   @click="editRole">修改</el-button>
-        <el-button class="mar-l-10 mar-b-20"
-                   type="warning"
-                   @click="showPowerDialog">分配权限</el-button>
+                   @click="editShop"
+                   icon="el-icon-edit">修改</el-button>
       </el-col>
     </el-row>
 
     <!-- 表格 -->
-    <el-row class="pad-t-10 ">
-      <el-table border
+    <template>
+      <el-table v-loading="loading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+                border
                 :data="tableDatas"
                 style="width:100%"
                 @selection-change="handleSelectionChange">
         <el-table-column type="index"
                          label=" "></el-table-column>
         <el-table-column type="selection"></el-table-column>
-        <el-table-column prop="roleName"
-                         label="角色名称"></el-table-column>
-        <el-table-column prop="appCode"
-                         label="所属系统"></el-table-column>
-        <el-table-column prop="remark"
-                         label="备注"></el-table-column>
-        <el-table-column prop="opearUser"
-                         label="操作人"></el-table-column>
-        <el-table-column prop="addTime"
-                         label="创建时间"></el-table-column>
+        <el-table-column prop="name"
+                         label="店铺名称"></el-table-column>
+        <el-table-column prop="account"
+                         label="商户账号"></el-table-column>
+        <el-table-column prop="userName"
+                         label="商户名称"></el-table-column>
         <el-table-column prop="enable"
-                         label="状态"
-                         :formatter="stateFormat">
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button size="mini"
-                       type="primary"
-                       :loading="btnloading"
-                       @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
-            <el-button size="mini"
-                       type="danger"
-                       :loading="btnloading"
-                       @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-          </template>
+                         label="审核状态"
+                         :formatter="auditFormat"></el-table-column>
+        <el-table-column prop="state"
+                         label="店铺状态"
+                         :formatter="stateFormat"></el-table-column>
+        <el-table-column label="入驻时间">
+          <template slot-scope="scope">{{ scope.row.addTime | dateFormat('YYYY-MM-DD HH:mm:ss') }}</template>
         </el-table-column>
 
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+
+            <el-button v-if="scope.row.state == 1"
+                       size="mini"
+                       type="primary"
+                       @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
+
+            <el-button v-else
+                       size="mini"
+                       type="danger"
+                       @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+
+            <el-button v-if="scope.row.enable != 0"
+                       size="mini"
+                       type="primary"
+                       @click="shopAudit(scope.$index, scope.row)">审核</el-button>
+            <el-button size="mini"
+                       @click="shopInfo(scope.$index, scope.row)">详情</el-button>
+            <!-- <el-button size="mini"
+                       type="primary"
+                       :loading="btnloading"
+                       @click="shopStaff(scope.$index, scope.row)">店员</el-button> -->
+          </template>
+        </el-table-column>
       </el-table>
-    </el-row>
+    </template>
 
     <!-- 分页 -->
     <el-row class="pad-t-20 pad-b-20 bor-1">
@@ -69,34 +83,38 @@
                        :current-page="currentPage"
                        :total="total"
                        :page-size="totalPage"
-                       :page-sizes="[10, 20, 30, 40]"
+                       :page-sizes="[5,10, 20, 30, 40]"
                        layout="total,sizes,prev,pager,next,jumper"></el-pagination>
       </div>
     </el-row>
 
     <!-- 弹框 -->
-    <el-dialog title="权限分配"
-               :visible.sync="allotPower"
+    <el-dialog title="店铺审核"
+               :visible.sync="showAudit"
                @close="closeDialog"
                center>
-      <el-tree ref="tree"
-               :data="dataTree"
-               :show-checkbox="true"
-               node-key="id"
-               :default-checked-keys="treeIds"
-               :default-expand-all="true"
-               :props="defaultProps"></el-tree>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button type="primary"
-                   @click="dialogSubmit">确 定</el-button>
-      </div>
+      <el-row>
+        <el-radio v-model="radio"
+                  label="0">通过</el-radio>
+        <el-radio v-model="radio"
+                  label="1">不通过</el-radio>
+      </el-row>
+      <el-input class="mar-t-20"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入原因"
+                v-model="auditCause">
+      </el-input>
+
+      <el-button class="mar-t-20"
+                 size="mini"
+                 type="primary"
+                 :loading="btnloading"
+                 @click="submitAudit">提交</el-button>
     </el-dialog>
     <!-- 弹框结束 -->
-
   </div>
 </template>
-
 <script>
 export default {
   data () {
@@ -104,42 +122,28 @@ export default {
       currentPage: 1, // 分页 当前页数
       totalPage: 10, // 分页 每页显示多少条
       total: 100, // 总条数
-      tableDatas: [], //数据源
-      multipleSelection: [],
-      loading: false, //加载框
+      tableDatas: [],//接口返回的列表数据源
+      multipleSelection: [], //勾选的列--修改
+      loading: false,
       btnloading: false, //按钮内部加载
-      deleteIDs: [], //删除的id集合
-      nameTxt: null, //条件框的值：用户名
-      allotPower: false, //弹框
-      dataTree: [], //菜单树的集合
-      treeIds: [], //接口返回当前角色已有权限的id集合
-      defaultProps: {
-        children: "children",
-        label: "name"
-      }
-
+      nameTxt: "", //条件框的值：用户名
+      showAudit: false, //显示审核框
+      radio: "0", //0:已审核，1：审核不通过，2：未审核
+      auditCause: "", //审核备注
+      auditId: "", //审核列的id
     }
   },
   mounted () {
-    //获取列表数据
     this.getData()
-    //获取树菜单
-    this.getTree()
   },
   methods: {
-    // 多选
     handleSelectionChange (val) {
-      //给修改功能用
-      this.multipleSelection = val;
-      //给删除功能用的
-      this.deleteIDs = []
-      val.map((item) => {
-        this.deleteIDs.push(item.id)
-      })
+      //给修改功能用的
+      this.multipleSelection = val
     },
     // 设置显示每页多少条数据
     setAuctionSizeChange (currentPage) {
-      this.totalPage = currentPage;
+      this.totalPage = currentPage
       let params = {
         start: this.currentPage,
         pageSize: this.totalPage
@@ -148,7 +152,7 @@ export default {
     },
     // 设置当前页码
     setAuctionCurrentChange (val) {
-      this.currentPage = val;
+      this.currentPage = val
       let params = {
         start: this.currentPage,
         pageSize: this.totalPage
@@ -157,27 +161,25 @@ export default {
     },
     //启用 0
     handleEnabled (index, row) {
-      this.btnloading = true
       this.setAbled("确认启用", row.id, 0)
     },
     //禁用 1
     handleDisabled (index, row) {
-      this.btnloading = true
       this.setAbled("确认禁用", row.id, 1)
     },
-
-    setAbled (strInfo, id, abled) {
+    setAbled (strInfo, id, state) {
       this.$confirm(strInfo, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
+          this.loading = true
           let params = {
             id: id,
-            enable: abled
+            state: state
           }
-          this.$api.api.updateRoleEnable(params)
+          this.$api.api.updateSupplierState(params)
             .then(result => {
               let dataRow = result.data
               if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
@@ -189,53 +191,34 @@ export default {
               } else {
                 this.$message.error(dataRow.retmsg)
               }
-              this.btnloading = false
+              this.loading = false
             }).catch(() => {
-              this.btnloading = false
+              this.loading = false
               this.$message.error("请求失败！")
             })
         }).catch(() => {
-
-          this.btnloading = false
+          this.loading = false
         })
     },
-    stateFormat (row, column) {
-      if (row.enable === 0) {
-        return "启用"
-      } else {
-        return "禁用"
-      }
-    },
 
-    //弹框---开始
-    /**
-     * 显示弹框
-     */
-    showPowerDialog () {
-      let num = this.multipleSelection.length;
-      if (num !== 1) {
-        this.$message.error("请选择一条记录");
-        return;
-      }
-      let id = this.multipleSelection[0].id;
-      this.getPowerByRole(id)
-
+    //显示店铺审核弹框
+    shopAudit (index, row) {
+      this.showAudit = true
+      this.auditId = row.id
     },
     //关闭弹框
     closeDialog () {
-      //清空选中项
-      this.$refs.tree.setCheckedKeys([])
-
+      //TODO
     },
-    //弹框的提交按钮
-    dialogSubmit () {
-      let id = this.multipleSelection[0].id
-      let menuId = this.$refs.tree.getCheckedKeys()
+    //submitAudit提交审核
+    submitAudit () {
+      this.btnloading = true
       let params = {
-        roleId: id,
-        menuIds: menuId
+        id: this.auditId,
+        enable: this.radio,
+        review: this.auditCause
       }
-      this.$api.api.saveAuthToRole(params)
+      this.$api.api.updateSupplierEnable(params)
         .then(result => {
           let dataRow = result.data
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
@@ -243,68 +226,57 @@ export default {
               message: dataRow.retmsg,
               type: "success"
             })
-            this.allotPower = false
+            this.getData()
+            this.showAudit = false
           } else {
             this.$message.error(dataRow.retmsg)
           }
+          this.btnloading = false
         }).catch(() => {
-          this.$message.error("请求失败!")
+          this.btnloading = false
+          this.$message.error("请求失败！")
         })
     },
-    //权限树是否被选中
-    getPowerByRole (id) {
-      let params = {
-        roleId: id
+    //店铺详情
+    shopInfo (index, row) {
+      this.$router.push({
+        path: "/backstage/merchantManage/shopManage/components/ShopDetail",
+        query: { id: row.id }
+      })
+    },
+    //查看店员
+    // shopStaff (index, row) {
+    //   //TODO
+    // },
+
+    stateFormat (row, column) {
+      if (row.state === 0) {
+        return "启用"
+      } else {
+        return "禁用"
       }
-      this.$api.api.findAuthByRole(params)
-        .then(result => {
-          let dataRow = result.data
-          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.treeIds = []
-            dataRow.data.map((item) => {
-              this.treeIds.push(item.menuId)
-            })
-          } else {
-            this.$message.error(dataRow.retmsg)
-          }
-
-          this.allotPower = true
-        }).catch(() => {
-          this.allotPower = true
-          this.$message.error("请求失败！")
-        })
     },
-    //获取树菜单
-    getTree () {
-      this.$api.api.findMenuZtree()
-        .then(result => {
-          let dataRow = result.data
-          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.dataTree = dataRow.data
-          } else {
-            this.$message.error(dataRow.retmsg)
-          }
-        }).catch(() => {
-          this.$message.error("请求失败！")
-        })
+    auditFormat (row, column) {
+      if (row.enable === 0) {
+        return "审核通过"
+      } else if (row.enable === 1) {
+        return "审核不通过"
+      } else {
+        return "未审核"
+      }
     },
-    //弹框---结束
 
-    //列表的查询方法
-    queryUser () {
+    //查询方法
+    queryShop () {
       let params = {
-        roleName: this.nameTxt === "" ? null : this.nameTxt,
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
       this.getData(params)
     },
-    //跳转到新增页面
-    addRole () {
-      this.$router.push({ path: "/backstage/sysManage/roleManage/components/AddRole" })
-    },
     //跳转到编辑页面
-    editRole () {
+    editShop () {
       let num = this.multipleSelection.length;
       if (num !== 1) {
         this.$message.error("请选择一条记录");
@@ -312,17 +284,17 @@ export default {
       }
       let id = this.multipleSelection[0].id;
       this.$router.push({
-        path: "/backstage/sysManage/roleManage/components/EditRole",
+        path: "/backstage/sysManage/userManage/components/EditUser",
         query: { id: id }
       })
     },
 
     /**
-     * 查询方法
+     * 查询列表展示数据方法
      */
     getData (params) {
       this.loading = true
-      let data = this.$api.api.findRoleAllPage(params)
+      this.$api.api.findSupplierInfoPage(params)
         .then(result => {
           let dataRow = result.data;
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {

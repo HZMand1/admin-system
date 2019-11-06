@@ -1,8 +1,12 @@
 <template>
   <el-row class="container">
-    <el-col :span="24" class="header">
-      <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-        <img :src="logoSrc" alt />
+    <el-col :span="24"
+            class="header">
+      <el-col :span="10"
+              class="logo"
+              :class="collapsed?'logo-collapse-width':'logo-width'">
+        <img :src="logoSrc"
+             alt />
         {{collapsed?'':sysName}}
       </el-col>
       <el-col :span="10">
@@ -10,13 +14,15 @@
 					<i class="fa fa-align-justify"></i>
         </div>-->
       </el-col>
-      <el-col :span="4" class="userinfo">
+      <el-col :span="4"
+              class="userinfo">
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner">
             <img :src="this.sysUserAvatar" />
             {{sysUserName}}
           </span>
-          <el-dropdown-menu slot="dropdown" class="custom">
+          <el-dropdown-menu slot="dropdown"
+                            class="custom">
             <el-dropdown-item @click.native="toPersonalCenter">我的消息</el-dropdown-item>
             <!-- <el-dropdown-item>设置</el-dropdown-item> -->
             <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
@@ -24,28 +30,52 @@
         </el-dropdown>
       </el-col>
     </el-col>
-    <el-col :span="24" class="main">
+    <el-col :span="24"
+            class="main">
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
         <!--导航菜单-->
-        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
+        <el-menu :default-active="$route.path"
+                 class="el-menu-vertical-demo"
+                 @open="handleopen"
+                 @close="handleclose"
+                 @select="handleselect"
+                 unique-opened
+                 router
+                 v-show="!collapsed">
           <template v-for="(item,index) in $router.options.routes">
             <template v-if="!item.hidden">
-              <el-submenu :key="index" :index="index+''" v-if="!item.leaf">
+              <el-submenu :key="index"
+                          :index="index+''"
+                          v-if="!item.leaf">
                 <template slot="title">
                   <i :class="item.iconCls"></i>
                   {{item.name}}
                 </template>
-                <div v-for="(child,index) in item.children" :index="child.path" :key="child.path" v-show="!child.hidden">
+                <div v-for="(child,index) in item.children"
+                     :index="child.path"
+                     :key="child.path"
+                     v-show="!child.hidden">
                   <template v-if="child.children">
                     <el-submenu :index="index+''">
                       <template slot="title">{{child.name}}</template>
-                      <el-menu-item v-for="grandson in child.children" :index="grandson.path" :key="grandson.path" v-show="!grandson.hidden" router="true" :route="grandson.path">{{grandson.name}}</el-menu-item>
+                      <el-menu-item v-for="grandson in child.children"
+                                    :index="grandson.path"
+                                    :key="grandson.path"
+                                    v-show="!grandson.hidden"
+                                    router="true"
+                                    :route="grandson.path">{{grandson.name}}</el-menu-item>
                     </el-submenu>
                   </template>
-                  <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-show="!child.children">{{child.name}}</el-menu-item>
+                  <el-menu-item @click="clickMenu(child)"
+                                :index="child.path"
+                                :key="child.path"
+                                v-show="!child.children">{{child.name}}</el-menu-item>
                 </div>
               </el-submenu>
-              <el-menu-item v-if="item.leaf&&item.children.length>0" :key="index" @click="clickMenu(item.children[0])" :index="item.children[0].path">
+              <el-menu-item v-if="item.leaf&&item.children.length>0"
+                            :key="index"
+                            @click="clickMenu(item.children[0])"
+                            :index="item.children[0].path">
                 <i :class="item.iconCls"></i>
                 {{item.children[0].name}}
               </el-menu-item>
@@ -53,19 +83,39 @@
           </template>
         </el-menu>
         <!--导航菜单-折叠后-->
-        <ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
-          <li :key="index" v-for="(item,index) in $router.options.routes" v-show="!item.hidden" class="el-submenu item">
+        <ul class="el-menu el-menu-vertical-demo collapsed"
+            v-show="collapsed"
+            ref="menuCollapsed">
+          <li :key="index"
+              v-for="(item,index) in $router.options.routes"
+              v-show="!item.hidden"
+              class="el-submenu item">
             <template v-if="!item.leaf">
-              <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
+              <div class="el-submenu__title"
+                   style="padding-left: 20px;"
+                   @mouseover="showMenu(index,true)"
+                   @mouseout="showMenu(index,false)">
                 <i :class="item.iconCls"></i>
               </div>
-              <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-                <li v-for="child in item.children" v-show="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>
+              <ul class="el-menu submenu"
+                  :class="'submenu-hook-'+index"
+                  @mouseover="showMenu(index,true)"
+                  @mouseout="showMenu(index,false)">
+                <li v-for="child in item.children"
+                    v-show="!child.hidden"
+                    :key="child.path"
+                    class="el-menu-item"
+                    style="padding-left: 40px;"
+                    :class="$route.path==child.path?'is-active':''"
+                    @click="$router.push(child.path)">{{child.name}}</li>
               </ul>
             </template>
             <template v-else>
           <li class="el-submenu">
-            <div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].name)">
+            <div class="el-submenu__title el-menu-item"
+                 style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;"
+                 :class="$route.path==item.children[0].path?'is-active':''"
+                 @click="$router.push(item.children[0].name)">
               <i :class="item.iconCls"></i>
             </div>
           </li>
@@ -100,7 +150,7 @@ import { mapActions, mapMutations } from "vuex";
 import Taps from "../../components/Taps";
 export default {
   components: {},
-  data() {
+  data () {
     return {
       sysName: "西北地区供应保障服务平台",
       collapsed: false,
@@ -121,22 +171,25 @@ export default {
       nameList: []
     };
   },
+  created () {
+    console.log(this.$route.matched)
+  },
   methods: {
     ...mapActions(["FETCH_USER_INFO", "USER_INFO"]),
     ...mapMutations(["USER_INFO"]),
-    toPersonalCenter() {
+    toPersonalCenter () {
       this.$router.push({ path: "/main/personalCenter" });
     },
-    onSubmit() {
+    onSubmit () {
       console.log("submit!");
     },
-    handleopen() {
+    handleopen () {
       // console.log('handleopen');
     },
-    handleclose() {
+    handleclose () {
       // console.log('handleclose');
     },
-    clickMenu(m) {
+    clickMenu (m) {
       this.openedTab = this.$store.state.openedTab;
       this.openedTab.map(v => {
         if (!this.nameList.includes(v.name)) {
@@ -151,12 +204,12 @@ export default {
       this.$store.commit("changeTab", m);
     },
     //  菜单回调
-    handleselect(index, indexPath) {
+    handleselect (index, indexPath) {
       // console.log(index);
       // console.log(indexPath);
     },
     // 退出登录
-    logout: function() {
+    logout: function () {
       let _this = this;
       this.$confirm("确认退出吗?", "提示", {
         // type: 'warning'
@@ -166,19 +219,19 @@ export default {
           this.$Utils.setCookie("phSessionToken", "");
           _this.$router.push("/login");
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     // 折叠导航栏
-    collapse: function() {
+    collapse: function () {
       this.collapsed = !this.collapsed;
     },
-    showMenu(i, status) {
+    showMenu (i, status) {
       this.$refs.menuCollapsed.getElementsByClassName(
         "submenu-hook-" + i
       )[0].style.display = status ? "block" : "none";
     }
   },
-  mounted() {
+  mounted () {
     // let user = sessionStorage.getItem("user")
     // // let user = this.$sotre.state.userInfo
     // if (user) {

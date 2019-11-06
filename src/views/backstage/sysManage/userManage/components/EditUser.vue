@@ -1,5 +1,5 @@
 <template>
-  <div id="adduser">
+  <div id="edituser">
     <el-form :model="ruleForm"
              :rules="rules"
              ref="ruleForm"
@@ -11,7 +11,8 @@
       <el-form-item label="账号"
                     prop="account">
         <el-input v-model="ruleForm.account"
-                  placeholder="请输入账号"></el-input>
+                  placeholder="请输入账号"
+                  :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="密码"
                     prop="password">
@@ -33,12 +34,10 @@
         <el-input v-model="ruleForm.phone"
                   placeholder="请输入手机号"></el-input>
       </el-form-item>
-      <el-form-item label="角色"></el-form-item>
-      <el-form-item label="状态">
-        <el-radio v-model="radio"
-                  label="1">禁用</el-radio>
-        <el-radio v-model="radio"
-                  label="2">正常</el-radio>
+      <el-form-item label="固话"
+                    prop="tel">
+        <el-input v-model="ruleForm.tel"
+                  placeholder="请输入固话"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
@@ -58,7 +57,8 @@ export default {
         password: "",
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        tel: ""
       },
       rules: {
         account: [
@@ -72,14 +72,13 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
-      radio: "1",
       loading: false,
       id: "" //上个页面传过来的值
     }
   },
   mounted () {
-    this.id = this.$router.query.id
-    this.getData(id)
+    this.id = this.$route.query.id
+    this.getData()
   },
   methods: {
     //表单提交
@@ -92,8 +91,8 @@ export default {
         .then(() => {
           //打开loading
           this.loading = true
-          //调用新增接口
-          this.$api.api.insertSeedUser(this.ruleForm)
+          //调用修改接口
+          this.$api.api.updateSeedUser(this.ruleForm)
             .then(result => {
               //返回结果处理
               let dataRow = result.data;
@@ -102,14 +101,16 @@ export default {
                   message: dataRow.retmsg,
                   type: "success"
                 })
-                //关闭loading
-                this.loading = false
                 //新增成功后，返回到上一页
                 this.$fun.goBack();
               } else {
                 this.$message.error(dataRow.retmsg)
               }
+              //关闭loading
+              this.loading = false
             }).catch(() => {
+              //关闭loading
+              this.loading = false
               this.$message.error("请求失败！")
             })
         })
@@ -117,18 +118,20 @@ export default {
     back () {
       this.$fun.goBack();
     },
-    getData (id) {
+    /**
+     * 获取用户详情
+     */
+    getData () {
       this.loading = true
-      this.$api.api.updateSeedUser(id)
+      let params = {
+        id: this.id
+      }
+      this.$api.api.findSeedUserById(params)
         .then(result => {
           //返回结果处理
           let dataRow = result.data;
           if (dataRow.retcode === 1) {
-            this.account = dataRow.data.account
-            this.password = dataRow.data.password
-            this.name = dataRow.data.name
-            this.email = dataRow.data.email
-            this.phone = dataRow.data.phone
+            this.ruleForm = dataRow.data
           } else {
             this.$message.error(dataRow.retmsg)
           }

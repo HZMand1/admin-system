@@ -33,18 +33,15 @@
         <el-input v-model="ruleForm.phone"
                   placeholder="请输入手机号"></el-input>
       </el-form-item>
-      <el-form-item label="角色"></el-form-item>
-      <el-form-item label="状态">
-        <el-radio v-model="radio"
-                  label="1">禁用</el-radio>
-        <el-radio v-model="radio"
-                  label="2">正常</el-radio>
+      <el-form-item label="固话"
+                    prop="tel">
+        <el-input v-model="ruleForm.tel"
+                  placeholder="请输入固话"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
                    @click="submit">提交</el-button>
         <el-button @click="back">返回</el-button>
-        <el-button>重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -58,7 +55,8 @@ export default {
         password: "",
         name: "",
         email: "",
-        phone: ""
+        phone: "",
+        tel: ""
       },
       rules: {
         account: [
@@ -72,7 +70,6 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
-      radio: "1",
       loading: false
     }
   },
@@ -97,14 +94,16 @@ export default {
                   message: dataRow.retmsg,
                   type: "success"
                 })
-                //关闭loading
-                this.loading = false
                 //新增成功后，返回到上一页
                 this.$fun.goBack();
               } else {
                 this.$message.error(dataRow.retmsg)
               }
+              //关闭loading
+              this.loading = false
             }).catch(() => {
+              //关闭loading
+              this.loading = false
               this.$message.error("请求失败！")
             })
         })

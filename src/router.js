@@ -124,8 +124,80 @@ const router = new Router({
       meta: {
         requireAuth: false // 只要此字段为true，必须做鉴权处理
       }
+    }]
+  },
+  {
+    path: "/backstage/home",
+    name: "广告管理",
+    hidden: false,
+    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
+    meta: {
+      requireAuth: false // 只要此字段为true，必须做鉴权处理
     },
+    children: [{
+      path: "/backstage/advManage/AdvList",
+      name: "广告管理",
+      hidden: false,
+      component: () => import("./views/backstage/advManage/list/AdvList.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: false
+      }
+    }]
+  },
+  {
+    path: "/backstage/home",
+    name: "商家管理",
+    hidden: false,
+    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
+    meta: {
+      requireAuth: true // 只要此字段为true，必须做鉴权处理
+    },
+    children: [{
+      path: "/backstage/merchantManage/ShopManage",
+      name: "店铺管理",
+      hidden: false,
+      component: () => import("./views/backstage/merchantManage/shopManage/ShopManage.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: "/backstage/merchantManage/ShopDetail",
+      name: "店铺详情",
+      hidden: true,
+      component: () => import("./views/backstage/merchantManage/components/ShopDetail.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }
     ]
+  },
+  {
+    path: "/backstage/home",
+    name: "会员管理",
+    hidden: false,
+    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
+    meta: {
+      requireAuth: true // 只要此字段为true，必须做鉴权处理
+    },
+    children: [{
+      path: "/backstage/memberManage/MemberList",
+      name: "会员列表",
+      hidden: false,
+      component: () => import("./views/backstage/memberManage/memberList/MemberList.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }]
+  },
+  {
+    path: "/northwest/NorthwestIndex",
+    name: "门户首页",
+    hidden: false,
+    component: () => import("./views/northwest/NorthwestIndex.vue"),
+    meta: {
+      requireAuth: false
+    }
   }
   ]
 })
