@@ -191,6 +191,48 @@ const router = new Router({
     }]
   },
   {
+    path: "/backstage/home",
+    name: "资讯管理",
+    hidden: false,
+    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
+    meta: {
+      requireAuth: true // 只要此字段为true，必须做鉴权处理
+    },
+    children: [{
+      path: "/backstage/newsManage/NewsList",
+      name: "资讯列表",
+      hidden: false,
+      component: () => import("./views/backstage/newsManage/NewsList.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/AddNews",
+      name: "新增资讯",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/AddNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/EditNews",
+      name: "编辑资讯",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/EditNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/DetailNews",
+      name: "资讯详情",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/DetailNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }]
+  },
+  {
     path: "/northwest/NorthwestIndex",
     name: "门户首页",
     hidden: false,

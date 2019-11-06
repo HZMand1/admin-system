@@ -9,11 +9,11 @@
       <el-col :span="12">
         <el-button class="mar-l-10 mar-b-20"
                    @click="queryNews"
-                   icon="el-icon-select">查询</el-button>
+                   icon="el-icon-search">查询</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
-                   @click="updateNews"
-                   icon="el-icon-edit">新增</el-button>
+                   @click="addNews"
+                   icon="el-icon-plus">新增</el-button>
         <el-button class="mar-l-10 mar-b-20"
                    type="primary"
                    @click="editNews"
@@ -21,7 +21,7 @@
         <el-button class="mar-l-10 mar-b-20"
                    type="danger"
                    @click="deleteNews"
-                   icon="el-icon-edit">删除</el-button>
+                   icon="el-icon-delete">删除</el-button>
       </el-col>
     </el-row>
 
@@ -40,43 +40,48 @@
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="title"
                          label="资讯标题"></el-table-column>
-        <el-table-column prop=""
+        <el-table-column prop="textSource"
                          label="资讯来源"></el-table-column>
-        <el-table-column prop=""
+        <el-table-column prop="textType"
                          label="是否原创"
-                         :formatter="reviewFormat"></el-table-column>
-        <el-table-column prop=""
-                         label="资讯分类"
-                         :formatter="enableFormat"></el-table-column>
-        <el-table-column prop=""
-                         label="资讯摘要"
-                         :formatter="enableFormat"></el-table-column>
-        <el-table-column prop=""
+                         width="100"
+                         :formatter="textTypeFormat"></el-table-column>
+        <el-table-column prop="typeName"
+                         label="资讯分类"></el-table-column>
+        <el-table-column prop="orders"
                          label="是否置顶"
-                         :formatter="enableFormat"></el-table-column>
-        <el-table-column label="创建时间">
+                         width="100"
+                         :formatter="ordersFormat"></el-table-column>
+        <el-table-column label="发布时间">
           <template slot-scope="scope">{{ scope.row.addTime | dateFormat('YYYY-MM-DD HH:mm:ss') }}</template>
         </el-table-column>
-        <el-table-column prop=""
+        <el-table-column prop="enable"
                          label="发布状态"
+                         width="100"
                          :formatter="enableFormat"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作"
+                         width="350">
           <template slot-scope="scope">
             <el-button v-if="scope.row.enable == 1"
                        size="mini"
                        type="primary"
-                       @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
+                       @click="handleIssue(scope.$index, scope.row)">发布</el-button>
             <el-button v-else
                        size="mini"
                        type="danger"
-                       @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-            <el-button v-if="scope.row.review != 0"
+                       @click="handleBack(scope.$index, scope.row)">撤回</el-button>
+
+            <el-button v-if="scope.row.orders != 0"
                        size="mini"
                        type="primary"
-                       @click="memberAudit(scope.$index, scope.row)">审核</el-button>
+                       @click="handleTop(scope.$index, scope.row)">置顶</el-button>
+            <el-button v-else
+                       size="mini"
+                       type="danger"
+                       @click="handleUntop(scope.$index, scope.row)">取消置顶</el-button>
             <el-button size="mini"
-                       @click="memberInfo(scope.$index, scope.row)">详情</el-button>
+                       @click="newsInfo(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -96,31 +101,6 @@
       </div>
     </el-row>
 
-    <!-- 弹框 -->
-    <el-dialog title="用户审核"
-               :visible.sync="showAudit"
-               @close="closeDialog"
-               center>
-      <el-row>
-        <el-radio v-model="radio"
-                  label="0">通过</el-radio>
-        <el-radio v-model="radio"
-                  label="1">不通过</el-radio>
-      </el-row>
-      <el-input class="mar-t-20"
-                type="textarea"
-                :rows="5"
-                placeholder="请输入原因"
-                v-model="auditCause">
-      </el-input>
-
-      <el-button class="mar-t-20"
-                 size="mini"
-                 type="primary"
-                 :loading="btnloading"
-                 @click="submitAudit">提交</el-button>
-    </el-dialog>
-    <!-- 弹框结束 -->
   </div>
 </template>
 <script>
@@ -135,10 +115,6 @@ export default {
       loading: false,
       btnloading: false, //按钮内部加载
       nameTxt: "", //条件框的值：用户名
-      showAudit: false, //显示审核框
-      radio: "0", //0:已审核，1：审核不通过，2：未审核
-      auditCause: "", //审核备注
-      auditId: "", //审核列的id
     }
   },
   mounted () {
@@ -167,15 +143,15 @@ export default {
       }
       this.getData(params)
     },
-    //启用 0
-    handleEnabled (index, row) {
-      this.setAbled("确认启用", row.id, 0)
+    //发布
+    handleIssue (index, row) {
+      this.setIssue("确认发布？", row.id, 0)
     },
-    //禁用 1
-    handleDisabled (index, row) {
-      this.setAbled("确认禁用", row.id, 1)
+    //撤回
+    handleBack (index, row) {
+      this.setIssue("确认撤回？", row.id, 1)
     },
-    setAbled (strInfo, id, enable) {
+    setIssue (strInfo, id, enable) {
       this.$confirm(strInfo, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -187,7 +163,7 @@ export default {
             id: id,
             enable: enable
           }
-          this.$api.api.enableOutletUser(params)
+          this.$api.api.enableAdNews(params)
             .then(result => {
               let dataRow = result.data
               if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
@@ -209,73 +185,81 @@ export default {
         })
     },
 
-    //显示审核弹框
-    memberAudit (index, row) {
-      this.showAudit = true
-      this.auditId = row.id
+    //置顶
+    handleTop (index, row) {
+      this.setTop("确认置顶？", row.id, 0)
     },
-    //关闭弹框
-    closeDialog () {
-      //TODO
+    //取消置顶,与项目经理沟通后，决定此值设置为1
+    handleUntop (index, row) {
+      this.setTop("确认取消置顶？", row.id, 1)
     },
-    //submitAudit提交审核
-    submitAudit () {
-      this.btnloading = true
-      let params = {
-        id: this.auditId,
-        enable: this.radio,
-        review: this.auditCause
-      }
-      this.$api.api.updateOutletUser(params)
-        .then(result => {
-          let dataRow = result.data
-          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.$message({
-              message: dataRow.retmsg,
-              type: "success"
-            })
-            this.getData()
-            this.showAudit = false
-          } else {
-            this.$message.error(dataRow.retmsg)
-          }
-          this.btnloading = false
-        }).catch(() => {
-          this.btnloading = false
-          this.$message.error("请求失败！")
-        })
+    setTop (strInfo, id, orders) {
+      this.$confirm(strInfo, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.loading = true
+        let params = {
+          id: id,
+          orders: orders
+        }
+        this.$api.api.setTopAdNews(params)
+          .then(result => {
+            let dataRow = result.data
+            if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+              this.$message({
+                message: dataRow.retmsg,
+                type: "success"
+              })
+              this.getData()
+            } else {
+              this.$message.error(dataRow.retmsg)
+            }
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+            this.$message.error("请求失败！")
+          })
+      }).catch(() => {
+        this.loading = false
+      })
     },
-    //用户详情
-    memberInfo (index, row) {
+
+    //详情
+    newsInfo (index, row) {
       this.$router.push({
-        path: "/backstage/merchantManage/shopManage/components/ShopDetail",
+        path: "/backstage/newsManage/components/DetailNews",
         query: { id: row.id }
       })
     },
-    //查看店员
-    // shopStaff (index, row) {
-    //   //TODO
-    // },
 
     enableFormat (row, column) {
       if (row.enable === 0) {
-        return "启用"
+        return "已发布"
       } else {
-        return "禁用"
+        return "待发布"
       }
     },
-    reviewFormat (row, column) {
-      if (row.review === 0) {
-        return "审核通过"
-      } else if (row.review === 1) {
-        return "审核不通过"
+    //是否置顶
+    ordersFormat (row, column) {
+      if (row.orders === 0) {
+        return "是"
       } else {
-        return "未审核"
+        return "否"
+      }
+    },
+    //是否原创
+    textTypeFormat (row, column) {
+      if (row.textType === 0) {
+        return "原创"
+      } else {
+        return "转载"
       }
     },
 
     //查询方法
-    queryMember () {
+    queryNews () {
       let params = {
         name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
@@ -283,8 +267,14 @@ export default {
       }
       this.getData(params)
     },
+    //增加方法
+    addNews () {
+      this.$router.push({
+        path: "/backstage/newsManage/components/AddNews"
+      })
+    },
     //跳转到编辑页面
-    editMember () {
+    editNews () {
       let num = this.multipleSelection.length;
       if (num !== 1) {
         this.$message.error("请选择一条记录");
@@ -292,8 +282,48 @@ export default {
       }
       let id = this.multipleSelection[0].id;
       this.$router.push({
-        path: "/backstage/sysManage/userManage/components/EditUser",
+        path: "/backstage/newsManage/components/EditNews",
         query: { id: id }
+      })
+    },
+    //删除方法
+    deleteNews () {
+      let num = this.multipleSelection.length;
+      if (num !== 1) {
+        this.$message.error("请选择一条记录");
+        return;
+      }
+      let id = this.multipleSelection[0].id;
+      let params = {
+        id: id
+      }
+      this.$confirm("是否确定删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      }).then(() => {
+        this.$api.api.deleteAdNews(params)
+          .then(result => {
+            let dataRow = result.data
+            if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+              this.$message({
+                type: "success",
+                message: dataRow.retmsg
+              });
+              this.getData()
+            } else {
+              this.$message.error(dataRow.retmsg)
+            }
+          }).catch(() => {
+            this.$message.error("请求失败")
+          })
+      }).catch(() => {
+        this.$message({
+          type: "info",
+          message: "已取消删除"
+        });
+
       })
     },
 
@@ -302,7 +332,7 @@ export default {
      */
     getData (params) {
       this.loading = true
-      this.$api.api.findOutletUserListPage(params)
+      this.$api.api.findAdNewsListPage(params)
         .then(result => {
           let dataRow = result.data;
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {

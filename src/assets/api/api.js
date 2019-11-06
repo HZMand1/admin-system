@@ -173,6 +173,10 @@ const api = {
   insertAdNews (params = {}) {
     return axios.post("/rest/seed/adNews/insertAdNews", params);
   },
+  //后台管理-广告新闻资讯管理-置顶操作
+  setTopAdNews (params = {}) {
+    return axios.post("/rest/seed/adNews/setTopAdNews", params);
+  },
   /**
   * 资讯管理 - end
   */
