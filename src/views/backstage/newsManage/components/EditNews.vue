@@ -147,7 +147,12 @@ export default {
       },
       loading: false,
       radioGp: "",
-
+      //上传图片相关--start
+      uploadingLoading: false,
+      crap: false,
+      previews: {},
+      thumbImageUrl: "",//展示的图片地址（缩略图）
+      fileUrl: "",//传给后台的原图
       option: {
         img: "",
         outputSize: 1, //剪切后的图片质量（0.1-1）
@@ -161,7 +166,15 @@ export default {
         autoCropHeight: 220, //默认生成截图框高度
         fixedBox: true //固定截图框大小 不允许改变
       },
+      fileName: "",  //本机文件地址
+      downImg: "#",
+      imgFile: "",
+      uploadImgRelaPath: "", //上传后的图片的地址（不带服务器域名）
+      //上传图片相关--end
     }
+  },
+  components: {
+    VueCropper
   },
   mounted () {
     //先设置下资讯分类的值
@@ -169,7 +182,9 @@ export default {
     this.ruleForm.sysParams = paramsObj
   },
   methods: {
+    //提交按钮
     submit () { },
+    //返沪按钮
     back () { },
     //放大/缩小
     changeScale (num) {
@@ -187,6 +202,49 @@ export default {
       console.log("rotateRight")
       this.$refs.cropper.rotateRight();
     },
+    //上传图片
+    finish (type) {
+      let formData = new FormData();
+      if (type === "blob") {
+        this.$refs.cropper.getCropBlob((data) => {
+          let img = window.URL.createObjectURL(data)
+          formData.append("file", data, this.fileName)
+          formData.append("thumbImageFlag", true)
+          this.uploadingLoading = true
+          this.$api.api.fileUpload(formData, {
+            contentType: false,
+            processData: false,
+            headers: { "Content-Type": "application/x-www-form-urlencoded" }
+          }).then(res => {
+            if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+              let data = res.data.data
+              console.log("调用接口", data)
+              this.imgFile = ""
+              this.fileUrl = data.fileUrl  //完整路径
+              this.dialogForm.imgPath = data.fileUrl  //完整路径
+              this.thumbImageUrl = data.thumbImageUrl  //非完整路径
+              this.$message({
+                type: "success",
+                message: res.data.retmsg
+              })
+              this.uploadingLoading = false
+            } else {
+              this.$message({
+                type: "error",
+                message: res.data.retmsg
+              })
+              this.uploadingLoading = false
+            }
+          }).catch(() => {
+            console.log(err)
+            this.uploadingLoading = false
+          })
+        })
+      } else {
+        this.$refs.cropper.getCropData((data) => {
+        })
+      }
+    },
     // 实时预览函数
     realTime (data) {
       console.log("realTime")
@@ -198,10 +256,48 @@ export default {
     },
     //选择本地图片
     uploadImg (e, num) {
+      console.log("bbbbbb");
 
+      this.uploadingLoading = true
+      //上传图片
+      let file = e.target.files[0]
+      this.fileName = file.name
+      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+        this.$message({
+          type: "error",
+          message: "图片类型必须是.gif,jpeg,jpg,png,bmp中的一种"
+        })
+        return false
+      }
+      //限制图片大小
+      const picSize = file.size / 1024 / 1024 < 5
+      if (!picSize) {
+        return this.$message.error("上传图片大小不能超过 5MB!")
+      }
+      let reader = new FileReader()
+      reader.onload = (e) => {
+        let data
+        if (typeof e.target.result === "object") {
+          // 把Array Buffer转化为blob 如果是base64不需要
+          data = window.URL.createObjectURL(new Blob([e.target.result]))
+        } else {
+          data = e.target.result
+        }
+        if (num === 1) {
+          this.option.img = data
+          this.uploadingLoading = false
+        }
+      }
+
+      // 转化为base64 
+      // reader.readAsDataURL(file) 
+      // 转化为blob 
+      reader.readAsArrayBuffer(file);
     },
     imgLoad (msg) {
       console.log("imgLoad")
+
+      this.finish("blob")
     },
   }
 }
