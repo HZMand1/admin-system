@@ -1,71 +1,8 @@
 <template>
   <div class="northWestIndex">
-    <header class="header">
-      <div class="pull_t">
-        <div class="layout">
-          <div class="h_wellcome fl">欢迎来到西北地区中药材保障公共平台</div>
-          <div class="h_login fr">
-            <a class="register" href="javascript:;">注册</a>
-            <span>|</span>
-            <a class="loginIn" href="javascript:;">登录</a>
-          </div>
-        </div>
-      </div>
-      <div class="pull_b">
-        <div class="layout clearfloat">
-          <div class="fl">
-            <div class="h_logo fl">
-              <img src="../../../src/assets/images/home/home_logo.png" />
-            </div>
-            <div class="h_name fl">
-              <h3>中药材供应平台</h3>
-              <span>Platform for the Supply of Chinese Medicinal Materials</span>
-            </div>
-          </div>
-          <div class="h_phone fr">
-            <h3>010-88462302</h3>
-            <span>客服热线（服务时间：8:30~15:30）</span>
-          </div>
-        </div>
-      </div>
-    </header>
-    <nav class="navbar">
-      <div class="layout clearfloat">
-        <ul class="fl">
-          <li class="active"><a>首页</a></li>
-          <li><a>种子种苗</a></li>
-          <li><a>初加工</a></li>
-          <li><a>交易服务</a></li>
-          <li><a>质检服务</a></li>
-        </ul>
-        <div class="fr my_accont">我的账户</div>
-      </div>
-    </nav>
-    <section class="banner"></section>
-    <section class="icon_group">
-      <ul class="layout">
-        <li>
-          <div class="circleIcon"></div>
-          <p>物流服务</p>
-        </li>
-        <li>
-          <div class="circleIcon"></div>
-          <p>仓储服务</p>
-        </li>
-        <li>
-          <div class="circleIcon"></div>
-          <p>供求信息</p>
-        </li>
-        <li>
-          <div class="circleIcon"></div>
-          <p>新闻资讯</p>
-        </li>
-        <li>
-          <div class="circleIcon"></div>
-          <p>跑合商城</p>
-        </li>
-      </ul>
-    </section>
+    <common-header></common-header>
+    <common-navbar></common-navbar>
+    <common-banner></common-banner>
     <section class="wrap_bg">
       <div class="layout">
         <section class="sc01 zzzm">
@@ -304,6 +241,9 @@
 </template>
 
 <script>
+import CommonHeader from "./components/Header"
+import CommonNavbar from "./components/Navbar"
+import CommonBanner from "./components/Banner"
 import CommonFooter from "./components/Footer"
 export default {
   name: "NorthwestIndex",
@@ -325,6 +265,9 @@ export default {
     }
   },
   components: {
+    CommonHeader,
+    CommonNavbar,
+    CommonBanner,
     CommonFooter
   },
   mounted () {
@@ -353,10 +296,7 @@ export default {
         .then(res => {
           if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             this.newsData = res.data.data
-
             this.firstNews = res.data.data.slice(0,1)
-            // this.firstNews = res.data.data[0]
-            console.log(this.firstNews)
           } else {
             this.$message.error(res.data.retmsg)
           }
@@ -364,14 +304,10 @@ export default {
           this.$message.error("请求失败！")
         })
     }
-    
-
-    
-    
   }
 }
 </script>
 <style scoped lang="less">
-  // @import "~src/assets/less/northWestIndex.less";
+  @import "../../../src/assets/less/common.less";
   @import "../../../src/assets/less/northWestIndex.less";
 </style>
