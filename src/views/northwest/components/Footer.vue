@@ -2,7 +2,7 @@
   <footer class="footer">
       <div class="pull_t">
         <div class="layout">
-          <p class="contact-us">对我们有任何疑问，请联系我们<span>（工作时间周一至周五8:30../../../../17:30）</span></p>
+          <p class="contact-us">对我们有任何疑问，请联系我们<span>（工作时间周一至周五8:30~17:30）</span></p>
           <div class="contact-row">
             <p>010-88462303</p>
             <p>fadf232@suyuan.com</p>
@@ -109,7 +109,9 @@ export default {
           }
         }
         .filing-pic {
-          margin: 10px 0 20px 0;
+          margin: 0 auto;
+          display: block;
+          padding: 10px 0 20px 0;
         }
       }
     }

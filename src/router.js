@@ -179,6 +179,16 @@ const router = new Router({
 					meta: {
 						requireAuth: true
 					}
+				},
+				// 分类管理
+				{
+					path: "/backstage/merchantManage/classifyManage",
+					name: "分类管理",
+					hidden: false,
+					component: () => import("./views/backstage/merchantManage/classifyManage/ClassifyManage.vue"), // vue路由懒加载  异步加载
+					meta: {
+						requireAuth: true
+					}
 				}
 			]
 		},
