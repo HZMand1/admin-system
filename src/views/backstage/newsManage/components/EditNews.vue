@@ -43,8 +43,62 @@
 
       <el-form-item label="资讯封面图："
                     prop="imgPath">
-        <el-input v-model="ruleForm.imgPath"
-                  placeholder="请输入图片"></el-input>
+        <div class="info-item">
+          <div class="line">
+            <div class="cropper-content">
+              <div class="cropper"
+                   v-loading="uploadingLoading"
+                   element-loading-text="拼命加载中……">
+                <vueCropper ref="cropper"
+                            :img="option.img"
+                            :outputSize="option.size"
+                            :outputType="option.outputType"
+                            :info="true"
+                            :full="option.full"
+                            :canMove="option.canMove"
+                            :canMoveBox="option.canMoveBox"
+                            :original="option.original"
+                            :autoCrop="option.autoCrop"
+                            :autoCropWidth="option.autoCropWidth"
+                            :autoCropHeight="option.autoCropHeight"
+                            :fixedBox="option.fixedBox"
+                            @realTime="realTime"
+                            @imgLoad="imgLoad">
+                </vueCropper>
+              </div>
+            </div>
+          </div>
+          <div class="mar-t-10">
+            <input type="file"
+                   id="uploads"
+                   :value="imgFile"
+                   style="position:absolute; clip:rect(0 0 0 0);"
+                   accept="image/png, image/jpeg, image/gif, image/jpg"
+                   @change="uploadImg($event, 1)">
+            <label class="el-button el-button--default el-button--mini is-round"
+                   for="uploads">选择图片</label>
+            <el-button type="default"
+                       size="mini"
+                       round
+                       @click="changeScale(1)">+</el-button>
+            <el-button type="default"
+                       size="mini"
+                       round
+                       @click="changeScale(-1)">-</el-button>
+            <el-button type="default"
+                       size="mini"
+                       round
+                       @click="rotateLeft">↺</el-button>
+            <el-button type="default"
+                       size="mini"
+                       round
+                       @click="rotateRight">↻</el-button>
+            <el-button type="default"
+                       size="mini"
+                       round
+                       @click="down('blob')">↓</el-button>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="资讯摘要："
                     prop="imgPath">
@@ -65,7 +119,11 @@
   </div>
 </template>
 <script>
+import { VueCropper } from "vue-cropper"
 export default {
+  components: {
+    VueCropper
+  },
   data () {
     return {
       ruleForm: {
@@ -73,8 +131,7 @@ export default {
         textSource: 0, //文章来源(0,"文本形式",1,"链接形式")
         textType: 0, //文章类型 (0,"原创",1,"转载")
         sysParams: {}, //系统参数
-        imgPath: "", //资讯封面图
-        content: "" //资讯
+        content: "", //资讯
       },
       rules: {
         title: [
@@ -90,6 +147,20 @@ export default {
       },
       loading: false,
       radioGp: "",
+
+      option: {
+        img: "",
+        outputSize: 1, //剪切后的图片质量（0.1-1）
+        full: false,//输出原图比例截图 props名full
+        outputType: "png", //裁剪生成图片的格式
+        canMove: true, //上传图片是否可以移动
+        original: false, //上传图片按照原始比例渲染
+        canMoveBox: true, //截图框能否拖动
+        autoCrop: false, //是否默认生成截图框
+        autoCropWidth: 330, //默认生成截图框宽度
+        autoCropHeight: 220, //默认生成截图框高度
+        fixedBox: true //固定截图框大小 不允许改变
+      },
     }
   },
   mounted () {
@@ -99,7 +170,84 @@ export default {
   },
   methods: {
     submit () { },
-    back () { }
+    back () { },
+    //放大/缩小
+    changeScale (num) {
+      console.log("changeScale")
+      num = num || 1;
+      this.$refs.cropper.changeScale(num)
+    },
+    //左旋转
+    rotateLeft () {
+      console.log("rotateLeft")
+      this.$refs.cropper.rotateLeft()
+    },
+    //右旋转
+    rotateRight () {
+      console.log("rotateRight")
+      this.$refs.cropper.rotateRight();
+    },
+    // 实时预览函数
+    realTime (data) {
+      console.log("realTime")
+      this.previews = data
+    },
+    //下载图片
+    down (type) {
+
+    },
+    //选择本地图片
+    uploadImg (e, num) {
+
+    },
+    imgLoad (msg) {
+      console.log("imgLoad")
+    },
   }
 }
 </script>
+<style lang="less" scoped>
+.avatar-uploader-icon {
+  width: 330px;
+  height: 220px;
+  line-height: 220px;
+  text-align: center;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.avatar-uploader-icon i {
+  font-size: 50px;
+  color: #dcdfe6;
+}
+.cropper-content {
+  overflow: hidden;
+}
+.cropper-content .cropper {
+  width: 697px;
+  height: 256px;
+}
+.show-preview {
+  flex: 1;
+  -webkit-flex: 1;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  width: 330px;
+  height: 220px;
+  overflow: hidden;
+  border: 1px solid #cccccc;
+  margin: 0 auto;
+}
+.cropper-content .show-preview .preview {
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  background: #cccccc;
+  margin-left: 40px;
+}
+.cropper-content .show-preview .preview {
+  margin-left: 0;
+}
+</style>
