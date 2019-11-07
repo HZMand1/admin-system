@@ -63,7 +63,7 @@ export default {
       ruleForm: {
         type: 0,
         menuName: null,
-        supeName: null,
+        supeName: "",
         supeId: null,
         menuUrl: null,
         auth: null,

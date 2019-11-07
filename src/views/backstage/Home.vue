@@ -122,9 +122,7 @@ export default {
       nameList: []
     };
   },
-  created() {
-    console.log(this.$route.matched);
-  },
+  created() {},
   methods: {
     ...mapActions(["FETCH_USER_INFO", "USER_INFO"]),
     ...mapMutations(["USER_INFO"]),
