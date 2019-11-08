@@ -19,33 +19,33 @@ Vue.prototype.$config = Config;
 
 // 定义全局的时间过滤器
 Vue.filter("dateFormat", function (dateStr, formatStr = "YYYY-MM-DD HH:mm:ss") {
-	// 在过滤器的处理函数中，最后，必须 return才是一个合法的过滤器
-	return moment(dateStr).format(formatStr)
+  // 在过滤器的处理函数中，最后，必须 return才是一个合法的过滤器
+  return moment(dateStr).format(formatStr)
 })
 Vue.use(ElementUI)
 router.beforeEach((to, from, next) => {
-	// 路由发生变化修改页面title
-	if (to.name) {
-		document.title = to.name;
-	}
-	let token = localStorage.getItem("token");
-	let path = to.path;
-	if (token) {
-		if (path === "/backstage/login") {
-			next("/backstage/home");
-		} else {
-			next();
-		}
-	} else {
-		if (path === "/backstage/login" || path === "/backstage/forgotPassword") {
-			next();
-		} else {
-			next("/backstage/login");
-		}
-	}
+  // 路由发生变化修改页面title
+  if (to.name) {
+    document.title = to.name;
+  }
+  let token = localStorage.getItem("token");
+  let path = to.path;
+  if (token) {
+    if (path === "/backstage/login") {
+      next("/backstage/home");
+    } else {
+      next();
+    }
+  } else {
+    if (path === "/backstage/login" || path === "/backstage/forgotPassword") {
+      next();
+    } else {
+      next("/backstage/login");
+    }
+  }
 });
 new Vue({
-	router,
-	store,
-	render: h => h(App),
+  router,
+  store,
+  render: h => h(App),
 }).$mount("#app")

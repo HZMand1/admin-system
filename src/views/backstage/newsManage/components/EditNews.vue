@@ -10,8 +10,10 @@
              element-loading-background="rgba(0, 0, 0, 0.8)">
       <el-form-item label="资讯标题："
                     prop="title">
-        <el-input v-model="ruleForm.title"
-                  placeholder="请输入标题"></el-input>
+        <el-col :span="12">
+          <el-input v-model="ruleForm.title"
+                    placeholder="请输入标题"></el-input>
+        </el-col>
       </el-form-item>
       <el-form-item label="资讯来源："
                     prop="textSource">
@@ -93,22 +95,27 @@
                        size="mini"
                        round
                        @click="rotateRight">↻</el-button>
-            <el-button type="default"
-                       size="mini"
-                       round
-                       @click="down('blob')">↓</el-button>
           </div>
         </div>
       </el-form-item>
       <el-form-item label="资讯摘要："
-                    prop="imgPath">
-        <el-input v-model="ruleForm.imgPath"
-                  placeholder="请输入摘要"></el-input>
+                    prop="subTitle">
+        <el-col :span="12">
+          <el-input v-model="ruleForm.subTitle"
+                    type="textarea"
+                    maxlength="250"
+                    show-word-limit
+                    placeholder="请输入摘要"></el-input>
+        </el-col>
       </el-form-item>
       <el-form-item label="资讯内容："
                     prop="content">
-        <el-input v-model="ruleForm.content"
-                  placeholder="请输入内容"></el-input>
+        <el-col :span="18">
+          <div>
+            <div id="editor"
+                 class="editor"></div>
+          </div>
+        </el-col>
       </el-form-item>
       <el-form-item>
         <el-button type="primary"
@@ -120,6 +127,7 @@
 </template>
 <script>
 import { VueCropper } from "vue-cropper"
+import E from "wangeditor"
 export default {
   components: {
     VueCropper
@@ -131,7 +139,8 @@ export default {
         textSource: 0, //文章来源(0,"文本形式",1,"链接形式")
         textType: 0, //文章类型 (0,"原创",1,"转载")
         sysParams: {}, //系统参数
-        content: "", //资讯
+        subTitle: "", //资讯摘要
+        content: "", //资讯内容
       },
       rules: {
         title: [
@@ -149,7 +158,6 @@ export default {
       radioGp: "",
       //上传图片相关--start
       uploadingLoading: false,
-      crap: false,
       previews: {},
       thumbImageUrl: "",//展示的图片地址（缩略图）
       fileUrl: "",//传给后台的原图
@@ -173,15 +181,36 @@ export default {
       //上传图片相关--end
     }
   },
-  components: {
-    VueCropper
-  },
   mounted () {
+    let editor = new E("#editor")
+    editor.customConfig.onchange = (html) => {
+      this.formArticle = html
+    }
+    editor.customConfig.uploadImgServer = "<%=path%>/Img/upload" //上传URL
+    editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+    editor.customConfig.uploadImgMaxLength = 5
+    editor.customConfig.uploadFileName = "myFileName"
+    editor.customConfig.uploadImgHooks = {
+      customInsert: function (insertImg, result, editor) {
+        // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+        // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+
+        // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+        let url = result.data
+        insertImg(url)
+
+        // result 必须是一个 JSON 格式字符串！！！否则报错
+      }
+    }
+    editor.create()
+
+
     //先设置下资讯分类的值
     let paramsObj = [{ "val": "华夏时讯", "code": "hxsb" }, { "val": "今日资讯", "code": "jrzx" }, { "val": "纽约日报", "code": "nyrb" }]
     this.ruleForm.sysParams = paramsObj
   },
   methods: {
+
     //提交按钮
     submit () { },
     //返沪按钮
@@ -221,7 +250,7 @@ export default {
               console.log("调用接口", data)
               this.imgFile = ""
               this.fileUrl = data.fileUrl  //完整路径
-              this.dialogForm.imgPath = data.fileUrl  //完整路径
+              this.ruleForm.imgPath = data.fileUrl //将参数给表单，提交方法时要用到这个参数
               this.thumbImageUrl = data.thumbImageUrl  //非完整路径
               this.$message({
                 type: "success",
@@ -236,7 +265,6 @@ export default {
               this.uploadingLoading = false
             }
           }).catch(() => {
-            console.log(err)
             this.uploadingLoading = false
           })
         })
@@ -247,17 +275,10 @@ export default {
     },
     // 实时预览函数
     realTime (data) {
-      console.log("realTime")
       this.previews = data
-    },
-    //下载图片
-    down (type) {
-
     },
     //选择本地图片
     uploadImg (e, num) {
-      console.log("bbbbbb");
-
       this.uploadingLoading = true
       //上传图片
       let file = e.target.files[0]
@@ -295,8 +316,6 @@ export default {
       reader.readAsArrayBuffer(file);
     },
     imgLoad (msg) {
-      console.log("imgLoad")
-
       this.finish("blob")
     },
   }
