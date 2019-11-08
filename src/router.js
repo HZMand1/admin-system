@@ -184,17 +184,17 @@ const router = new Router({
       path: "/backstage/merchantManage/ShopDetail",
       name: "店铺详情",
       hidden: true,
-      component: () => import("./views/backstage/merchantManage/components/ShopDetail.vue"), // vue路由懒加载  异步加载
+      component: () => import("./views/backstage/merchantManage/shopManage/components/ShopDetail.vue"), // vue路由懒加载  异步加载
       meta: {
         requireAuth: true
       }
     },
     // 分类管理
     {
-      path: "/backstage/merchantManage/classifyManage",
-      name: "分类管理",
+      path: "/backstage/merchantManage/goodsManage",
+      name: "商品管理",
       hidden: false,
-      component: () => import("./views/backstage/merchantManage/classifyManage/ClassifyManage.vue"), // vue路由懒加载  异步加载
+      component: () => import("./views/backstage/merchantManage/goodsManage/GoodsManage.vue"), // vue路由懒加载  异步加载
       meta: {
         requireAuth: true
       }

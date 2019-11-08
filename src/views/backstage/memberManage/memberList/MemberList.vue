@@ -34,7 +34,7 @@
                          label="姓名"></el-table-column>
         <el-table-column prop="account"
                          label="账号"></el-table-column>
-        <el-table-column prop="review"
+        <el-table-column prop="reviewState"
                          label="审核状态"
                          :formatter="reviewFormat"></el-table-column>
         <el-table-column prop="state"
@@ -54,7 +54,7 @@
                        size="mini"
                        type="danger"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-            <el-button v-if="scope.row.review != 0"
+            <el-button v-if="scope.row.reviewState != 0 && null != scope.row.reviewId"
                        size="mini"
                        type="primary"
                        @click="memberAudit(scope.$index, scope.row)">审核</el-button>
@@ -248,9 +248,9 @@ export default {
       }
     },
     reviewFormat (row, column) {
-      if (row.review === 0) {
+      if (row.reviewState === 0) {
         return "审核通过"
-      } else if (row.review === 1) {
+      } else if (row.reviewState === 1) {
         return "审核不通过"
       } else {
         return "未审核"
@@ -285,7 +285,7 @@ export default {
      */
     getData (params) {
       this.loading = true
-      this.$api.api.findOutletUserListPage(params)
+      this.$api.api.findUserPage(params)
         .then(result => {
           let dataRow = result.data;
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {

@@ -173,7 +173,7 @@ export default {
             id: id,
             enable: enable
           }
-          this.$api.api.goodsCategoryUpdate(params)
+          this.$api.api.goodsCategoryUpdateEnable(params)
             .then(result => {
               let dataRow = result.data
               if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
