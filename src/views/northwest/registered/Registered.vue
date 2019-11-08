@@ -25,8 +25,8 @@
           </el-row>
           <el-row>
             <el-col :span="22" :offset="1">
-              <el-form-item label="" prop="conPassword">
-                <el-input v-model="ruleForm.conPassword" type="password" placeholder="再次输入您的密码"></el-input>
+              <el-form-item label="" prop="checkPass">
+                <el-input v-model="ruleForm.checkPass" type="password" placeholder="再次输入您的密码"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -51,7 +51,7 @@
           </el-row> -->
           <el-row>
             <el-col :span="22" :offset="1">
-              <el-button class="submit" @click="submitForm('ruleForm')">立即注册</el-button>
+              <el-button class="submit" @click="submitForm('ruleForm')" :loading="accountLoadingBtn">立即注册</el-button>
             </el-col>
           </el-row>
           <el-row class="pad-t-18">
@@ -75,11 +75,20 @@ export default {
   name: "Registered",
   components: { Headers, Footers },
   data() {
+    let checkPass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.ruleForm.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       ruleForm: {
         account: null,
         password: null,
-        conPassword: null,
+        checkPass: null,
         phone: null,
         code: null,
         checked: false
@@ -95,21 +104,47 @@ export default {
         password: [
           { required: true, message: "请输入您的密码", trigger: "change" }
         ],
-        conPassword: [
-          { required: true, message: "请再次输入您的密码", trigger: "change" }
-        ],
+        checkPass: [{ validator: checkPass, trigger: "blur" }],
         phone: [
           { required: true, message: "请输入您的手机号", trigger: "change" }
         ],
         code: [{ required: true, message: "请输入验证码", trigger: "change" }]
-      }
+      },
+      accountLoadingBtn: false
     };
   },
   methods: {
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          console.log("ok");
+          let params = {
+            account: this.ruleForm.account,
+            password: this.ruleForm.password,
+            // 注册来源，0 - 买家，1 - 卖家
+            resource: 0,
+            enable: 0
+          };
+          this.accountLoadingBtn = true;
+          this.$api.api
+            .insertOutletUser(params)
+            .then(result => {
+              if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+                this.$message({
+                  message: result.data.retmsg,
+                  type: "success"
+                });
+                this.accountLoadingBtn = false;
+                this.$router.push("/northwest/login");
+              } else {
+                this.accountLoadingBtn = false;
+                this.$message.error(result.data.retmsg);
+              }
+            })
+            .catch(err => {
+              this.accountLoadingBtn = false;
+              console.log(err);
+              this.$message.error("服务器出错");
+            });
         } else {
           console.log("error submit!!");
           return false;

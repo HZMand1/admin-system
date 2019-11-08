@@ -16,7 +16,10 @@
           <account-reg @nextEmit="nextEmit"></account-reg>
         </el-col>
         <el-col v-show="active===2">
-          <aptitude-reg></aptitude-reg>
+          <aptitude-reg @nextEmit="nextEmit"></aptitude-reg>
+        </el-col>
+        <el-col v-show="active===3">
+          <store-opened @nextEmit="nextEmit"></store-opened>
         </el-col>
       </el-row>
     </main>
@@ -26,9 +29,10 @@
 import "../../../assets/less/northwest/tenants/tenants.less";
 import AccountReg from "./components/AccountReg";
 import AptitudeReg from "./components/AptitudeReg";
+import StoreOpened from "./components/StoreOpened";
 export default {
   name: "Tsenants",
-  components: { AccountReg, AptitudeReg },
+  components: { AccountReg, AptitudeReg, StoreOpened },
   data() {
     return {
       active: 2

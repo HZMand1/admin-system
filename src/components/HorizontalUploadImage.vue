@@ -11,6 +11,7 @@
         <div class="upload-tip" slot="tip">{{uploadTip}}</div>
       </div>
     </el-upload>
+    <p class="tip">{{tip}}</p>
     <!--<div class="el-form-item__error">上传图片只能是 JPG 格式!</div>-->
   </div>
 </template>
@@ -27,7 +28,8 @@ export default {
   },
   props: {
     actionUrl: String,
-    uploadTip: String
+    uploadTip: String,
+    tip: String
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -35,30 +37,30 @@ export default {
     },
     // 自定义上传文件方法
     uploadSectionFileImg(param) {
-      this.form.fileListImg.length = 0;
-      this.form.fileListImg.push({
-        name: param.file.name,
-        url: URL.createObjectURL(param.file)
-      });
+      // this.form.fileListImg.length = 0;
+      // this.form.fileListImg.push({
+      //   name: param.file.name,
+      //   url: URL.createObjectURL(param.file)
+      // });
       this.files = param.file;
       let formData = new FormData();
       formData.append("file", this.files);
+      this.imageUrl = URL.createObjectURL(this.files);
+      console.log(this.files);
     },
     beforeAvatarUpload(file) {
-      this.imageUrl = "";
-      this.percentage = 0;
-      this.isError = false;
-      const isJPG = file.type === "image/jpeg";
+      let filetypes = ["jpg", "png", "jpeg"];
+      let filename = file.name;
+      let fileted = filename.replace(/.+\./, "");
       const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG) {
-        this.$message.error("上传图片只能是 JPG 格式!");
-        this.isImg = true;
+      let isTYPE = filetypes.includes(fileted);
+      if (!isTYPE) {
+        this.$message.error("上传文件类型只能是jpg,png,jpeg格式!");
       }
       if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 2MB!");
-        this.isImg = true;
+        this.$message.error("上传文件大小不能超过 2MB!");
       }
-      return isJPG && isLt2M;
+      return isTYPE && isLt2M;
     },
     handleError(err) {
       this.isError = true;
@@ -78,6 +80,10 @@ export default {
 }
 </style>
 <style scoped lang="less">
+.tip {
+  width: 214px;
+  text-align: center;
+}
 .avatar-uploader {
   display: flex;
   align-content: center;
@@ -85,18 +91,18 @@ export default {
   justify-content: center;
   font-size: 0;
   position: relative;
-  width: 185px;
-  height: 116px;
+  width: 214px;
+  height: 129px;
   line-height: 1;
   overflow: hidden;
-  border: 1px solid #ccc;
+  border: 1px dashed #ccc;
   border-radius: 4px;
   transition: all ease 0.3s;
   &:hover {
     border: 1px solid #ab5d01;
   }
   .upload-content {
-    padding: 30px;
+    padding: 37px 77px;
     display: flex;
     align-content: center;
     align-items: center;
