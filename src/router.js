@@ -264,7 +264,7 @@ const router = new Router({
 		{
 			path: "/northwest/login",
 			name: "门户登录",
-			hidden: false,
+			hidden: true,
 			component: () => import("./views/northwest/login/Login.vue"),
 			meta: {
 				requireAuth: false
@@ -273,7 +273,7 @@ const router = new Router({
 		{
 			path: "/northwest/registered",
 			name: "门户注册",
-			hidden: false,
+			hidden: true,
 			component: () => import("./views/northwest/registered/Registered.vue"),
 			meta: {
 				requireAuth: false
@@ -282,7 +282,7 @@ const router = new Router({
 		{
 			path: "/northwest/tenants",
 			name: "商家入驻",
-			hidden: false,
+			hidden: true,
 			component: () => import("./views/northwest/tenants/Tenants.vue"),
 			meta: {
 				requireAuth: false
