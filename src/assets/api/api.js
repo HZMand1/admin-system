@@ -124,13 +124,21 @@ const api = {
 	goodsCategoryFindList(params = {}) {
 		return axios.post("/goodsCategory/findList", params);
 	},
-	// 后台管理 — 商品分类 — 修改和（启用禁用）
-	goodsCategoryUpdate(params = {}) {
-		return axios.post("/goodsCategory/update", params);
+	// 后台管理 — 商品分类 — 启用禁用
+	goodsCategoryUpdateEnable(params = {}) {
+		return axios.post("/goodsCategory/updateEnable", params);
 	},
 	// 后台管理 — 商品分类 — 添加
 	goodsCategoryAdd(params = {}) {
 		return axios.post("/goodsCategory/add", params);
+	},
+	// 后台管理 — 商品分类 — 修改
+	goodsCategoryUpdate(params = {}) {
+		return axios.post("/goodsCategory/update", params);
+	},
+	// 后台管理 — 商品分类 — 查询详情
+	goodsCategoryFindCategoryById(params = {}) {
+		return axios.post("/goodsCategory/findCategoryById", params);
 	},
 	/**
 	 * 商品分类 - end
@@ -155,52 +163,47 @@ const api = {
 	findSupplierInfoById(params = {}) {
 		return axios.post("/rest/seed/supplier/info/findSupplierInfoById", params);
 	},
-	//后台管理-商家店铺-店铺分页
-	findSupplierInfoPage(params = {}) {
-		return axios.post("/rest/seed/supplier/info/findSupplierInfoPage", params);
-	},
-	//后台管理-商家店铺-店铺审核
-	updateSupplierEnable(params = {}) {
-		return axios.post("/rest/seed/supplier/info/updateSupplierEnable", params);
-	},
-	//后台管理-商家店铺-店铺启用、禁用
-	updateSupplierState(params = {}) {
-		return axios.post("/rest/seed/supplier/info/updateSupplierState", params);
-	},
-	//后台管理-商家店铺-根据id获取店铺详情
-	findSupplierInfoById(params = {}) {
-		return axios.post("/rest/seed/supplier/info/findSupplierInfoById", params);
-	},
 	/**
 	 * 商家管理 - end
+	 */
+
+	/**
+	 * 商品管理 - start
+	 */
+	//后台管理 — 商品信息 — 商品列表查询
+	goodsInfoFindList(params = {}) {
+		return axios.post("/goodsInfo/findList", params);
+	},
+	// //后台管理 — 商品信息 — 添加
+	// goodsInfoAdd (params = {}) {
+	//   return axios.post("/goodsInfo/add", params);
+	// },
+	// //后台管理 — 商品信息 — 修改
+	// goodsInfoUpdate (params = {}) {
+	//   return axios.post("/goodsInfo/update", params);
+	// },
+	//后台管理 — 商品信息 —  查询详情
+	goodsInfoFindGoodsById(params = {}) {
+		return axios.post("/goodsInfo/findGoodsById", params);
+	},
+	//后台管理 — 商品信息 — 审核
+	goodsInfoGoodsReview(params = {}) {
+		return axios.post("/goodsInfo/goodsReview", params);
+	},
+	//后台管理 — 商品信息 — 上下架
+	goodsInfoUpdateStatus(params = {}) {
+		return axios.post("/goodsInfo/updateStatus", params);
+	},
+	/**
+	 * 商品管理 - end
 	 */
 
 	/**
 	 * 会员管理 - start
 	 */
 	//后台管理-会员管理-分页获取会员信息
-	findOutletUserListPage(params = {}) {
-		return axios.post("/rest/seed/outlet/user/findOutletUserListPage", params);
-	},
-	//后台管理-会员管理-启用、禁用会员信息
-	enableOutletUser(params = {}) {
-		return axios.post("/rest/seed/outlet/user/enableOutletUser", params);
-	},
-	// //后台管理-会员管理-审核会员信息
-	// updateOutletUser (params = {}) {
-	//   return axios.post("/rest/seed/outlet/user/updateOutletUser", params);
-	// },
-	//后台管理-会员管理-修改会员信息
-	updateOutletUser(params = {}) {
-		return axios.post("/rest/seed/outlet/user/updateOutletUser", params);
-	},
-	//后台管理-会员管理-根据ID查询会员信息
-	findOutletUserById(params = {}) {
-		return axios.post("/rest/seed/outlet/user/findOutletUserById", params);
-	},
-	//后台管理-会员管理-分页获取会员信息
-	findOutletUserListPage(params = {}) {
-		return axios.post("/rest/seed/outlet/user/findOutletUserListPage", params);
+	findUserPage(params = {}) {
+		return axios.post("/rest/seed/outlet/user/findUserPage", params);
 	},
 	//后台管理-会员管理-启用、禁用会员信息
 	enableOutletUser(params = {}) {
