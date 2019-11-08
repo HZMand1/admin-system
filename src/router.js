@@ -260,6 +260,33 @@ const router = new Router({
 			meta: {
 				requireAuth: false
 			}
+		},
+		{
+			path: "/northwest/login",
+			name: "门户登录",
+			hidden: false,
+			component: () => import("./views/northwest/login/Login.vue"),
+			meta: {
+				requireAuth: false
+			}
+		},
+		{
+			path: "/northwest/registered",
+			name: "门户注册",
+			hidden: false,
+			component: () => import("./views/northwest/registered/Registered.vue"),
+			meta: {
+				requireAuth: false
+			}
+		},
+		{
+			path: "/northwest/tenants",
+			name: "商家入驻",
+			hidden: false,
+			component: () => import("./views/northwest/tenants/Tenants.vue"),
+			meta: {
+				requireAuth: false
+			}
 		}
 	]
 })
