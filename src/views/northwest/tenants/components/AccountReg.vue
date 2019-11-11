@@ -103,7 +103,7 @@ export default {
                 });
                 this.accountLoadingBtn = false;
                 this.userId = result.data.data.id;
-                this.$emit("nextEmit", 2);
+                this.$emit("nextEmit", 2, true);
               } else {
                 this.accountLoadingBtn = false;
                 this.$message.error(result.data.retmsg);

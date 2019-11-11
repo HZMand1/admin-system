@@ -4,6 +4,7 @@
 	background-size: 100% 100%;
 
 	main {
+		position: relative;
 		width: 1200px;
 		margin: 0 auto;
 		padding-top: 54px;
@@ -75,6 +76,47 @@
 			font-weight: 400;
 		}
 
+		.aptitude-tip {
+			font-size: 24px;
+			color: rgba(34, 34, 34, 1);
+			line-height: 18px;
+			font-family: Microsoft YaHei;
+			font-weight: bold;
+
+			span {
+				color: #3A65C6;
+			}
+		}
+
+		.aptitude-btn {
+			width: 458px;
+			margin: 0 auto;
+			padding-top: 146px;
+			padding-bottom: 182px;
+
+			button {
+				width: 160px;
+				height: 50px;
+				margin: 0;
+				padding: 0;
+				background: rgba(58, 101, 198, 1);
+				font-size: 22px;
+				color: rgba(255, 255, 255, 1);
+				line-height: 18px;
+				border-radius: 4px;
+				font-family: Source Han Sans CN;
+				font-weight: 400;
+
+				&:first-child {
+					margin-right: 138px;
+				}
+
+				&:last-child {
+					background: rgba(197, 197, 197, 1);
+				}
+			}
+		}
+
 		.store-opened-tip {
 			padding-top: 56px;
 			font-size: 24px;
@@ -101,6 +143,15 @@
 
 		.exit {
 			background: rgba(197, 197, 197, 1);
+		}
+
+		.go-top {
+			position: absolute;
+			bottom: -26px;
+			right: 8%;
+			width: 50px;
+			height: 50px;
+			cursor: pointer;
 		}
 	}
 }
