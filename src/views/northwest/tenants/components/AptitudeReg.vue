@@ -4,79 +4,79 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px">
       <el-row>
         <el-col :span="13" :offset="4">
-          <el-form-item label="类型 : " prop="type">
-            <el-select v-model="ruleForm.type">
+          <el-form-item label="类型 : " prop="userType">
+            <el-select v-model="ruleForm.userType">
               <el-option label="个人" value="personal"></el-option>
               <el-option label="企业" value="enterprise"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='enterprise'">
+      <el-row v-if="ruleForm.userType==='enterprise'">
         <el-col :span="13" :offset="4">
           <el-form-item label="企业名称 : " prop="enterpriseName">
             <el-input v-model="ruleForm.enterpriseName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='enterprise'">
+      <el-row v-if="ruleForm.userType==='enterprise'">
         <el-col :span="13" :offset="4">
           <el-form-item label="企业法人 : " prop="enterprisePerson">
             <el-input v-model="ruleForm.enterprisePerson"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='personal'">
+      <el-row v-if="ruleForm.userType==='personal'">
         <el-col :span="13" :offset="4">
-          <el-form-item label="持有人 : " prop="possessor">
-            <el-input v-model="ruleForm.possessor"></el-input>
+          <el-form-item label="持有人 : " prop="legalName">
+            <el-input v-model="ruleForm.legalName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='personal'">
+      <el-row v-if="ruleForm.userType==='personal'">
         <el-col :span="13" :offset="4">
-          <el-form-item label="持有人电话 : " prop="possessorPhone">
-            <el-input v-model="ruleForm.possessorPhone" maxlength="11"></el-input>
+          <el-form-item label="持有人电话 : " prop="legalMobile">
+            <el-input v-model="ruleForm.legalMobile" maxlength="11"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="13" :offset="4">
-          <el-form-item :label="ruleForm.type==='personal' ?'持有人身份证号 : ':' 法人身份证号 : '" prop="possessorCard">
+          <el-form-item :label="ruleForm.userType==='personal' ?'持有人身份证号 : ':' 法人身份证号 : '" prop="possessorCard">
             <el-input v-model="ruleForm.possessorCard"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="13" :offset="4">
-          <el-form-item :label="ruleForm.type==='personal' ?'身份证照片 : ':' 法人身份证照片 : '" prop="account">
+          <el-form-item class="mark-red" :label="ruleForm.userType==='personal' ?'身份证照片 : ':' 法人身份证照片 : '">
             <el-row>
               <el-col :span="12">
-                <horizontal-upload-image tip="正面"></horizontal-upload-image>
+                <horizontal-upload-image tip="正面" ref="legalFontPath"></horizontal-upload-image>
               </el-col>
               <el-col :span="12" class="pad-l-10">
-                <horizontal-upload-image tip="反面"></horizontal-upload-image>
+                <horizontal-upload-image tip="反面" ref="legalBackPath"></horizontal-upload-image>
               </el-col>
             </el-row>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='personal'">
+      <el-row v-if="ruleForm.userType==='personal'">
         <el-col :span="13" :offset="4">
-          <el-form-item label="自产自销证明 : " prop="account">
-            <horizontal-upload-image tip=""></horizontal-upload-image>
+          <el-form-item class="mark-red" label="自产自销证明 : ">
+            <horizontal-upload-image tip="" ref="sellerNo"></horizontal-upload-image>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-if="ruleForm.type==='enterprise'">
+      <el-row v-if="ruleForm.userType==='enterprise'">
         <el-col :span="13" :offset="4">
-          <el-form-item label="企业证件照 : " prop="account">
+          <el-form-item class="mark-red" label="企业证件照 : ">
             <el-row>
               <el-col :span="12">
-                <horizontal-upload-image tip="营业执照"></horizontal-upload-image>
+                <horizontal-upload-image tip="营业执照" ref="creditImgPath"></horizontal-upload-image>
               </el-col>
               <el-col :span="12" class="pad-l-10">
-                <horizontal-upload-image tip="种子种苗经营许可证"></horizontal-upload-image>
+                <horizontal-upload-image tip="种子种苗经营许可证" ref="seedlings"></horizontal-upload-image>
               </el-col>
             </el-row>
           </el-form-item>
@@ -84,14 +84,14 @@
       </el-row>
       <el-row>
         <el-col :span="13" :offset="4">
-          <el-form-item label="银行卡号 : " prop="account">
+          <el-form-item label="银行卡号 : " prop="bankCard">
             <el-input v-model="ruleForm.bankCard" @keyup.native="validateNum"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="13" :offset="4">
-          <el-form-item label="开户行 : " prop="account">
+          <el-form-item label="开户行 : " prop="openingBank">
             <el-input v-model="ruleForm.openingBank"></el-input>
           </el-form-item>
         </el-col>
@@ -110,32 +110,41 @@ let BIN = require("bankcardinfo");
 export default {
   name: "AptitudeReg",
   components: { HorizontalUploadImage },
+  props: {
+    userId: {
+      type: String,
+      require: true
+    }
+  },
   data() {
     return {
       ruleForm: {
-        type: "personal",
+        userType: "personal",
         bankCard: null,
         openingBank: null
       },
       rules: {
-        type: [{ required: true, message: "请选择类型", trigger: "blur" }],
+        userType: [{ required: true, message: "请选择类型", trigger: "blur" }],
         enterpriseName: [
           { required: true, message: "请输入企业名称", trigger: "blur" }
         ],
         enterprisePerson: [
           { required: true, message: "请输入企业法人", trigger: "blur" }
         ],
-        possessor: [
+        legalName: [
           { required: true, message: "请输入持有人名称", trigger: "blur" }
         ],
-        possessorPhone: [
+        legalMobile: [
           { required: true, message: "请输入持有人电话", trigger: "blur" }
         ],
         possessorCard: [
           { required: true, message: "请输入身份证号", trigger: "blur" }
         ],
-        account: [
-          { required: true, message: "请输入身份证号", trigger: "blur" }
+        bankCard: [
+          { required: true, message: "请输入银行卡号", trigger: "blur" }
+        ],
+        openingBank: [
+          { required: true, message: "请输入开户行", trigger: "blur" }
         ]
       }
     };
@@ -153,14 +162,103 @@ export default {
             this.ruleForm.openingBank = data.bankName;
           })
           .catch(err => {
-            this.$message.error(err);
+            this.$message.error("银行卡输入错误");
           });
       }
     },
+    // 提交资质审核
     application(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit("nextEmit", 3);
+          if (this.ruleForm.userType === "personal") {
+            // 个人
+            let params = {
+              // 类型
+              userType: "0",
+              // 用户ID
+              userId: this.userId,
+              // 持有人
+              legalName: this.ruleForm.legalName,
+              // 持有人手机
+              legalMobile: this.ruleForm.legalMobile,
+              // 身份证号码
+              legalId: this.ruleForm.possessorCard,
+              // 身份证正面
+              legalFontPath: this.$refs.legalFontPath.imageUrl,
+              // 身份证反面
+              legalBackPath: this.$refs.legalBackPath.imageUrl,
+              // 自产自销图
+              sellerNo: this.$refs.sellerNo.imageUrl,
+              // 银行卡号
+              bankId: this.ruleForm.bankCard,
+              // 开户行
+              bankName: this.ruleForm.openingBank
+            };
+            this.$api.api
+              .personalSubmitReview(params)
+              .then(result => {
+                if (
+                  result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE
+                ) {
+                  this.$message({
+                    message: result.data.retmsg,
+                    type: "success"
+                  });
+                  this.$emit("nextEmit", 3);
+                } else {
+                  this.$message.error(result.data.retmsg);
+                }
+              })
+              .catch(err => {
+                console.log(err);
+                this.$message.error("服务器错误!!");
+              });
+          } else {
+            // 企业
+            let params = {
+              // 类型
+              userType: "1",
+              // 用户ID
+              userId: this.userId,
+              // 企业名称
+              companyName: this.ruleForm.enterpriseName,
+              // 法人姓名
+              legalName: this.ruleForm.enterprisePerson,
+              // 法人身份证号码
+              legalId: this.ruleForm.possessorCard,
+              // 身份证正面
+              legalFontPath: this.$refs.legalFontPath.imageUrl,
+              // 身份证反面
+              legalBackPath: this.$refs.legalBackPath.imageUrl,
+              // 营业执照
+              creditImgPath: this.$refs.creditImgPath.imageUrl,
+              // 种子种苗经营许可证
+              sellerNo: this.$refs.seedlings.imageUrl,
+              // 银行卡号
+              bankId: this.ruleForm.bankCard,
+              // 开户行
+              bankName: this.ruleForm.openingBank
+            };
+            this.$api.api
+              .companySubmitReview(params)
+              .then(result => {
+                if (
+                  result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE
+                ) {
+                  this.$message({
+                    message: result.data.retmsg,
+                    type: "success"
+                  });
+                  this.$emit("nextEmit", 3);
+                } else {
+                  this.$message.error(result.data.retmsg);
+                }
+              })
+              .catch(err => {
+                console.log(err);
+                this.$message.error("服务器错误!!");
+              });
+          }
         } else {
           console.log("error submit!!");
           return false;

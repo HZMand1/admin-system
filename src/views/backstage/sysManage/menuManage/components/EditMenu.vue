@@ -101,6 +101,10 @@ export default {
           this.ruleForm.menuUrl = result.data.data.path;
           this.ruleForm.auth = result.data.data.auth;
           this.ruleForm.enable = result.data.data.enable;
+          this.ruleForm.supeName =
+            result.data.data.parent !== null
+              ? result.data.data.parent.name
+              : "一级菜单";
         } else {
           this.$message.error(result.data.retmsg);
         }

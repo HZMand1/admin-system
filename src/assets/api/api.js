@@ -270,6 +270,21 @@ const api = {
   // 西北门户-广告新闻资讯管理-列表查询
   findAdNewsAllList (params = {}) {
     return axios.post("rest/seed/adNews/findAdNewsAllList", params);
+  },
+  // 会员注册
+  insertOutletUser (params) {
+    return axios.post("/rest/seed/outlet/user/insertOutletUser", params);
+  },
+	/**
+	 * 商家入驻start
+	 */
+  // 【资质申请】-【个人审核信息提交】
+  personalSubmitReview (params = {}) {
+    return axios.post("/rest/seed/user/review/personalSubmitReview", params);
+  },
+  // 【资质申请】-【企业审核信息提交】
+  companySubmitReview (params = {}) {
+    return axios.post("/rest/seed/user/review/companySubmitReview", params);
   }
 }
 export default {

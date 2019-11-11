@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-upload class="avatar-uploader" action="/" :show-file-list="false" :on-progress="handleProgess" :on-success="handleAvatarSuccess" :on-error="handleError" :http-request="uploadSectionFileImg" :before-upload="beforeAvatarUpload">
+    <el-upload class="avatar-uploader" action="/" :show-file-list="false" :on-progress="handleProgess" :on-error="handleError" :http-request="uploadSectionFileImg" :before-upload="beforeAvatarUpload">
       <img v-if="imageUrl" :src="imageUrl" class="img-cover">
       <el-progress v-if="!isImg && !imageUrl" :status="isError?'exception':null" :width="114" type="circle" :percentage="percentage"></el-progress>
       <div v-if="isImg" class="upload-content">
@@ -32,21 +32,29 @@ export default {
     tip: String
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
     // 自定义上传文件方法
     uploadSectionFileImg(param) {
-      // this.form.fileListImg.length = 0;
-      // this.form.fileListImg.push({
-      //   name: param.file.name,
-      //   url: URL.createObjectURL(param.file)
-      // });
       this.files = param.file;
       let formData = new FormData();
       formData.append("file", this.files);
-      this.imageUrl = URL.createObjectURL(this.files);
-      console.log(this.files);
+      this.$api.api
+        .fileUpload(formData)
+        .then(result => {
+          if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.$message({
+              message: result.data.retmsg,
+              type: "success"
+            });
+            this.imageUrl = result.data.data.fileUrl;
+          } else {
+            this.$message.error(result.data.retmsg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message.error("服务器错误!!");
+        });
+      // this.imageUrl = URL.createObjectURL(this.files);
     },
     beforeAvatarUpload(file) {
       let filetypes = ["jpg", "png", "jpeg"];
