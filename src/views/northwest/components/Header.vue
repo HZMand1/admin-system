@@ -1,46 +1,48 @@
 <template>
   <header class="header">
-      <div class="pull_t">
-        <div class="layout">
-          <div class="h_wellcome fl">欢迎来到西北地区中药材保障公共平台</div>
-          <div class="h_login fr">
-            <a class="register" href="javascript:;">注册</a>
-            <span>|</span>
-            <a class="loginIn" href="javascript:;">登录</a>
-          </div>
+    <div class="pull_t">
+      <div class="layout">
+        <div class="h_wellcome fl">欢迎来到西北地区中药材保障公共平台</div>
+        <div class="h_login fr">
+          <router-link class="register" to="/northwest/registered">注册</router-link>
+          <!-- <a class="register" href="/northwest/registered">注册</a> -->
+          <span>|</span>
+          <router-link class="loginIn" to="/northwest/login">登录</router-link>
+          <!-- <a class="loginIn" href="/northwest/login">登录</a> -->
         </div>
       </div>
-      <div class="pull_b">
-        <div class="layout clearfloat">
-          <div class="fl">
-            <div class="h_logo fl">
-              <img src="../../../../src/assets/images/home/home_logo.png" />
-            </div>
-            <div class="h_name fl">
-              <h3>中药材供应平台</h3>
-              <span>Platform for the Supply of Chinese Medicinal Materials</span>
-            </div>
+    </div>
+    <div class="pull_b">
+      <div class="layout clearfloat">
+        <div class="fl">
+          <div class="h_logo fl">
+            <img src="../../../../src/assets/images/home/home_logo.png" />
           </div>
-          <div class="h_phone fr">
-            <h3>010-88462302</h3>
-            <span>客服热线（服务时间：8:30~15:30）</span>
+          <div class="h_name fl">
+            <h3>中药材供应平台</h3>
+            <span>Platform for the Supply of Chinese Medicinal Materials</span>
           </div>
         </div>
+        <div class="h_phone fr">
+          <h3>010-88462302</h3>
+          <span>客服热线（服务时间：8:30~15:30）</span>
+        </div>
       </div>
-    </header>
+    </div>
+  </header>
 </template>
 
 <script>
 export default {
   name: "CommonHeader"
-}
+};
 </script>
 
 <style lang="less" scoped>
 @import "../../../../src/assets/less/common.less";
 .header {
   .pull_t {
-    background: #F2F2F2;
+    background: #f2f2f2;
     height: 30px;
     line-height: 30px;
     font-size: 12px;
@@ -48,7 +50,7 @@ export default {
     .h_login {
       a {
         &:first-child {
-          color: #ED702C;
+          color: #ed702c;
           margin-right: 10px;
         }
         &:last-child {
@@ -71,7 +73,7 @@ export default {
         margin: 0;
       }
       span {
-        color: #B3B3B3;
+        color: #b3b3b3;
         font-size: 12px;
       }
     }
@@ -82,7 +84,7 @@ export default {
         font-size: 20px;
       }
       span {
-        color: #6E7F9C;
+        color: #6e7f9c;
         font-size: 12px;
       }
     }

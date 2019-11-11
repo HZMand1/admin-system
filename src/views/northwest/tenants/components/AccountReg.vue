@@ -62,6 +62,7 @@ export default {
       }
     };
     return {
+      userId: "",
       ruleForm: {
         account: null,
         password: null,
@@ -101,6 +102,7 @@ export default {
                   type: "success"
                 });
                 this.accountLoadingBtn = false;
+                this.userId = result.data.data.id;
                 this.$emit("nextEmit", 2);
               } else {
                 this.accountLoadingBtn = false;

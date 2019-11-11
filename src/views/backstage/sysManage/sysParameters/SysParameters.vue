@@ -3,7 +3,7 @@
   <section class="sys-parameters">
     <el-row>
       <el-col :span="4">
-        <el-input v-model="searchValue" placeholder="类型"></el-input>
+        <el-input v-model="searchValue" placeholder="类型" :clearable="true" @clear="searchSys"></el-input>
       </el-col>
       <el-col :span="20">
         <span class="pad-l-10">
