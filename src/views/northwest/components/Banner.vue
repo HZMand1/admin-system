@@ -39,9 +39,9 @@ export default {
 .banner {
   width: 100%;
   height: 410px;
-  background: url(../../../../src/assets/images/home/home_banner1.jpg) no-repeat
-    center center;
-  background-size: 100% 100%;
+  background: url(../../../../src/assets/images/home/home_banner1.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 .icon_group {
   background: rgba(255, 255, 255, 1);
