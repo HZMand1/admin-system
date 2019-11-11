@@ -60,9 +60,9 @@
             <el-button v-if="scope.row.review != 0"
                        size="mini"
                        type="primary"
-                       @click="memberAudit(scope.$index, scope.row)">审核</el-button>
+                       @click="categoryAudit(scope.$index, scope.row)">审核</el-button>
             <el-button size="mini"
-                       @click="memberInfo(scope.$index, scope.row)">详情</el-button>
+                       @click="categoryInfo(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -139,6 +139,7 @@ export default {
     setAuctionSizeChange (currentPage) {
       this.totalPage = currentPage
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
@@ -148,6 +149,7 @@ export default {
     setAuctionCurrentChange (val) {
       this.currentPage = val
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
@@ -196,7 +198,7 @@ export default {
     },
 
     //显示审核弹框
-    memberAudit (index, row) {
+    categoryAudit (index, row) {
       this.showAudit = true
       this.auditId = row.id
     },
@@ -232,11 +234,11 @@ export default {
         })
     },
     //详情
-    memberInfo (index, row) {
-      // this.$router.push({
-      //   path: "/backstage/merchantManage/shopManage/components/ShopDetail",
-      //   query: { id: row.id }
-      // })
+    categoryInfo (index, row) {
+      this.$router.push({
+        path: "/backstage/sysManage/goodsCategory/CategoryDetail",
+        query: { id: row.id }
+      })
     },
 
     enableFormat (row, column) {

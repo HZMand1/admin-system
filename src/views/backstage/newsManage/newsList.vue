@@ -129,6 +129,7 @@ export default {
     setAuctionSizeChange (currentPage) {
       this.totalPage = currentPage;
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       };
@@ -138,6 +139,7 @@ export default {
     setAuctionCurrentChange (val) {
       this.currentPage = val;
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       };

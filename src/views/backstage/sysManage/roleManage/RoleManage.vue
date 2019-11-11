@@ -46,11 +46,13 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini"
+            <el-button v-if="scope.row.enable === 1"
+                       size="mini"
                        type="primary"
                        :loading="btnloading"
                        @click="handleEnabled(scope.$index, scope.row)">启用</el-button>
-            <el-button size="mini"
+            <el-button v-else
+                       size="mini"
                        type="danger"
                        :loading="btnloading"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
@@ -141,6 +143,7 @@ export default {
     setAuctionSizeChange (currentPage) {
       this.totalPage = currentPage;
       let params = {
+        roleName: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
@@ -150,6 +153,7 @@ export default {
     setAuctionCurrentChange (val) {
       this.currentPage = val;
       let params = {
+        roleName: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }

@@ -136,6 +136,7 @@ export default {
     setAuctionSizeChange (currentPage) {
       this.totalPage = currentPage
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
@@ -145,6 +146,7 @@ export default {
     setAuctionCurrentChange (val) {
       this.currentPage = val
       let params = {
+        name: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       }
@@ -209,7 +211,7 @@ export default {
         enable: this.radio,
         review: this.auditCause
       }
-      this.$api.api.updateOutletUser(params)
+      this.$api.api.updateUserReview(params)
         .then(result => {
           let dataRow = result.data
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {

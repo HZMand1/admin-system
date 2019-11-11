@@ -71,7 +71,7 @@ export default {
           //打开loading
           this.loading = true
           //调用新增接口
-          this.$api.api.insertRole(this.ruleForm)
+          this.$api.api.updateRole(this.ruleForm)
             .then(result => {
               //返回结果处理
               let dataRow = result.data;
