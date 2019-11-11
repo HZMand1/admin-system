@@ -104,6 +104,10 @@ export default {
         .then(result => {
           let datas = result.data.data;
           if (result.data.retcode === this.code) {
+            this.$message({
+              message: "刷新成功",
+              type: "success"
+            });
             this.tableData = datas;
           } else {
             this.$message.error(result.data.retmsg);
