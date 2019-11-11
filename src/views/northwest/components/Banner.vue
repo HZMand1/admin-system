@@ -40,6 +40,8 @@ export default {
   width: 100%;
   height: 410px;
   background: url(../../../../src/assets/images/home/home_banner1.jpg) no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 .icon_group {
   ul {
