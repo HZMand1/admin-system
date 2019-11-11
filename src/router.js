@@ -28,7 +28,7 @@ const router = new Router({
     },
     children: [{
       path: "/backstage/sysManage/userManage",
-      name: "用户管理",
+      name: "后台用户管理",
       hidden: false,
       component: () => import("./views/backstage/sysManage/userManage/UserManage.vue"),
       meta: {
@@ -135,6 +135,48 @@ const router = new Router({
       }
     },
     {
+      path: "/backstage/advManage/AdvList",
+      name: "广告管理",
+      hidden: false,
+      component: () => import("./views/backstage/advManage/list/AdvList.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
+      path: "/backstage/newsManage/NewsList",
+      name: "资讯管理",
+      hidden: false,
+      component: () => import("./views/backstage/newsManage/newsList.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/AddNews",
+      name: "新增资讯",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/AddNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/EditNews",
+      name: "编辑资讯",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/EditNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    }, {
+      path: "/backstage/newsManage/components/DetailNews",
+      name: "资讯详情",
+      hidden: true,
+      component: () => import("./views/backstage/newsManage/components/DetailNews.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
       path: "/backstage/sysManage/goodsCategory/GoodsCategoryList",
       name: "商品分类",
       hidden: false,
@@ -144,24 +186,6 @@ const router = new Router({
       }
     }
     ]
-  },
-  {
-    path: "/backstage/home",
-    name: "广告管理",
-    hidden: false,
-    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
-    meta: {
-      requireAuth: false // 只要此字段为true，必须做鉴权处理
-    },
-    children: [{
-      path: "/backstage/advManage/AdvList",
-      name: "广告管理",
-      hidden: false,
-      component: () => import("./views/backstage/advManage/list/AdvList.vue"), // vue路由懒加载  异步加载
-      meta: {
-        requireAuth: false
-      }
-    }]
   },
   {
     path: "/backstage/home",
@@ -203,7 +227,7 @@ const router = new Router({
   },
   {
     path: "/backstage/home",
-    name: "会员管理",
+    name: "用户管理",
     hidden: false,
     component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
     meta: {
@@ -211,51 +235,9 @@ const router = new Router({
     },
     children: [{
       path: "/backstage/memberManage/MemberList",
-      name: "会员列表",
+      name: "用户列表",
       hidden: false,
       component: () => import("./views/backstage/memberManage/memberList/MemberList.vue"), // vue路由懒加载  异步加载
-      meta: {
-        requireAuth: true
-      }
-    }]
-  },
-  {
-    path: "/backstage/home",
-    name: "资讯管理",
-    hidden: false,
-    component: () => import("./views/backstage/Home.vue"), // vue路由懒加载  异步加载
-    meta: {
-      requireAuth: true // 只要此字段为true，必须做鉴权处理
-    },
-    children: [{
-      path: "/backstage/newsManage/NewsList",
-      name: "资讯列表",
-      hidden: false,
-      component: () => import("./views/backstage/newsManage/newsList.vue"), // vue路由懒加载  异步加载
-      meta: {
-        requireAuth: true
-      }
-    }, {
-      path: "/backstage/newsManage/components/AddNews",
-      name: "新增资讯",
-      hidden: true,
-      component: () => import("./views/backstage/newsManage/components/AddNews.vue"), // vue路由懒加载  异步加载
-      meta: {
-        requireAuth: true
-      }
-    }, {
-      path: "/backstage/newsManage/components/EditNews",
-      name: "编辑资讯",
-      hidden: true,
-      component: () => import("./views/backstage/newsManage/components/EditNews.vue"), // vue路由懒加载  异步加载
-      meta: {
-        requireAuth: true
-      }
-    }, {
-      path: "/backstage/newsManage/components/DetailNews",
-      name: "资讯详情",
-      hidden: true,
-      component: () => import("./views/backstage/newsManage/components/DetailNews.vue"), // vue路由懒加载  异步加载
       meta: {
         requireAuth: true
       }
