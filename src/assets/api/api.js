@@ -144,6 +144,15 @@ const api = {
   goodsCategoryFindCategoryById (params = {}) {
     return axios.post("/goodsCategory/findCategoryById", params);
   },
+  // 后台管理 — 商品分类 — 获取商品分类树结构
+  findCategoryTree (params = {}) {
+    return axios.post("/goodsCategory/findCategoryTree", params);
+  },
+  // 后台管理 — 商品分类 — 获分类下所有商品
+  findGoodsByCategoryId (params = {}) {
+    return axios.post("/goodsInfo/findGoodsByCategoryId", params);
+  },
+
 	/**
 	 * 商品分类 - end
 	 */
