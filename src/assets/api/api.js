@@ -76,6 +76,10 @@ const api = {
 	findAuthByRole(params = {}) {
 		return axios.post("/rest/seed/roleauth/findAuthByRole", params);
 	},
+	//后台管理 - 用户角色权限 - 获取用户所有权限
+	findAuthByUser(params = {}) {
+		return axios.post("/rest/seed/roleauth/findAuthByUser", params);
+	},
 	//后台管理-用户角色权限-给角色分配权限
 	saveAuthToRole(params = {}) {
 		return axios.post("/rest/seed/roleauth/saveAuthToRole", params);
@@ -283,30 +287,7 @@ const api = {
 	// 会员注册
 	insertOutletUser(params) {
 		return axios.post("/rest/seed/outlet/user/insertOutletUser", params);
-	},
-	/**
-	 * 商家入驻start
-	 */
-	// 【资质申请】-【个人审核信息提交】
-	personalSubmitReview(params = {}) {
-		return axios.post("/rest/seed/user/review/personalSubmitReview", params);
-	},
-	// 【资质申请】-【企业审核信息提交】
-	companySubmitReview(params = {}) {
-		return axios.post("/rest/seed/user/review/companySubmitReview", params);
-	},
-	// 【资质申请】-【资质审核】
-	updateUserReview(params = {}) {
-		return axios.post("/rest/seed/user/review/updateUserReview", params);
-	},
-	// 【资质申请】-【根据用户 ID 获取个人或企业的详细资质审核信息】
-	queryReviewDetailByUserId(params = {}) {
-		return axios.post("/rest/seed/user/review/queryReviewDetailByUserId", params);
-	},
-	// 【资质申请】-【根据用户 ID 获取个人或企业的详细资质审核信息】
-	queryReviewDetailByUserId111(params = {}) {
-		return axios.post("/rest/seed/user/review/queryReviewDetailByUserId", params);
-	},
+	}
 }
 export default {
 	api

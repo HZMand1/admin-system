@@ -9,7 +9,7 @@
         <!-- <div class="tools" @click.prevent="collapse">
 					<i class="fa fa-align-justify"></i>
         </div>-->
-        <div style="text-align: right;cursor: pointer;" @click.stop="$router.push('/northwest/NorthwestIndex')">门户首页</div>
+        <!-- <div style="text-align: right;cursor: pointer;" @click.stop="$router.push('/northwest/NorthwestIndex')">门户首页</div> -->
       </el-col>
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
