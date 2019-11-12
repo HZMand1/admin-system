@@ -294,6 +294,14 @@ const api = {
   // 【资质申请】-【企业审核信息提交】
   companySubmitReview (params = {}) {
     return axios.post("/rest/seed/user/review/companySubmitReview", params);
+  },
+  // 【资质申请】-【资质审核】
+  updateUserReview (params = {}) {
+    return axios.post("/rest/seed/user/review/updateUserReview", params);
+  },
+  // 【资质申请】-【根据用户 ID 获取个人或企业的详细资质审核信息】
+  queryReviewDetailByUserId (params = {}) {
+    return axios.post("/rest/seed/user/review/queryReviewDetailByUserId", params);
   }
 }
 export default {

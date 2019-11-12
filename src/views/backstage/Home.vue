@@ -9,8 +9,7 @@
         <!-- <div class="tools" @click.prevent="collapse">
 					<i class="fa fa-align-justify"></i>
         </div>-->
-        <div style="text-align: right;cursor: pointer;" 
-             @click.stop="$router.push('/northwest/NorthwestIndex')">门户首页</div>
+        <div style="text-align: right;cursor: pointer;" @click.stop="$router.push('/northwest/NorthwestIndex')">门户首页</div>
       </el-col>
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
@@ -30,11 +29,10 @@
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
         <!--导航菜单-->
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
-          <template v-for="(item,index) in $router.options.routes">
-            <template v-if="!item.hidden">
-              <el-submenu :key="index" :index="index+''" v-if="!item.leaf">
+          <template v-for="(item,index) in menuTree">
+            <template>
+              <el-submenu v-if="item.children" :key="index" :index="index+''">
                 <template slot="title">
-                  <i :class="item.iconCls"></i>
                   {{item.name}}
                 </template>
                 <div v-for="(child,index) in item.children" :index="child.path" :key="child.path" v-show="!child.hidden">
@@ -47,15 +45,14 @@
                   <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-show="!child.children">{{child.name}}</el-menu-item>
                 </div>
               </el-submenu>
-              <el-menu-item v-if="item.leaf&&item.children.length>0" :key="index" @click="clickMenu(item.children[0])" :index="item.children[0].path">
-                <i :class="item.iconCls"></i>
-                {{item.children[0].name}}
+              <el-menu-item v-if="!item.children" :key="index" @click="clickMenu(item)" :index="item.path">
+                {{item.name}}
               </el-menu-item>
             </template>
           </template>
         </el-menu>
         <!--导航菜单-折叠后-->
-        <ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
+        <!-- <ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
           <li :key="index" v-for="(item,index) in $router.options.routes" v-show="!item.hidden" class="el-submenu item">
             <template v-if="!item.leaf">
               <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
@@ -73,28 +70,28 @@
           </li>
 </template>
 </li>
-</ul>
-</aside>
-<section class="content-container">
-  <div class="grid-content bg-purple-light">
-    <el-col :span="24" class="breadcrumb-container">
-      <!-- <strong class="title">{{$route.name}}</strong> -->
-      <el-breadcrumb separator="/" class="breadcrumb-inner">
-        <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-          {{ item.name }}
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-      <!-- <taps></taps> -->
+</ul> -->
+      </aside>
+      <section class="content-container">
+        <div class="grid-content bg-purple-light">
+          <el-col :span="24" class="breadcrumb-container">
+            <!-- <strong class="title">{{$route.name}}</strong> -->
+            <el-breadcrumb separator="/" class="breadcrumb-inner">
+              <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+                {{ item.name }}
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+            <!-- <taps></taps> -->
+          </el-col>
+          <el-col :span="24" class="content-wrapper">
+            <transition name="fade" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </el-col>
+        </div>
+      </section>
     </el-col>
-    <el-col :span="24" class="content-wrapper">
-      <transition name="fade" mode="out-in">
-        <router-view></router-view>
-      </transition>
-    </el-col>
-  </div>
-</section>
-</el-col>
-</el-row>
+  </el-row>
 </template>
 
 <script>
@@ -121,10 +118,37 @@ export default {
         desc: ""
       },
       openedTab: [],
-      nameList: []
+      nameList: [],
+      menuTree: null
     };
   },
   created() {},
+  mounted() {
+    // let user = sessionStorage.getItem("user")
+    // // let user = this.$sotre.state.userInfo
+    // if (user) {
+    //   user = JSON.parse(user)
+    //   this.sysUserName = user.userName || ""
+    //   this.sysUserAvatar = user.headImg || require("../../assets/images/user.png")
+    // }
+    // this.FETCH_USER_INFO()
+    // this.USER_INFO(user)
+    this.$api.api
+      .findMenuZtree()
+      .then(result => {
+        let datas = result.data.data;
+        if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+          this.menuTree = datas;
+        } else {
+          this.$message.error(result.data.retmsg);
+        }
+        this.loading = false;
+      })
+      .catch(err => {
+        this.loading = false;
+        console.log(err);
+      });
+  },
   methods: {
     ...mapActions(["FETCH_USER_INFO", "USER_INFO"]),
     ...mapMutations(["USER_INFO"]),
@@ -181,17 +205,6 @@ export default {
         "submenu-hook-" + i
       )[0].style.display = status ? "block" : "none";
     }
-  },
-  mounted() {
-    // let user = sessionStorage.getItem("user")
-    // // let user = this.$sotre.state.userInfo
-    // if (user) {
-    //   user = JSON.parse(user)
-    //   this.sysUserName = user.userName || ""
-    //   this.sysUserAvatar = user.headImg || require("../../assets/images/user.png")
-    // }
-    // this.FETCH_USER_INFO()
-    // this.USER_INFO(user)
   }
 };
 </script>

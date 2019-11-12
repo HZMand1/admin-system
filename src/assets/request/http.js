@@ -4,6 +4,9 @@
  */
 import axios from "axios";
 import router from "../../router";
+import {
+	Message
+} from "element-ui"
 // 创建axios实例
 let instance = axios.create({
 	timeout: 1000 * 10 // 超时
@@ -48,7 +51,17 @@ instance.interceptors.response.use(
 	//res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
 	res => {
 		if (res.status === 200) {
-			return Promise.resolve(res);
+			if (res.data.retcode === 300) {
+				localStorage.removeItem("token");
+				setTimeout(() => {
+					router.push({
+						path: "/backstage/login"
+					})
+				}, 3000);
+				return Promise.resolve(res);
+			} else {
+				return Promise.resolve(res);
+			}
 		} else {
 			return Promise.reject(res);
 		}
@@ -60,7 +73,7 @@ instance.interceptors.response.use(
 		} = error;
 		if (response) {
 			// token过期 || 没有token || 服务端错误
-			if (response.data.errorcode === "0") {
+			if (response.data.errorcode === 500) {
 				localStorage.removeItem("token");
 				Message({
 					message: "登录过期，即将前往登录页",

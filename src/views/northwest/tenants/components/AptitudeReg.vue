@@ -1,7 +1,16 @@
 <template>
   <!-- 资质申请 -->
   <section>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px">
+    <el-row v-if="isAuth">
+      <el-col>
+        <p class="text-center aptitude-tip">您已成功注册，请完善<span>资质认证</span>，才能进行店铺操作</p>
+        <div class="aptitude-btn">
+          <el-button @click="immediately">立即认证</el-button>
+          <el-button @click="goBack">返回</el-button>
+        </div>
+      </el-col>
+    </el-row>
+    <el-form v-else :model="ruleForm" :rules="rules" ref="ruleForm" label-width="200px">
       <el-row>
         <el-col :span="13" :offset="4">
           <el-form-item label="类型 : " prop="userType">
@@ -114,6 +123,10 @@ export default {
     userId: {
       type: String,
       require: true
+    },
+    isAuth: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -166,6 +179,14 @@ export default {
           });
       }
     },
+    // 立即认证
+    immediately() {
+      this.$emit("nextEmit", 2, false);
+    },
+    // 返回到种子种苗首页
+    goBack() {
+      this.$router.push("/");
+    },
     // 提交资质审核
     application(formName) {
       this.$refs[formName].validate(valid => {
@@ -204,7 +225,7 @@ export default {
                     message: result.data.retmsg,
                     type: "success"
                   });
-                  this.$emit("nextEmit", 3);
+                  this.$emit("nextEmit", 3, false);
                 } else {
                   this.$message.error(result.data.retmsg);
                 }

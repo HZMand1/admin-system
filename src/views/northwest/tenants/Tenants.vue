@@ -19,12 +19,13 @@
           <account-reg @nextEmit="nextEmit" ref="AccountReg"></account-reg>
         </el-col>
         <el-col v-show="active===2">
-          <aptitude-reg @nextEmit="nextEmit" :userId="userId"></aptitude-reg>
+          <aptitude-reg @nextEmit="nextEmit" :userId="userId" :isAuth="isAuthAptitude"></aptitude-reg>
         </el-col>
         <el-col v-show="active===3">
           <store-opened @nextEmit="nextEmit"></store-opened>
         </el-col>
       </el-row>
+      <i class="go-top" @click="goTop"><img src="../../../assets/images/northwest/goTop.png" alt=""></i>
     </main>
     <footers></footers>
   </section>
@@ -52,13 +53,23 @@ export default {
   data() {
     return {
       active: 1,
-      userId: ""
+      userId: "",
+      isAuthAptitude: false
     };
   },
   methods: {
-    nextEmit(n) {
+    nextEmit(n, b) {
       this.userId = this.$refs.AccountReg.userId;
+      this.isAuthAptitude = b;
       this.active = n;
+    },
+    // 返回顶部
+    goTop() {
+      let c = document.documentElement.scrollTop || document.body.scrollTop;
+      if (c > 0) {
+        window.requestAnimationFrame(this.goTop);
+        window.scrollTo(0, c - c / 5);
+      }
     }
   }
 };
