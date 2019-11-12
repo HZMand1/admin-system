@@ -260,7 +260,9 @@ export default {
     },
     //新增方法
     addCategory () {
-
+      this.$router.push({
+        path: "/backstage/sysManage/goodsCategory/AddCategory"
+      })
     },
     //跳转到编辑页面
     editCategory () {
@@ -271,7 +273,7 @@ export default {
       }
       let id = this.multipleSelection[0].id;
       this.$router.push({
-        path: "/backstage/sysManage/userManage/components/EditUser",
+        path: "/backstage/sysManage/goodsCategory/EditCategory",
         query: { id: id }
       })
     },

@@ -2,10 +2,10 @@
   <div id="categoryDetail">
     <el-form ref="form"
              :model="dataForm">
-      <el-form-item label="父级分类：">{{parentId}}</el-form-item>
-      <el-form-item label="分类名称：">{{name}}</el-form-item>
-      <el-form-item label="排序：">{{appCode}}</el-form-item>
-      <el-form-item label="是否显示">{{enable}}</el-form-item>
+      <el-form-item label="父级分类：">{{dataForm.parentName}}</el-form-item>
+      <el-form-item label="分类名称：">{{dataForm.name}}</el-form-item>
+      <el-form-item label="排序：">{{dataForm.orders}}</el-form-item>
+      <el-form-item label="是否显示：">{{dataForm.enable | enableFormat}}</el-form-item>
       <el-form-item>
         <el-button @click="back">返回</el-button>
       </el-form-item>
@@ -16,19 +16,22 @@
 export default {
   data () {
     return {
-
-      dataForm: {
-        roleName: "",
-        roleCode: "",
-        appCode: "",
-        remark: ""
-      },
+      dataForm: {},
       id: "" //上个页面传过来的值
     }
   },
   mounted () {
     this.id = this.$route.query.id
     this.getData()
+  },
+  filters: {
+    enableFormat (value) {
+      if (value === 0) {
+        return "启用"
+      } else {
+        return "禁用"
+      }
+    },
   },
   methods: {
     /**

@@ -136,8 +136,8 @@ export default {
     return {
       ruleForm: {
         title: "", //标题
-        textSource: 0, //文章来源(0,"文本形式",1,"链接形式")
-        textType: 0, //文章类型 (0,"原创",1,"转载")
+        textSource: "0", //文章来源(0,"文本形式",1,"链接形式")
+        textType: "0", //文章类型 (0,"原创",1,"转载")
         sysParams: {}, //系统参数
         subTitle: "", //资讯摘要
         content: "", //资讯内容
@@ -154,7 +154,7 @@ export default {
           { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
-      loading: false,
+      loading: false, //表单加载
       radioGp: "",
       //上传图片相关--start
       uploadingLoading: false,
@@ -212,7 +212,34 @@ export default {
   methods: {
 
     //提交按钮
-    submit () { },
+    submit () {
+      this.$confirm("确认提交？", "提交", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          //调用新增接口
+          this.$api.api.updateAdNews(this.ruleForm)
+            .then(result => {
+              //返回结果处理
+              let dataRow = result.data;
+              if (dataRow.retcode === 1) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                })
+                //新增成功后，返回到上一页
+                this.$fun.goBack();
+              } else {
+                this.$message.error(dataRow.retmsg)
+              }
+            }).cathc(() => {
+              this.$message.error("请求失败！")
+            })
+        }).catch(() => {
+        })
+    },
     //返沪按钮
     back () { },
     //放大/缩小
