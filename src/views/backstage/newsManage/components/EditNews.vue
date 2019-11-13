@@ -18,29 +18,27 @@
       <el-form-item label="资讯来源："
                     prop="textSource">
         <template>
-          <el-radio v-model="ruleForm.textSource"
-                    label="0">文本形式</el-radio>
-          <el-radio v-model="ruleForm.textSource"
-                    label="1">链接形式</el-radio>
+          <el-radio :key="index"
+                    v-for=" (item,index) in infoSource"
+                    v-model="ruleForm.textSource"
+                    :label="item.val">{{item.code}}</el-radio>
         </template>
       </el-form-item>
       <el-form-item label="原创或转载："
                     prop="textType">
         <template>
-          <el-radio v-model="ruleForm.textType"
-                    label="0">原创</el-radio>
-          <el-radio v-model="ruleForm.textType"
-                    label="1">转载</el-radio>
+          <el-radio :key="index"
+                    v-for=" (item,index) in originalReprint"
+                    v-model="ruleForm.textType"
+                    :label="item.val">{{item.code}}</el-radio>
         </template>
       </el-form-item>
       <el-form-item label="资讯分类："
-                    prop="sysParams">
-        <el-radio-group v-model="radioGp">
-          <el-radio-button :key="index"
-                           v-for="(item,index) in ruleForm.sysParams"
-                           v-model="item.code"
-                           :label="item.val"></el-radio-button>
-        </el-radio-group>
+                    prop="typeCode">
+        <el-radio :key="index"
+                  v-for=" (item,index) in infoType"
+                  v-model="ruleForm.typeCode"
+                  :label="item.val">{{item.code}}</el-radio>
       </el-form-item>
 
       <el-form-item label="资讯封面图："
@@ -138,7 +136,8 @@ export default {
         title: "", //标题
         textSource: "0", //文章来源(0,"文本形式",1,"链接形式")
         textType: "0", //文章类型 (0,"原创",1,"转载")
-        sysParams: {}, //系统参数
+        typeCode: "0", //资讯分类 
+        imgPath: "", //图片路径
         subTitle: "", //资讯摘要
         content: "", //资讯内容
       },
@@ -146,16 +145,15 @@ export default {
         title: [
           { required: true, message: "请输入标题", trigger: "blur" },
           { min: 0, max: 50, message: "长度在 0 到 50 个字符", trigger: "blur" }
-        ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ],
-        name: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
         ]
       },
       loading: false, //表单加载
       radioGp: "",
+
+      infoType: [], //资讯分类
+      originalReprint: [], //原创和转载
+      infoSource: [], //资讯来源
+      id: "", //传过来的id值
       //上传图片相关--start
       uploadingLoading: false,
       previews: {},
@@ -202,17 +200,37 @@ export default {
         // result 必须是一个 JSON 格式字符串！！！否则报错
       }
     }
+    editor.customConfig.onchange = (html) => {
+      this.ruleForm.content = html
+      console.log(html);
+
+    }
     editor.create()
 
+    //根据id查询数据
+    this.id = this.$route.query.id
+    this.getData()
 
-    //先设置下资讯分类的值
-    let paramsObj = [{ "val": "华夏时讯", "code": "hxsb" }, { "val": "今日资讯", "code": "jrzx" }, { "val": "纽约日报", "code": "nyrb" }]
-    this.ruleForm.sysParams = paramsObj
+    //资讯分类
+    this.getSystemParams("INFO_TYPE")
+
+    //原创和转载
+    this.getSystemParams("ORIGINAL_REPRINT")
+
+    //资讯来源
+    this.getSystemParams("INFO_SOURCE")
+
   },
   methods: {
-
     //提交按钮
     submit () {
+      if (this.ruleForm.title === "") {
+        this.$message({
+          message: "请输入标题",
+          type: "error"
+        })
+        return
+      }
       this.$confirm("确认提交？", "提交", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -224,7 +242,7 @@ export default {
             .then(result => {
               //返回结果处理
               let dataRow = result.data;
-              if (dataRow.retcode === 1) {
+              if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
                 this.$message({
                   message: dataRow.retmsg,
                   type: "success"
@@ -240,8 +258,10 @@ export default {
         }).catch(() => {
         })
     },
-    //返沪按钮
-    back () { },
+    //返回按钮
+    back () {
+      this.$fun.goBack()
+    },
     //放大/缩小
     changeScale (num) {
       console.log("changeScale")
@@ -345,6 +365,58 @@ export default {
     imgLoad (msg) {
       this.finish("blob")
     },
+
+    /**
+     * 查询数据
+     */
+    getData () {
+      let params = {
+        id: this.id
+      }
+      this.$api.api.findAdNewsById(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.ruleForm = dataRow.data
+            //radio组件的值需要时字符类型
+            this.ruleForm.textType = JSON.stringify(dataRow.data.textType)
+            this.ruleForm.textSource = JSON.stringify(dataRow.data.textSource)
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败!")
+        })
+    },
+
+    //根据参数，获取不同类型的系统参数
+    getSystemParams (par) {
+      let params = {
+        type: par
+      }
+      let that = this
+      this.$api.api.systemParamFindListByType(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            if ("INFO_TYPE" === par) {
+              this.infoType = dataRow.data
+
+              //这一步多余的，只是尝试下这种写法
+              // this.ruleForm.sysParams = dataRow.data.map(item => ({ code: item.code, val: item.val }))
+
+            } else if ("ORIGINAL_REPRINT" === par) {
+              this.originalReprint = dataRow.data
+            } else if ("INFO_SOURCE" === par) {
+              this.infoSource = dataRow.data
+            }
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
+    }
   }
 }
 </script>
@@ -391,5 +463,17 @@ export default {
 }
 .cropper-content .show-preview .preview {
   margin-left: 0;
+}
+</style>
+<style lang="less">
+//弹框
+.el-message-box__wrapper {
+  z-index: 10002 !important;
+}
+.el-message-box {
+  z-index: 10006 !important;
+}
+.v-modal {
+  z-index: 10001 !important;
 }
 </style>

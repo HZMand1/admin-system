@@ -46,7 +46,8 @@
           <template slot-scope="scope">{{ scope.row.addTime | dateFormat('YYYY-MM-DD HH:mm:ss') }}</template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作"
+                         width="300">
           <template slot-scope="scope">
 
             <el-button v-if="scope.row.state == 1"
@@ -58,6 +59,16 @@
                        size="mini"
                        type="danger"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+
+            <el-button v-if="scope.row.orders != 0"
+                       size="mini"
+                       type="primary"
+                       @click="handleTop(scope.$index, scope.row)">置顶</el-button>
+
+            <el-button v-else
+                       size="mini"
+                       type="danger"
+                       @click="handleUntop(scope.$index, scope.row)">取消置顶</el-button>
 
             <el-button v-if="scope.row.enable != 0"
                        size="mini"
@@ -239,6 +250,52 @@ export default {
           this.$message.error("请求失败！")
         })
     },
+
+    //置顶
+    handleTop (index, row) {
+      this.setTop("确认置顶？", row.id, 0);
+    },
+    //取消置顶,与项目经理沟通后，决定此值设置为1
+    handleUntop (index, row) {
+      this.setTop("确认取消置顶？", row.id, 1);
+    },
+    setTop (strInfo, id, orders) {
+      this.$confirm(strInfo, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.loading = true;
+          let params = {
+            id: id,
+            orders: orders
+          };
+          this.$api.api
+            .setTopSupplier(params)
+            .then(result => {
+              let dataRow = result.data;
+              if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+                this.$message({
+                  message: dataRow.retmsg,
+                  type: "success"
+                });
+                this.getData();
+              } else {
+                this.$message.error(dataRow.retmsg);
+              }
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+              this.$message.error("请求失败！");
+            });
+        })
+        .catch(() => {
+          this.loading = false;
+        });
+    },
+
     //店铺详情
     shopInfo (index, row) {
       this.$router.push({

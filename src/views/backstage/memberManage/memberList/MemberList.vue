@@ -54,7 +54,7 @@
                        size="mini"
                        type="danger"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-            <el-button v-if="scope.row.reviewState != 0 && null != scope.row.reviewId"
+            <el-button v-if="scope.row.reviewState == 2 && null != scope.row.reviewId"
                        size="mini"
                        type="primary"
                        @click="memberAudit(scope.$index, scope.row)">审核</el-button>
@@ -197,7 +197,7 @@ export default {
     //显示审核弹框
     memberAudit (index, row) {
       this.showAudit = true
-      this.auditId = row.id
+      this.auditId = row.reviewId
     },
     //关闭弹框
     closeDialog () {
@@ -208,8 +208,8 @@ export default {
       this.btnloading = true
       let params = {
         id: this.auditId,
-        enable: this.radio,
-        review: this.auditCause
+        reviewState: this.radio,
+        reviewRemark: this.auditCause
       }
       this.$api.api.updateUserReview(params)
         .then(result => {
