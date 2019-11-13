@@ -4,9 +4,6 @@
  */
 import axios from "axios";
 import router from "../../router";
-import {
-	Message
-} from "element-ui"
 // 创建axios实例
 let instance = axios.create({
 	timeout: 1000 * 10 // 超时
@@ -57,7 +54,7 @@ instance.interceptors.response.use(
 					router.push({
 						path: "/backstage/login"
 					})
-				}, 3000);
+				}, 2000);
 				return Promise.resolve(res);
 			} else {
 				return Promise.resolve(res);

@@ -33,8 +33,20 @@ export default {
       }
     };
   },
+  created() {
+    let that = this;
+    document.onkeypress = function(e) {
+      let keycode = document.all ? event.keyCode : e.which;
+      if (keycode === 13) {
+        // 回车登录
+        that.submitForm(that.form);
+        return false;
+      }
+    };
+  },
   mounted() {
     Storage.localRemove("token");
+    Storage.localRemove("userInfo");
   },
   methods: {
     submitForm(form) {

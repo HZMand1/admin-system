@@ -28,18 +28,18 @@
     <el-col :span="24" class="main">
       <aside :class="collapsed?'menu-collapsed':'menu-expanded'">
         <!--导航菜单-->
-        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" unique-opened router v-show="!collapsed">
+        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect" :unique-opened="false" router v-show="!collapsed">
           <template v-for="(item,index) in menuTree">
             <template>
               <el-submenu v-if="item.children" :key="index" :index="index+''">
                 <template slot="title">
                   {{item.name}}
                 </template>
-                <div v-for="(child,index) in item.children" :index="child.path" :key="child.path" v-show="!child.hidden">
+                <div v-for="(child,index) in item.children" :index="child.path" :key="child.path">
                   <template v-if="child.children">
                     <el-submenu :index="index+''">
                       <template slot="title">{{child.name}}</template>
-                      <el-menu-item v-for="grandson in child.children" :index="grandson.path" :key="grandson.path" v-show="!grandson.hidden" router="true" :route="grandson.path">{{grandson.name}}</el-menu-item>
+                      <el-menu-item v-for="grandson in child.children" :index="grandson.path" :key="grandson.path" router="true" :route="grandson.path">{{grandson.name}}</el-menu-item>
                     </el-submenu>
                   </template>
                   <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-show="!child.children">{{child.name}}</el-menu-item>
@@ -138,11 +138,12 @@ export default {
       userId: userId
     };
     this.$api.api
-      .findMenuZtree()
+      .findAuthTree(params)
       .then(result => {
         let datas = result.data.data;
         if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
           this.menuTree = datas;
+          this.filterTree(this.menuTree);
         } else {
           this.$message.error(result.data.retmsg);
         }
@@ -161,6 +162,16 @@ export default {
     },
     onSubmit() {
       console.log("submit!");
+    },
+    //
+    filterTree(data) {
+      return data.map(v => {
+        if (v.children.length === 0) {
+          delete v.children;
+        } else {
+          this.filterTree(v.children);
+        }
+      });
     },
     handleopen() {
       // console.log('handleopen');
