@@ -104,6 +104,10 @@ const api = {
 	findMenuById(params) {
 		return axios.post("/rest/seed/menu/findMenuById", params);
 	},
+	// 后台管理 — 权限管理 — 获取指定用户权限树
+	findAuthTree(params) {
+		return axios.post("/rest/seed/roleauth/findAuthTree", params);
+	},
 	// 后台管理 — 系统参数 — 列表查询
 	findSysList(params = {}) {
 		return axios.post("/systemParam/findList", params);
