@@ -48,7 +48,9 @@
         </el-table-column>
 
         <el-table-column prop="addTime"
-                         label="创建时间"></el-table-column>
+                         label="创建时间">
+          <template slot-scope="scope">{{ scope.row.addTime | dateFormat('YYYY-MM-DD HH:mm:ss') }}</template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button v-if="scope.row.enable == 1"
@@ -61,6 +63,9 @@
                        type="danger"
                        :loading="btnloading"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+            <el-button size="mini"
+                       :loading="btnloading"
+                       @click="userDetail(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -345,6 +350,14 @@ export default {
       this.$router.push({
         path: "/backstage/sysManage/userManage/components/EditUser",
         query: { id: id }
+      })
+    },
+    //跳转到详情页面
+    //启用 0
+    userDetail (index, row) {
+      this.$router.push({
+        path: "/backstage/sysManage/userManage/components/UserDetail",
+        query: { id: row.id }
       })
     },
     /**

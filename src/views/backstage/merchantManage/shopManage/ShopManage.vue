@@ -36,6 +36,9 @@
                          label="商户账号"></el-table-column>
         <el-table-column prop="userName"
                          label="商户名称"></el-table-column>
+        <el-table-column prop="orders"
+                         label="是否置顶"
+                         :formatter="ordersFormat"></el-table-column>
         <el-table-column prop="enable"
                          label="审核状态"
                          :formatter="auditFormat"></el-table-column>
@@ -296,18 +299,6 @@ export default {
         });
     },
 
-    //店铺详情
-    shopInfo (index, row) {
-      this.$router.push({
-        path: "/backstage/merchantManage/shopManage/components/ShopDetail",
-        query: { id: row.id }
-      })
-    },
-    //查看店员
-    // shopStaff (index, row) {
-    //   //TODO
-    // },
-
     stateFormat (row, column) {
       if (row.state === 0) {
         return "启用"
@@ -324,6 +315,14 @@ export default {
         return "未审核"
       }
     },
+    //是否置顶
+    ordersFormat (row, column) {
+      if (row.orders === 0) {
+        return "是"
+      } else {
+        return "否"
+      }
+    },
 
     //查询方法
     queryShop () {
@@ -334,6 +333,14 @@ export default {
       }
       this.getData(params)
     },
+
+    //店铺详情
+    shopInfo (index, row) {
+      this.$router.push({
+        path: "/backstage/merchantManage/ShopDetail",
+        query: { id: row.id }
+      })
+    },
     //跳转到编辑页面
     editShop () {
       let num = this.multipleSelection.length;
@@ -343,7 +350,7 @@ export default {
       }
       let id = this.multipleSelection[0].id;
       this.$router.push({
-        path: "/backstage/sysManage/userManage/components/EditUser",
+        path: "/backstage/merchantManage/EditShop",
         query: { id: id }
       })
     },

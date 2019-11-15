@@ -56,6 +56,9 @@
                        type="danger"
                        :loading="btnloading"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
+            <el-button size="mini"
+                       :loading="btnloading"
+                       @click="roleDetail(scope.$index, scope.row)">详情</el-button>
           </template>
         </el-table-column>
 
@@ -235,6 +238,8 @@ export default {
     dialogSubmit () {
       let id = this.multipleSelection[0].id
       let menuId = this.$refs.tree.getCheckedKeys()
+      console.log(this.$refs.tree);
+
       let params = {
         roleId: id,
         menuIds: menuId
@@ -318,6 +323,13 @@ export default {
       this.$router.push({
         path: "/backstage/sysManage/roleManage/components/EditRole",
         query: { id: id }
+      })
+    },
+    //跳转到详情页
+    roleDetail (index, row) {
+      this.$router.push({
+        path: "/backstage/sysManage/roleManage/components/RoleDetail",
+        query: { id: row.id }
       })
     },
 

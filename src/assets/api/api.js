@@ -188,6 +188,10 @@ const api = {
   findSupplierInfoById (params = {}) {
     return axios.post("/rest/seed/supplier/info/findSupplierInfoById", params);
   },
+  //后台管理-商家店铺-修改店铺信息
+  updateSupplier (params = {}) {
+    return axios.post("/rest/seed/supplier/info/updateSupplier", params);
+  },
 	/**
 	 * 商家管理 - end
 	 */
