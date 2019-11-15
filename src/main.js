@@ -6,9 +6,12 @@ import store from "./store";
 import Axios from "./assets/request/http";
 import Api from "./assets/api/api";
 import Config from "./assets/utils/config";
+import Viewer from "v-viewer" //导入图片预览
 import moment from "moment" // 导入格式化时间的模块
 Vue.config.productionTip = false
 import "element-ui/lib/theme-chalk/index.css";
+//引入Viewer基础样式
+import "viewerjs/dist/viewer.css"
 import "./assets/less/base.less";
 import "./assets/less/vars.less";
 import Fun from "./assets/utils/public";
@@ -16,7 +19,8 @@ Vue.prototype.$axios = Axios;
 Vue.prototype.$api = Api;
 Vue.prototype.$fun = Fun;
 Vue.prototype.$config = Config;
-
+//使用Viewer
+Vue.use(Viewer);
 // 定义全局的时间过滤器
 Vue.filter("dateFormat", function (dateStr, formatStr = "YYYY-MM-DD HH:mm:ss") {
 	// 在过滤器的处理函数中，最后，必须 return才是一个合法的过滤器
