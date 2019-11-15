@@ -128,7 +128,14 @@ const api = {
   findAdNewsListPage (params = {}) {
     return axios.post("rest/seed/adNews/findAdNewsListPage", params);
   },
-
+  //【后台管理】-【广告新闻资讯管理】-【通过 ID 获取详情】
+  findAdNewsById (params = {}) {
+    return axios.post("/rest/seed/adNews/findAdNewsById", params);
+  },
+  // 【后台管理】-【广告新闻资讯管理】-【修改】
+  updateAdNews (params) {
+    return axios.post("/rest/seed/adNews/updateAdNews", params);
+  },
 	/**
 	 * 商品分类 - start
 	 */

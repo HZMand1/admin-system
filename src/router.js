@@ -162,6 +162,15 @@ const router = new Router({
       }
     },
     {
+      path: "/backstage/advManage/AdvList/viewAd",
+      name: "广告查看",
+      hidden: false,
+      component: () => import("./views/backstage/advManage/list/components/ViewAd.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: false
+      }
+    },
+    {
       path: "/backstage/newsManage/NewsList",
       name: "资讯管理",
       hidden: false,
