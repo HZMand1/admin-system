@@ -184,7 +184,7 @@ export default {
     editor.customConfig.onchange = (html) => {
       this.formArticle = html
     }
-    editor.customConfig.uploadImgServer = "<%=path%>/Img/upload" //上传URL
+    editor.customConfig.uploadImgServer = process.env.VUE_APP_BASEURL + "/ueditor/ueditorConfig" //上传URL
     editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
     editor.customConfig.uploadImgMaxLength = 5
     editor.customConfig.uploadFileName = "myFileName"

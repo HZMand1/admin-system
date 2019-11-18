@@ -90,7 +90,8 @@
                node-key="id"
                :default-checked-keys="treeIds"
                :default-expand-all="true"
-               :props="defaultProps"></el-tree>
+               :props="defaultProps"
+               :check-strictly="true"></el-tree>
       <div slot="footer"
            class="dialog-footer">
         <el-button type="primary"
@@ -236,9 +237,32 @@ export default {
     },
     //弹框的提交按钮
     dialogSubmit () {
+      let test = 0
       let id = this.multipleSelection[0].id
       let menuId = this.$refs.tree.getCheckedKeys()
-      console.log(this.$refs.tree);
+      // let menuId = []
+      //如果子菜单选中获取父节点
+      this.dataTree.map((itemFather) => {
+
+        if (null !== itemFather.children) {
+          //如果有子菜单
+          itemFather.children.map((item) => {
+            //遍历二级子菜单的id
+            if (this.$refs.tree.getCheckedKeys().indexOf(item.id) > -1) {
+              //将父级id添加到数组
+              menuId.push(itemFather.id)
+              console.log(test + "item===" + itemFather.id);
+              return
+            }
+          })
+        }
+      })
+
+
+
+      //map循环无法退出，故这里坐个数据去重处理
+      menuId = new Set(menuId)
+      menuId = Array.from([...menuId])
 
       let params = {
         roleId: id,
@@ -260,6 +284,20 @@ export default {
           this.$message.error("请求失败!")
         })
     },
+
+    //递归算法
+    // getLeafCountTree(data){
+    //   if(!data.children){
+    //     return 1
+    //   }else{
+    //     let count = 0
+    //     for(let i =0; i< data.children.length; i++){
+    //       if(this.$refs.tree.getCheckedKeys().indexOf(data.children[i]) > -1){
+    //         getLeafCountTree(data.children[i])
+    //       }
+    //     }
+    //   }
+    // },
     //权限树是否被选中
     getPowerByRole (id) {
       let params = {
