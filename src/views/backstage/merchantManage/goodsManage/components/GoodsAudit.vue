@@ -58,8 +58,23 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button center
-                   @click="back">返回</el-button>
+        <el-row>
+          <el-radio v-model="radio"
+                    label="0">通过</el-radio>
+          <el-radio v-model="radio"
+                    label="1">不通过</el-radio>
+        </el-row>
+        <el-input class="mar-t-20"
+                  type="textarea"
+                  :rows="5"
+                  placeholder="请输入原因"
+                  v-model="auditCause">
+        </el-input>
+      </el-form-item>
+      <el-form-item center>
+        <el-button type="primary"
+                   @click="audit">审核</el-button>
+        <el-button @click="back">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -71,6 +86,8 @@ export default {
       ruleForm: {},
       loading: false, //表单加载
       id: "", //传过来的id值
+      radio: "0", //0:已审核，1：审核不通过，2：未审核
+      auditCause: "", //审核备注
 
     }
   },
@@ -108,6 +125,31 @@ export default {
     strSplit (data) {
       return (data || "").split(",")
     },
+
+    //审核按钮
+    audit () {
+      let params = {
+        id: this.id,
+        reviewStatus: this.radio,
+        review: this.auditCause
+      }
+      this.$api.api.goodsInfoGoodsReview(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            this.$message({
+              message: dataRow.retmsg,
+              type: "success"
+            })
+            this.$fun.goBack()
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
+    },
+
     //返回按钮
     back () {
       this.$fun.goBack()

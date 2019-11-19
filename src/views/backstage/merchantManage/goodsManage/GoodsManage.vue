@@ -36,8 +36,13 @@
         <el-table-column type="selection"></el-table-column>
         <el-table-column prop="name"
                          label="商品名称"></el-table-column>
+        <el-table-column prop="sku"
+                         label="商品规格"></el-table-column>
         <el-table-column prop="categoryName"
                          label="类别"></el-table-column>
+        <el-table-column label="价格">
+          <template slot-scope="scope">{{ scope.row.price/100 +"    元/"+ scope.row.unit }}</template>
+        </el-table-column>
         <el-table-column prop="reviewStatus"
                          label="审核状态"
                          :formatter="reviewStatusFormat"></el-table-column>
@@ -75,31 +80,6 @@
       </div>
     </el-row>
 
-    <!-- 弹框 -->
-    <el-dialog title="商品审核"
-               :visible.sync="showAudit"
-               @close="closeDialog"
-               center>
-      <el-row>
-        <el-radio v-model="radio"
-                  label="0">通过</el-radio>
-        <el-radio v-model="radio"
-                  label="1">不通过</el-radio>
-      </el-row>
-      <el-input class="mar-t-20"
-                type="textarea"
-                :rows="5"
-                placeholder="请输入原因"
-                v-model="auditCause">
-      </el-input>
-
-      <el-button class="mar-t-20"
-                 size="mini"
-                 type="primary"
-                 :loading="btnloading"
-                 @click="submitAudit">提交</el-button>
-    </el-dialog>
-    <!-- 弹框结束 -->
   </div>
 </template>
 <script>
@@ -114,7 +94,6 @@ export default {
       loading: false,
       btnloading: false, //按钮内部加载
       nameTxt: "", //条件框的值：用户名
-      showAudit: false, //显示审核框
       radio: "0", //0:已审核，1：审核不通过，2：未审核
       auditCause: "", //审核备注
       auditId: "", //审核列的id
@@ -149,50 +128,19 @@ export default {
       this.getData(params)
     },
 
-
-    //显示审核弹框
-    goodsAudit (index, row) {
-      this.showAudit = true
-      this.auditId = row.id
-    },
-    //关闭弹框
-    closeDialog () {
-      //TODO
-    },
-    //submitAudit提交审核
-    submitAudit () {
-      this.btnloading = true
-      let params = {
-        id: this.auditId,
-        reviewStatus: this.radio,
-        review: this.auditCause
-      }
-      this.$api.api.goodsInfoGoodsReview(params)
-        .then(result => {
-          let dataRow = result.data
-          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.$message({
-              message: dataRow.retmsg,
-              type: "success"
-            })
-            this.getData()
-            this.showAudit = false
-          } else {
-            this.$message.error(dataRow.retmsg)
-          }
-          this.btnloading = false
-        }).catch(() => {
-          this.btnloading = false
-          this.$message.error("请求失败！")
-        })
-    },
     //详情
     goodsInfo (index, row) {
-      this.$message.error("等前台先实现！")
-      // this.$router.push({
-      //   path: "/backstage/merchantManage/shopManage/components/ShopDetail",
-      //   query: { id: row.id }
-      // })
+      this.$router.push({
+        path: "/backstage/merchantManage/goodsManage/GoodsDetail",
+        query: { id: row.id }
+      })
+    },
+    //审核
+    goodsAudit (index, row) {
+      this.$router.push({
+        path: "/backstage/merchantManage/goodsManage/GoodsAudit",
+        query: { id: row.id }
+      })
     },
 
     enableFormat (row, column) {

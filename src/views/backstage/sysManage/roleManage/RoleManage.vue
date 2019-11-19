@@ -85,6 +85,7 @@
                @close="closeDialog"
                center>
       <el-tree ref="tree"
+               @check-change="checkCahnge"
                :data="dataTree"
                :show-checkbox="true"
                node-key="id"
@@ -235,6 +236,42 @@ export default {
       this.$refs.tree.setCheckedKeys([])
 
     },
+    // tree树点击触发
+    checkCahnge (data, check) {
+      this.subjectCheckChange(data, check);
+    },
+    // 选中父级
+    subjectCheckChange (data, ifCheck) {
+      // 父节点操作
+      if (data.parentId) {
+        if (ifCheck === true) {
+          // 如果选中，设置父节点为选中
+          this.$refs.tree.setChecked(data.parentId, true, false);
+        } else {
+          // 如果取消选中，检查父节点是否该取消选中（可能仍有子节点为选中状态）
+          let parentNode = this.$refs.tree.getNode(data.parentId);
+          let parentHasCheckedChild = false;
+          parentNode.childNodes.map((v, i) => {
+            if (parentNode.childNodes[i].checked === true) {
+              parentHasCheckedChild = true;
+              return;
+            }
+          });
+          if (!parentHasCheckedChild)
+            this.$refs.tree.setChecked(data.parentId, false);
+        }
+      }
+      // 子节点操作
+      // 如果取消选中，取消子节点选中
+      if (data.children !== null && ifCheck === false) {
+        data.children.map(v => {
+          let childNode = this.$refs.tree.getNode(v.id);
+          if (childNode.checked === true) {
+            this.$refs.tree.setChecked(childNode.data.id, false);
+          }
+        });
+      }
+    },
     //弹框的提交按钮
     dialogSubmit () {
       let test = 0
@@ -242,6 +279,23 @@ export default {
       let menuId = this.$refs.tree.getCheckedKeys()
       // let menuId = []
       //如果子菜单选中获取父节点
+      // this.dataTree.map((itemFather) => {
+
+      //   if (null !== itemFather.children) {
+      //     //如果有子菜单
+      //     itemFather.children.map((item) => {
+      //       //遍历二级子菜单的id
+      //       if (this.$refs.tree.getCheckedKeys().indexOf(item.id) > -1) {
+      //         //将父级id添加到数组
+      //         menuId.push(itemFather.id)
+      //         console.log(test + "item===" + itemFather.id);
+      //         return
+      //       }
+      //     })
+      //   }
+      // })
+
+      //三级菜单
       this.dataTree.map((itemFather) => {
 
         if (null !== itemFather.children) {
@@ -251,18 +305,24 @@ export default {
             if (this.$refs.tree.getCheckedKeys().indexOf(item.id) > -1) {
               //将父级id添加到数组
               menuId.push(itemFather.id)
-              console.log(test + "item===" + itemFather.id);
-              return
             }
+
+            //如果有子菜单
+            if (null !== item.children) {
+              item.children.map((itemSon) => {
+                if (this.$refs.tree.getCheckedKeys().indexOf(itemSon.id) > -1) {
+                  menuId.push(item.id)
+                }
+              })
+            }
+
           })
         }
       })
-
-
-
-      //map循环无法退出，故这里坐个数据去重处理
+      //map循环无法退出，所以这里做个数据去重处理
       menuId = new Set(menuId)
       menuId = Array.from([...menuId])
+      console.log(menuId);
 
       let params = {
         roleId: id,
@@ -285,19 +345,6 @@ export default {
         })
     },
 
-    //递归算法
-    // getLeafCountTree(data){
-    //   if(!data.children){
-    //     return 1
-    //   }else{
-    //     let count = 0
-    //     for(let i =0; i< data.children.length; i++){
-    //       if(this.$refs.tree.getCheckedKeys().indexOf(data.children[i]) > -1){
-    //         getLeafCountTree(data.children[i])
-    //       }
-    //     }
-    //   }
-    // },
     //权限树是否被选中
     getPowerByRole (id) {
       let params = {
