@@ -285,6 +285,24 @@ const router = new Router({
       meta: {
         requireAuth: true
       }
+    },
+    {
+      path: "/backstage/merchantManage/goodsManage/GoodsDetail",
+      name: "商品详情",
+      hidden: true,
+      component: () => import("./views/backstage/merchantManage/goodsManage/components/GoodsDetail.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: "/backstage/merchantManage/goodsManage/GoodsAudit",
+      name: "商品审核",
+      hidden: true,
+      component: () => import("./views/backstage/merchantManage/goodsManage/components/GoodsAudit.vue"), // vue路由懒加载  异步加载
+      meta: {
+        requireAuth: true
+      }
     }
     ]
   },

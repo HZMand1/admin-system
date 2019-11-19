@@ -210,14 +210,14 @@ const api = {
   goodsInfoFindList (params = {}) {
     return axios.post("/goodsInfo/findList", params);
   },
-  // //后台管理 — 商品信息 — 添加
-  // goodsInfoAdd (params = {}) {
-  //   return axios.post("/goodsInfo/add", params);
-  // },
-  // //后台管理 — 商品信息 — 修改
-  // goodsInfoUpdate (params = {}) {
-  //   return axios.post("/goodsInfo/update", params);
-  // },
+  //后台管理 — 商品信息 — 添加
+  goodsInfoAdd (params = {}) {
+    return axios.post("/goodsInfo/add", params);
+  },
+  //后台管理 — 商品信息 — 修改
+  goodsInfoUpdate (params = {}) {
+    return axios.post("/goodsInfo/update", params);
+  },
   //后台管理 — 商品信息 —  查询详情
   goodsInfoFindGoodsById (params = {}) {
     return axios.post("/goodsInfo/findGoodsById", params);
