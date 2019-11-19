@@ -67,7 +67,7 @@ export default {
                   type: "success"
                 });
                 Storage.localSet("token", result.data.data.token);
-                Storage.localSet("userInfo", result.data.data.userEntity);
+                Storage.localSet("userInfo", result.data.data.userInfo);
                 this.$router.push("/backstage/home");
                 setTimeout(() => {
                   this.accountLoadingBtn = false;
