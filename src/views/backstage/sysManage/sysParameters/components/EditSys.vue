@@ -60,11 +60,11 @@ export default {
     };
   },
   mounted() {
-    const { type, id } = this.$route.query;
+    const { id } = this.$route.query;
     this.sysId = id;
     let params = {
       appCode: this.SSXT,
-      type: type
+      id: id
     };
     this.findSysList(params);
   },
@@ -73,9 +73,9 @@ export default {
     findSysList(params) {
       this.loading = true;
       this.$api.api
-        .findSysList(params)
+        .findListByCondition(params)
         .then(result => {
-          let datas = result.data.data.list[0];
+          let datas = result.data.data[0];
           if (result.data.retcode === this.code) {
             this.ruleForm.sysName = datas.code;
             this.ruleForm.sysValue = datas.val;

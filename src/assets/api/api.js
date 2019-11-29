@@ -12,10 +12,6 @@ const api = {
 	login(params) {
 		return axios.post("/authority/login", params);
 	},
-	// 注册
-	insertOutletUser(params) {
-		return axios.post("/rest/seed/outlet/user/insertOutletUser", params);
-	},
 	// 文件管理-上传附件到fasdfs
 	fileUpload(params) {
 		return axios.post("/rest/seed/http/fileUpload", params);
@@ -55,10 +51,6 @@ const api = {
 	//后台管理--角色管理--新增角色
 	insertRole(params = {}) {
 		return axios.post("/rest/seed/role/insertRole", params);
-	},
-	//后台管理--角色管理--修改角色
-	updateRole(params = {}) {
-		return axios.post("/rest/seed/role/updateRole", params);
 	},
 	//后台管理-角色管理-根据id获取角色
 	findRoleById(params = {}) {
@@ -112,6 +104,10 @@ const api = {
 	findSysList(params = {}) {
 		return axios.post("/systemParam/findList", params);
 	},
+	// 后台管理 — 系统参数 — 列表查询
+	findListByCondition(params = {}) {
+		return axios.post("/systemParam/findListByCondition", params);
+	},
 	// 后台管理 — 系统参数 — 添加
 	addSysList(params = {}) {
 		return axios.post("/systemParam/add", params);
@@ -123,18 +119,6 @@ const api = {
 	// 后台管理 — 系统参数 — 修改
 	updateSysList(params = {}) {
 		return axios.post("/systemParam/update", params);
-	},
-	// 后台管理 — 广告新闻资讯管理 — 列表
-	findAdNewsListPage(params = {}) {
-		return axios.post("rest/seed/adNews/findAdNewsListPage", params);
-	},
-	//【后台管理】-【广告新闻资讯管理】-【通过 ID 获取详情】
-	findAdNewsById(params = {}) {
-		return axios.post("/rest/seed/adNews/findAdNewsById", params);
-	},
-	// 【后台管理】-【广告新闻资讯管理】-【修改】
-	updateAdNews(params) {
-		return axios.post("/rest/seed/adNews/updateAdNews", params);
 	},
 	/**
 	 * 商品分类 - start
