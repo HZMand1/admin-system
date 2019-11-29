@@ -57,10 +57,6 @@
                        size="mini"
                        type="danger"
                        @click="handleDisabled(scope.$index, scope.row)">禁用</el-button>
-            <el-button v-if="scope.row.review != 0"
-                       size="mini"
-                       type="primary"
-                       @click="categoryAudit(scope.$index, scope.row)">审核</el-button>
             <el-button size="mini"
                        @click="categoryInfo(scope.$index, scope.row)">详情</el-button>
           </template>
@@ -81,32 +77,6 @@
                        layout="total,sizes,prev,pager,next,jumper"></el-pagination>
       </div>
     </el-row>
-
-    <!-- 弹框 -->
-    <el-dialog title="类别审核"
-               :visible.sync="showAudit"
-               @close="closeDialog"
-               center>
-      <el-row>
-        <el-radio v-model="radio"
-                  label="0">通过</el-radio>
-        <el-radio v-model="radio"
-                  label="1">不通过</el-radio>
-      </el-row>
-      <el-input class="mar-t-20"
-                type="textarea"
-                :rows="5"
-                placeholder="请输入原因"
-                v-model="auditCause">
-      </el-input>
-
-      <el-button class="mar-t-20"
-                 size="mini"
-                 type="primary"
-                 :loading="btnloading"
-                 @click="submitAudit">提交</el-button>
-    </el-dialog>
-    <!-- 弹框结束 -->
   </div>
 </template>
 <script>
@@ -196,42 +166,9 @@ export default {
           this.loading = false
         })
     },
-
-    //显示审核弹框
-    categoryAudit (index, row) {
-      this.showAudit = true
-      this.auditId = row.id
-    },
     //关闭弹框
     closeDialog () {
       //TODO
-    },
-    //submitAudit提交审核
-    submitAudit () {
-      this.btnloading = true
-      let params = {
-        id: this.auditId,
-        enable: this.radio,
-        review: this.auditCause
-      }
-      this.$api.api.updateOutletUser(params)
-        .then(result => {
-          let dataRow = result.data
-          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-            this.$message({
-              message: dataRow.retmsg,
-              type: "success"
-            })
-            this.getData()
-            this.showAudit = false
-          } else {
-            this.$message.error(dataRow.retmsg)
-          }
-          this.btnloading = false
-        }).catch(() => {
-          this.btnloading = false
-          this.$message.error("请求失败！")
-        })
     },
     //详情
     categoryInfo (index, row) {
