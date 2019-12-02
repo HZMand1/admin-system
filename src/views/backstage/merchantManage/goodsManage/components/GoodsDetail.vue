@@ -30,11 +30,11 @@
                     prop="region">{{ruleForm.region}}</el-form-item>
 
       <el-form-item label="商品图：">
-        <el-col :span="12"
+        <el-col :span="24"
                 v-viewer>
           <img class="mar-l-20"
                :key="index"
-               v-for="(data,index) in strSplit(ruleForm.detailImgs)"
+               v-for="(data,index) in JSON.parse(ruleForm.detailImgs)"
                :src="data"
                alt="图片"
                width="250"

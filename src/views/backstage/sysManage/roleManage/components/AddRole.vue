@@ -14,11 +14,6 @@
         <el-input v-model="ruleForm.roleCode"
                   placeholder="请输入角色编号"></el-input>
       </el-form-item>
-      <el-form-item label="所属系统"
-                    prop="appCode">
-        <el-input v-model="ruleForm.appCode"
-                  placeholder="请输入所属系统"></el-input>
-      </el-form-item>
       <el-form-item label="备注"
                     prop="remark">
         <el-input v-model="ruleForm.remark"
@@ -40,7 +35,6 @@ export default {
       ruleForm: {
         roleName: "",
         roleCode: "",
-        appCode: "",
         remark: ""
       },
       rules: {

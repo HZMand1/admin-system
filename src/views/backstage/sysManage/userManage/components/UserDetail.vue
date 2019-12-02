@@ -11,10 +11,6 @@
                     prop="account">
         {{ruleForm.account}}
       </el-form-item>
-      <el-form-item label="密码"
-                    prop="password">
-        {{ruleForm.password}}
-      </el-form-item>
       <el-form-item label="用户名"
                     prop="name">
         {{ruleForm.name}}
