@@ -314,8 +314,8 @@ export default {
         enable: this.dialogForm.enable,
         orders: this.dialogForm.orders,
         imgPath: this.dialogForm.imgPath,
-        addTime: new Date(this.dialogForm.time[0]).getTime(),
-        finishTime: new Date(this.dialogForm.time[1]).getTime()
+        addTime: new Date(this.dialogForm.addTime).getTime(),
+        finishTime: new Date(this.dialogForm.finishTime).getTime()
       };
 
       if (this.handleType === "add") {

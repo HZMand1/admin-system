@@ -102,7 +102,7 @@ export default {
   components: {},
   data() {
     return {
-      sysName: "西北地区供应保障服务平台",
+      sysName: "西北地区中药材供应保障服务平台",
       collapsed: false,
       sysUserName: "",
       sysUserAvatar: require("../../assets/images/user.png"),
@@ -266,11 +266,11 @@ export default {
       // border-right-style: solid;
       img {
         float: left;
-        margin: 5px 10px 10px 0px;
-        width: 92px;
-        height: auto;
-        // background: #fff;
-        padding: 10px;
+        /* margin: 5px 10px 10px 0px; */
+        width: auto;
+        height: 50px;
+        /* padding: 10px; */
+        object-fit: contain;
       }
       .txt {
         color: #fff;

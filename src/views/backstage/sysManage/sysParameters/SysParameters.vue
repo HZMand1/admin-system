@@ -144,11 +144,10 @@ export default {
         this.$message.error("请选择一条记录");
         return;
       }
-      let type = this.multipleSelection[0].type;
       let id = this.multipleSelection[0].id;
       this.$router.push({
         path: "/backstage/sysManage/SysParameters/EditSys",
-        query: { type: type, id: id }
+        query: { id: id }
       });
     },
     // 删除
