@@ -233,7 +233,7 @@ export default {
     //用户详情
     memberInfo (index, row) {
       this.$router.push({
-        path: "/backstage/merchantManage/shopManage/components/ShopDetail",
+        path: "/backstage/memberManage/MemberDetail",
         query: { id: row.id }
       })
     },
