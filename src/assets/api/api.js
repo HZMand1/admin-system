@@ -306,6 +306,14 @@ const api = {
 	findOrderByDetailId(params = {}) {
 		return axios.post("/rest/seed/order/info/findOrderByDetailId", params);
 	},
+	//【物流信息】-【通过公司编码和快递单号查询快递信息】
+	findLogisticsInfo(params = {}) {
+		return axios.post("/rest/seed/logistics/findLogisticsInfo", params);
+	},
+	// 订单管理 — 查询发货信息
+	findSeedPackage(params = {}) {
+		return axios.post("/rest/seed/order/info/findSeedPackage", params);
+	},
 	/**
 	 * end
 	 */
