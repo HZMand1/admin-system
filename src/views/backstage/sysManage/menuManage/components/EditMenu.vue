@@ -33,12 +33,12 @@
           <!-- <el-form-item label="图标" v-if="ruleForm.type!=='button'">
             <el-input v-model="ruleForm.icon" placeholder="图标"></el-input>
           </el-form-item> -->
-          <el-form-item label="状态">
+          <!--<el-form-item label="状态">
             <el-radio-group v-model="ruleForm.enable">
               <el-radio :label="0">有效</el-radio>
               <el-radio :label="1">无效</el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item>-->
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
             <el-button type="primary" @click="goback">返回</el-button>

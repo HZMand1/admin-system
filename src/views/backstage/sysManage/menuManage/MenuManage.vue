@@ -42,7 +42,7 @@
           <el-table-column prop="auth" label="授权标识" min-width="50%"></el-table-column>
           <el-table-column label="状态" min-width="4%">
             <template slot-scope="scope">
-              <div class="button" :class="scope.row.enable===0?'blue':'red'">{{scope.row.enable===0?"有效":"无效"}}</div>
+              <div style="cursor:pointer" @click="updateMenuStatus(scope.row.id, scope.row.enable===1?0:1)" class="button" :class="scope.row.enable===0?'blue':'red'">{{scope.row.enable===0?"有效":"无效"}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -166,7 +166,27 @@ export default {
             message: "已取消删除"
           });
         });
-    }
+    },
+    // 更新菜单状态
+    updateMenuStatus(_id,_enable) {
+        let params = {
+            id: _id, //菜单id
+            enable: _enable //状态
+        };
+    this.$api.api.updateMenuEnable(params)
+        .then(res => {
+            if (res.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+
+
+                this.refresh();
+            } else {
+                this.$message.error(res.data.retmsg);
+            }
+        })
+        .catch(() => {
+            this.$message.error("商品分类请求失败！");
+        });
+    },
   }
 };
 </script>
