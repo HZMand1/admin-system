@@ -109,10 +109,8 @@
       <el-form-item label="资讯内容："
                     prop="content">
         <el-col :span="18">
-          <div>
-            <div id="editor"
-                 class="editor"></div>
-          </div>
+          <vue-ueditor-wrap v-model="ueditorInfo"
+                            :config="ueditorConfig"></vue-ueditor-wrap>
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -125,10 +123,11 @@
 </template>
 <script>
 import { VueCropper } from "vue-cropper"
-import E from "wangeditor"
+import VueUeditorWrap from "vue-ueditor-wrap"
 export default {
   components: {
-    VueCropper
+    VueCropper,
+    VueUeditorWrap
   },
   data () {
     return {
@@ -183,35 +182,25 @@ export default {
       imgFile: "",
       uploadImgRelaPath: "", //上传后的图片的地址（不带服务器域名）
       //上传图片相关--end
+
+      //富文本相关---start
+      ueditorInfo: "",
+      ueditorConfig: {
+        // 编辑器不自动被内容撑高
+        autoHeightEnabled: true,
+        // 初始容器高度
+        initialFrameHeight: 300,
+        // 初始容器宽度
+        initialFrameWidth: "100%",
+        serverUrl: process.env.VUE_APP_BASEURL + "/ueditor/ueditorConfig",
+
+        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
+        UEDITOR_HOME_URL: "/UE/",
+      }
+      //富文本相关---end
     }
   },
   mounted () {
-    let editor = new E("#editor")
-    editor.customConfig.onchange = (html) => {
-      this.formArticle = html
-    }
-    editor.customConfig.uploadImgServer = "<%=path%>/Img/upload" //上传URL
-    editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
-    editor.customConfig.uploadImgMaxLength = 5
-    editor.customConfig.uploadFileName = "myFileName"
-    editor.customConfig.uploadImgHooks = {
-      customInsert: function (insertImg, result, editor) {
-        // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
-        // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
-
-        // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
-        let url = result.data
-        insertImg(url)
-
-        // result 必须是一个 JSON 格式字符串！！！否则报错
-      }
-    }
-    editor.customConfig.onchange = (html) => {
-      this.ruleForm.content = html
-      console.log(html);
-
-    }
-    editor.create()
 
     //资讯分类
     this.getSystemParams("INFO_TYPE")
@@ -226,6 +215,9 @@ export default {
   methods: {
     //提交按钮
     submit () {
+      //富文本内容
+      this.ruleForm.content = this.ueditorInfo
+
       if (this.ruleForm.title === "") {
         this.$message({
           message: "请输入标题",
@@ -445,14 +437,7 @@ export default {
 }
 </style>
 <style lang="less">
-//弹框
-.el-message-box__wrapper {
-  z-index: 10002 !important;
-}
-.el-message-box {
-  z-index: 10006 !important;
-}
-.v-modal {
-  z-index: 10001 !important;
+.edui-editor-breadcrumb {
+  display: none;
 }
 </style>

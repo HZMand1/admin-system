@@ -41,13 +41,16 @@
         <el-table-column prop="title"
                          label="资讯标题"></el-table-column>
         <el-table-column prop="textSource"
-                         label="资讯来源"></el-table-column>
+                         label="资讯来源"
+                         :formatter="textSourceFormat"></el-table-column>
         <el-table-column prop="textType"
                          label="是否原创"
                          width="100"
-                         :formatter="textTypeFormat"></el-table-column>
+                         :formatter="textTypeFormat">
+        </el-table-column>
         <el-table-column prop="typeName"
-                         label="资讯分类"></el-table-column>
+                         label="资讯分类"
+                         :formatter="textCategoryFormat"></el-table-column>
         <el-table-column prop="orders"
                          label="是否置顶"
                          width="100"
@@ -114,11 +117,24 @@ export default {
       multipleSelection: [], //勾选的列--修改
       loading: false,
       btnloading: false, //按钮内部加载
-      nameTxt: "" //条件框的值：用户名
+      nameTxt: "", //条件框的值：用户名
+      infoType: [], //资讯分类
+      originalReprint: [], //原创和转载
+      infoSource: [], //资讯来源
     };
   },
   mounted () {
-    this.getData();
+
+    //资讯分类
+    this.getSystemParams("INFO_TYPE")
+
+    //原创和转载
+    this.getSystemParams("ORIGINAL_REPRINT")
+
+    //资讯来源
+    this.getSystemParams("INFO_SOURCE")
+
+    this.getData()
   },
   methods: {
     handleSelectionChange (val) {
@@ -258,12 +274,30 @@ export default {
         return "否";
       }
     },
+
     //是否原创
-    textTypeFormat (row, column) {
-      if (row.textType === 0) {
-        return "原创";
+    textTypeFormat (row) {
+      if (null !== row.textType) {
+        return this.originalReprint.filter(item => String(row.textType) === item.val)[0].code
       } else {
-        return "转载";
+        return "暂无"
+      }
+    },
+
+    //资讯来源
+    textSourceFormat (row, column) {
+      if (null !== row.textSource) {
+        return this.infoSource.filter(item => String(row.textSource) === item.val)[0].code
+      } else {
+        return "暂无"
+      }
+
+
+    },
+    //资讯分类
+    textCategoryFormat (row, column) {
+      if (null === row.typeName) {
+        return "暂无"
       }
     },
 
@@ -368,7 +402,32 @@ export default {
           this.loading = false;
           this.$message.error("请求失败！");
         });
+    },
+    //根据参数，获取不同类型的系统参数
+    getSystemParams (par) {
+      let params = {
+        type: par
+      }
+      let that = this
+      this.$api.api.systemParamFindListByType(params)
+        .then(result => {
+          let dataRow = result.data
+          if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
+            if ("INFO_TYPE" === par) {
+              this.infoType = dataRow.data
+            } else if ("ORIGINAL_REPRINT" === par) {
+              this.originalReprint = dataRow.data
+            } else if ("INFO_SOURCE" === par) {
+              this.infoSource = dataRow.data
+            }
+          } else {
+            this.$message.error(dataRow.retmsg)
+          }
+        }).catch(() => {
+          this.$message.error("请求失败！")
+        })
     }
+
   }
 };
 </script>
