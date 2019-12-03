@@ -80,6 +80,10 @@ const api = {
 	findMenuZtree(params = {}) {
 		return axios.post("/rest/seed/menu/findMenuZtree", params);
 	},
+	// 后台菜单管理-获取有效菜单树结构
+	findEnableMenuZtree(params = {}) {
+		return axios.post("/rest/seed/menu/findEnableMenuZtree", params);
+	},
 	// 后台管理 - 菜单管理 - 新增菜单按钮
 	insertMenu(params = {}) {
 		return axios.post("/rest/seed/menu/insertMenu", params);
