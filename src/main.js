@@ -15,6 +15,7 @@ import "viewerjs/dist/viewer.css"
 import "./assets/less/base.less";
 import "./assets/less/vars.less";
 import Fun from "./assets/utils/public";
+
 Vue.prototype.$axios = Axios;
 Vue.prototype.$api = Api;
 Vue.prototype.$fun = Fun;

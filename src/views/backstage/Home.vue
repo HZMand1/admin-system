@@ -18,7 +18,8 @@
             {{sysUserName}}
           </span>
           <el-dropdown-menu slot="dropdown" class="custom">
-            <el-dropdown-item @click.native="toPersonalCenter">我的消息</el-dropdown-item>
+            <el-dropdown-item @click.native="editPassVisible = true">修改密码</el-dropdown-item>
+            <el-dropdown-item @click.native="$router.push({path:'/backstage/sysManage/userManage/components/UserDetail',query:{id:userId}})">个人信息</el-dropdown-item>
             <!-- <el-dropdown-item>设置</el-dropdown-item> -->
             <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
@@ -91,6 +92,7 @@
         </div>
       </section>
     </el-col>
+    <edit-pass :dialogVisible="editPassVisible" @cancelEmit="cancelEmit"></edit-pass>
   </el-row>
 </template>
 
@@ -98,10 +100,14 @@
 import { mapActions, mapMutations } from "vuex";
 import Taps from "../../components/Taps";
 import Storage from "../../assets/utils/Storage";
+import EditPass from "../../components/editPass";
 export default {
-  components: {},
+  components: {
+    EditPass
+  },
   data() {
     return {
+      editPassVisible: false,
       sysName: "西北地区中药材供应保障服务平台",
       collapsed: false,
       sysUserName: "",
@@ -119,7 +125,8 @@ export default {
       },
       openedTab: [],
       nameList: [],
-      menuTree: null
+      menuTree: null,
+      userId: null
     };
   },
   created() {},
@@ -134,6 +141,7 @@ export default {
     // this.FETCH_USER_INFO()
     // this.USER_INFO(user)
     let userId = Storage.localGet("userInfo").id;
+    this.userId = userId;
     let params = {
       userId: userId
     };
@@ -163,7 +171,7 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
-    //
+    //过滤树菜单
     filterTree(data) {
       return data.map(v => {
         if (v.children.length === 0) {
@@ -219,6 +227,10 @@ export default {
       this.$refs.menuCollapsed.getElementsByClassName(
         "submenu-hook-" + i
       )[0].style.display = status ? "block" : "none";
+    },
+    // 取消修改密码弹框
+    cancelEmit(b) {
+      this.editPassVisible = b;
     }
   }
 };
