@@ -370,7 +370,7 @@ export default {
     },
     //获取树菜单
     getTree () {
-      this.$api.api.findMenuZtree()
+      this.$api.api.findEnableMenuZtree()
         .then(result => {
           let dataRow = result.data
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
