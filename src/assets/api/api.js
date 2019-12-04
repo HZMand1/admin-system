@@ -96,6 +96,10 @@ const api = {
 	updateMenuEnable(params) {
 		return axios.post("/rest/seed/menu/updateMenuEnable", params);
 	},
+    // 后台管理 - 菜单管理 - 删除菜单(物理删除)
+    delMenu(params) {
+        return axios.post("/rest/seed/menu/delMenu", params);
+    },
 	// 后台管理 - 菜单管理 - 根据 id 获取菜单信息
 	findMenuById(params) {
 		return axios.post("/rest/seed/menu/findMenuById", params);

@@ -126,7 +126,7 @@ export default {
         query: {}
       });
     },
-    // 删除
+    // 物理删除菜单
     deleteMenu() {
       let config = JSON.stringify(this.configItem) === "{}";
       if (config) {
@@ -144,7 +144,7 @@ export default {
             enable: 1
           };
           this.$api.api
-            .updateMenuEnable(params)
+            .delMenu(params)
             .then(result => {
               if (result.data.retcode === this.code) {
                 this.$message({
