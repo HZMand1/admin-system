@@ -43,7 +43,7 @@
                       <el-menu-item v-for="grandson in child.children" :index="grandson.path" :key="grandson.path" router="true" :route="grandson.path">{{grandson.name}}</el-menu-item>
                     </el-submenu>
                   </template>
-                  <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-show="!child.children">{{child.name}}</el-menu-item>
+                  <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-if="!child.children && child.type===0">{{child.name}}</el-menu-item>
                 </div>
               </el-submenu>
               <el-menu-item v-if="!item.children" :key="index" @click="clickMenu(item)" :index="item.path">
