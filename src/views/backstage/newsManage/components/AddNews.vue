@@ -231,7 +231,9 @@ export default {
         type: "warning"
       })
         .then(() => {
+          debugger
           //调用新增接口
+          this.ruleForm.type = "1";
           this.$api.api.insertAdNews(this.ruleForm)
             .then(result => {
               //返回结果处理

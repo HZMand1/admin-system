@@ -134,7 +134,10 @@ export default {
     //资讯来源
     this.getSystemParams("INFO_SOURCE")
 
-    this.getData()
+    let params = {
+      type:1
+    };
+    this.getData(params)
   },
   methods: {
     handleSelectionChange (val) {
@@ -208,6 +211,15 @@ export default {
 
     //置顶
     handleTop (index, row) {
+      //未发布的资讯信息不能置顶
+      let enable = row.enable;
+      if(enable === 1){
+        this.$message({
+          message: "未发布的资讯信息不能置顶。",
+          type: "error"
+        });
+        return false;
+      }
       this.setTop("确认置顶？", row.id, 0);
     },
     //取消置顶,与项目经理沟通后，决定此值设置为1
