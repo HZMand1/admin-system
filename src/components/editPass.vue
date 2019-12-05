@@ -78,11 +78,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let params = {
-            id: Storage.localGet("userInfo").id,
+            account: Storage.localGet("userInfo").account,
             password: this.ruleForm.password
           };
           this.$api.api
-            .updateSeedUser(params)
+            .updateSeedUserPassword(params)
             .then(result => {
               if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
                 this.$message({

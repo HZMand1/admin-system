@@ -32,6 +32,10 @@ const api = {
 	updateSeedUser(params = {}) {
 		return axios.post("/rest/seed/user/updateSeedUser", params);
 	},
+	//后台用户管理---修改密码
+	updateSeedUserPassword(params = {}) {
+		return axios.post("/rest/seed/user/updateSeedUserPassword", params);
+	},
 	//后台管理-后台用户管理-用户启用、禁用
 	enableSeedUser(params = {}) {
 		return axios.post("/rest/seed/user/enableSeedUser", params);
