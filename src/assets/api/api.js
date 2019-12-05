@@ -96,10 +96,10 @@ const api = {
 	updateMenuEnable(params) {
 		return axios.post("/rest/seed/menu/updateMenuEnable", params);
 	},
-    // 后台管理 - 菜单管理 - 删除菜单(物理删除)
-    delMenu(params) {
-        return axios.post("/rest/seed/menu/delMenu", params);
-    },
+	// 后台管理 - 菜单管理 - 删除菜单(物理删除)
+	delMenu(params) {
+		return axios.post("/rest/seed/menu/delMenu", params);
+	},
 	// 后台管理 - 菜单管理 - 根据 id 获取菜单信息
 	findMenuById(params) {
 		return axios.post("/rest/seed/menu/findMenuById", params);
@@ -321,6 +321,10 @@ const api = {
 	// 订单管理 — 查询发货信息
 	findSeedPackage(params = {}) {
 		return axios.post("/rest/seed/order/info/findSeedPackage", params);
+	},
+	// 订单管理 - 获取合同信息
+	getContractDetailByContractNo(params = {}) {
+		return axios.post("/rest/contract/info/getContractDetailByContractNo", params);
 	},
 	/**
 	 * end

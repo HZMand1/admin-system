@@ -43,7 +43,7 @@
                       <el-menu-item v-for="grandson in child.children" :index="grandson.path" :key="grandson.path" router="true" :route="grandson.path">{{grandson.name}}</el-menu-item>
                     </el-submenu>
                   </template>
-                  <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-show="!child.children">{{child.name}}</el-menu-item>
+                  <el-menu-item @click="clickMenu(child)" :index="child.path" :key="child.path" v-if="!child.children">{{child.name}}</el-menu-item>
                 </div>
               </el-submenu>
               <el-menu-item v-if="!item.children" :key="index" @click="clickMenu(item)" :index="item.path">
@@ -150,8 +150,8 @@ export default {
       .then(result => {
         let datas = result.data.data;
         if (result.data.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
-          this.menuTree = datas;
-          this.filterTree(this.menuTree);
+          // this.menuTree = datas;
+          this.menuTree = this.filterTree(datas);
         } else {
           this.$message.error(result.data.retmsg);
         }
@@ -173,13 +173,15 @@ export default {
     },
     //过滤树菜单
     filterTree(data) {
-      return data.map(v => {
-        if (v.children.length === 0) {
-          delete v.children;
-        } else {
+      data.forEach(v => {
+        v.children = v.children && v.children.filter(c => c.type !== 1);
+        if (v.children && v.children.length) {
           this.filterTree(v.children);
+        } else {
+          delete v.children;
         }
       });
+      return data;
     },
     handleopen() {
       // console.log('handleopen');

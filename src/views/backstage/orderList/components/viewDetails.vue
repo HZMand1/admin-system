@@ -10,6 +10,7 @@
             下单时间: {{form.orderDate | dateFormat}}
           </el-col>
           <el-col :span="4" :offset="7">
+            <el-button class="color-9C1A1C" type="text" v-if="form.detail.state!==0&&form.detail.state!==-1" @click="viewFiles">查看附件</el-button>
             <el-button class="color-9C1A1C" type="text" v-if="form.detail.state!==0" @click="viewContract">查看合同</el-button>
             <el-button class="color-9C1A1C" type="text" @click="viewVoucher" v-if="form.detail.payLog">查看凭证</el-button>
           </el-col>
@@ -189,11 +190,17 @@ export default {
           console.log(err);
         });
     },
+    // 查看附件
+    viewFiles() {
+      this.Visible = true;
+      this.contractNo = this.form.detail.contractNo;
+      this.showType = 1;
+    },
     // 查看合同
     viewContract() {
       this.Visible = true;
       this.contractNo = this.form.detail.contractNo;
-      this.showType = 1;
+      this.showType = 3;
     },
     // 查看凭证
     viewVoucher() {
