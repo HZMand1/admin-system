@@ -158,7 +158,7 @@ export default {
     setAuctionCurrentChange (val) {
       this.currentPage = val;
       let params = {
-        name: this.nameTxt === "" ? null : this.nameTxt,
+        title: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       };
@@ -316,7 +316,7 @@ export default {
     //查询方法
     queryNews () {
       let params = {
-        name: this.nameTxt === "" ? null : this.nameTxt,
+        title: this.nameTxt === "" ? null : this.nameTxt,
         start: this.currentPage,
         pageSize: this.totalPage
       };
