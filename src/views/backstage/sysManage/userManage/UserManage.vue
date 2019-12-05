@@ -323,7 +323,7 @@ export default {
           let dataRow = result.data;
           if (dataRow.retcode === this.$config.RET_CODE.SUCCESS_CODE) {
             //数据源
-            this.gridData = dataRow.data.list;
+            this.gridData = dataRow.data.list.filter(v => v.enable !== 1);
             //当前页
             this.dialogCurrentPage = dataRow.data.pageNum;
             //每页条数

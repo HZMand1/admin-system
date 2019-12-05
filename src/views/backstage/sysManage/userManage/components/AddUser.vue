@@ -39,6 +39,16 @@ export default {
         callback();
       }
     };
+    const validatePassword = (rule, value, callback) => {
+      let reg = /^[0-9a-zA-Z]*$/g;
+      if (!value) {
+        callback(new Error("请输入您的密码"));
+      } else if (!reg.test(value)) {
+        callback(new Error("只能输入字母或者数字"));
+      } else {
+        callback();
+      }
+    };
     return {
       ruleForm: {
         account: "",
@@ -52,8 +62,10 @@ export default {
         account: [
           { required: true, validator: validateAccount, trigger: "change" }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        name: [{ required: true, message: "请输入用户名", trigger: "blur" }]
+        password: [
+          { required: true, validator: validatePassword, trigger: "change" }
+        ],
+        name: [{ required: true, message: "请输入用户名", trigger: "change" }]
       },
       loading: false
     };
