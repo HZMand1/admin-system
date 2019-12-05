@@ -10,14 +10,6 @@
         <el-button class="mar-l-10 mar-b-20"
                    @click="queryCategory"
                    icon="el-icon-select">查询</el-button>
-        <el-button class="mar-l-10 mar-b-20"
-                   type="primary"
-                   @click="addCategory"
-                   icon="el-icon-plus">新增</el-button>
-        <el-button class="mar-l-10 mar-b-20"
-                   type="primary"
-                   @click="editCategory"
-                   icon="el-icon-edit">修改</el-button>
       </el-col>
     </el-row>
 
@@ -168,25 +160,6 @@ export default {
         pageSize: this.totalPage
       }
       this.getData(params)
-    },
-    //新增方法
-    addCategory () {
-      this.$message.error("等前台先实现！")
-    },
-    //跳转到编辑页面
-    editCategory () {
-      let num = this.multipleSelection.length;
-      if (num !== 1) {
-        this.$message.error("请选择一条记录");
-        return;
-      }
-      let id = this.multipleSelection[0].id;
-      // this.$router.push({
-      //   path: "/backstage/sysManage/userManage/components/EditUser",
-      //   query: { id: id }
-      // })
-
-      this.$message.error("等前台先实现！")
     },
 
     /**
