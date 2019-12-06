@@ -1,7 +1,16 @@
 <template>
   <section class="login">
     <div class="concent">
-      <el-form ref="form" :model="form" label-width="70px" :rules="rules">
+      <el-row>
+        <el-col :span="6">
+          <img src="../../../assets/images/logo.png">
+        </el-col>
+        <el-col :span="18">
+
+        </el-col>
+      </el-row>
+
+      <el-form ref="form" :model="form" style="margin-top: 80px;" label-width="70px" :rules="rules">
         <el-form-item label="账号 : " prop="account">
           <el-input v-model="form.account"></el-input>
         </el-form-item>
