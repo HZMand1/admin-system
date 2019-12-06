@@ -94,6 +94,7 @@ export default {
      * desc:封装初始化获取列表和搜索  共用
      */
     successList(params) {
+      console.log(params);
       this.loading = true;
       this.$api.api
         .findAdNewsListPage(params)
@@ -127,7 +128,7 @@ export default {
     getList() {
       let params = {
         type: 0,
-        pageNo: this.paginationParams.pageNo, //页码
+        start: this.paginationParams.pageNo, //页码
         pageSize: this.paginationParams.pageSize //每页条数
       };
       //请求列表
@@ -145,7 +146,7 @@ export default {
           ? new Date(searchData.time[1]).getTime()
           : null;
       let params = {
-        pageNo: this.paginationParams.pageNo, //页码
+        start: this.paginationParams.pageNo, //页码
         pageSize: this.paginationParams.pageSize, //每页条数
         type: 0,
         title: searchData && searchData.title ? searchData.title : null,
@@ -161,42 +162,18 @@ export default {
     },
     //接收分页参数
     sendPaginationsHandle() {
-      if (
-        this.searchForm.title !== "" ||
-        this.searchForm.typeCode !== "" ||
-        this.searchForm.status !== "" ||
-        this.searchForm.time !== ""
-      ) {
-        let params = {
-          pageNo: this.paginationParams.pageNo, //页码
-          pageSize: this.paginationParams.pageSize, //每页条数
-          type: 0,
-          title:
-            this.searchForm && this.searchForm.title
-              ? this.searchForm.title
-              : null,
-          typeCode:
-            this.searchForm && this.searchForm.typeCode
-              ? this.searchForm.typeCode
-              : null,
-          enable:
-            this.searchForm && this.searchForm.status
-              ? Number(this.searchForm.status)
-              : null,
-          addTime:
-            this.searchForm && this.searchForm.time[0]
-              ? new Date(this.searchForm.time[0]).getTime()
-              : null,
-          finishTime:
-            this.searchForm && this.searchForm.time[1]
-              ? new Date(this.searchForm.time[1]).getTime()
-              : null
-        };
-        //发送请求
-        this.successList(params);
-      } else {
-        this.getList();
-      }
+      let params = {
+        start: this.paginationParams.pageNo, //页码
+        pageSize: this.paginationParams.pageSize, //每页条数
+        type: 0,
+        title:this.searchForm && this.searchForm.title ? this.searchForm.title : null,
+        typeCode: this.searchForm && this.searchForm.typeCode ? this.searchForm.typeCode : null,
+        enable: this.searchForm && this.searchForm.status ? Number(this.searchForm.status) : null,
+        addTime: this.searchForm && this.searchForm.time[0] ? new Date(this.searchForm.time[0]).getTime() : null,
+        finishTime:  this.searchForm && this.searchForm.time[1] ? new Date(this.searchForm.time[1]).getTime() : null
+      };
+      //发送请求
+      this.successList(params);
     },
     //重置搜索查询
     resetSearchBtn() {
